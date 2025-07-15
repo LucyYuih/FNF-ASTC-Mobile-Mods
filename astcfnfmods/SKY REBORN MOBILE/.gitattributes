@@ -1,5 +1,0 @@
-videos/videos/gallery/bg[[:space:]]1.mp4 filter=lfs diff=lfs merge=lfs -text
-videos/videos/gallery/bg[[:space:]]2.mp4 filter=lfs diff=lfs merge=lfs -text
-videos/videos/gallery/bg[[:space:]]3.mp4 filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
-.mp4 filter=lfs diff=lfs merge=lfs -text
