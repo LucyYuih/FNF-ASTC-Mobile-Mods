@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="manifestWall.png">
+	<!-- Created with Adobe Animate version 22.0.8.217 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="manifestText20000" x="11" y="11" width="3934" height="769"/>
+	<SubTexture name="manifestText20001" x="11" y="787" width="3934" height="769"/>
+</TextureAtlas>

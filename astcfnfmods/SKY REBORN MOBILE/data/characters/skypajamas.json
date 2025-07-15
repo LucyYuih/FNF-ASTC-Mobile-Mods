@@ -1,0 +1,127 @@
+{
+	"danceEvery": 1,
+	"offsets": [
+		0,
+		0
+	],
+	"renderType": "sparrow",
+	"version": "1.0.0",
+	"scale": 1,
+	"cameraOffsets": [
+		0,
+		0
+	],
+	"flipX": false,
+	"name": "Sky (Pajamas)",
+	"flipY": false,
+	"isPixel": false,
+	"startingAnimation": "idle",
+	"singTime": 8,
+	"healthIcon": {
+		"flipY": false,
+		"isPixel": false,
+		"offsets": [
+			0,
+			0
+		],
+		"scale": 1,
+		"id": "sky",
+		"flipX": false
+	},
+	"assetPath": "characters/Sky_Pajamas",
+	"generatedBy": "Nova Character Editor REFRESHED v0.1.0",
+	"animations": [
+		{
+			"offsets": [
+				71,
+				-24
+			],
+			"flipY": false,
+			"frameRate": 24,
+			"prefix": "sky left",
+			"looped": false,
+			"name": "singLEFT",
+			"flipX": false
+		},
+		{
+			"offsets": [
+				23,
+				-49
+			],
+			"flipY": false,
+			"frameRate": 24,
+			"prefix": "sky down",
+			"looped": false,
+			"name": "singDOWN",
+			"flipX": false
+		},
+		{
+			"offsets": [
+				83,
+				14
+			],
+			"flipY": false,
+			"frameRate": 24,
+			"prefix": "sky up",
+			"looped": false,
+			"name": "singUP",
+			"flipX": false
+		},
+		{
+			"offsets": [
+				-35,
+				-37
+			],
+			"flipY": false,
+			"frameRate": 24,
+			"prefix": "sky right",
+			"looped": false,
+			"name": "singRIGHT",
+			"flipX": false
+		},
+		{
+			"flipY": null,
+			"offsets": [
+				6,
+				0
+			],
+			"frameRate": 24,
+			"frameIndices": [
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8
+			],
+			"prefix": "sky idle",
+			"flipX": null,
+			"looped": false,
+			"name": "danceLeft"
+		},
+		{
+			"flipY": null,
+			"offsets": [
+				0,
+				0
+			],
+			"frameRate": 24,
+			"frameIndices": [
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16
+			],
+			"prefix": "sky idle",
+			"flipX": false,
+			"looped": false,
+			"name": "danceRight"
+		}
+	]
+}

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TextureAtlas imagePath="skyanxiouspixel.png">
+	<SubTexture name="confirm0001" x="0" y="0" width="44" height="39" frameX="0" frameY="0" frameWidth="44" frameHeight="39" />
+	<SubTexture name="confirm0002" x="44" y="0" width="44" height="39" frameX="0" frameY="0" frameWidth="44" frameHeight="39" />
+	<SubTexture name="confirm0003" x="0" y="39" width="44" height="39" frameX="0" frameY="0" frameWidth="44" frameHeight="39" />
+	<SubTexture name="confirm0004" x="44" y="39" width="44" height="39" frameX="0" frameY="0" frameWidth="44" frameHeight="39" />
+	<SubTexture name="idle0001" x="0" y="0" width="44" height="39" frameX="0" frameY="0" frameWidth="44" frameHeight="39" />
+	<SubTexture name="confirm-hold0001" x="44" y="39" width="44" height="39" frameX="0" frameY="0" frameWidth="44" frameHeight="39" />
+</TextureAtlas>

@@ -1,0 +1,13 @@
+import flixel.FlxG;
+import funkin.play.PlayState;
+import funkin.audio.FunkinSound;
+import funkin.play.notes.notekind.NoteKind;
+import funkin.play.character.CharacterType;
+
+class SkySadNoteKind extends NoteKind {
+
+    function new() {
+        // This makes the note show up in the Chart Editor.
+        super("skySadNote", "Sky Sad Note");
+    }
+}

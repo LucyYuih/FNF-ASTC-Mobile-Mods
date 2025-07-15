@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="Menu_Selever_Angry.png">
+<SubTexture name="Menu_Selever_Angry Idle0000" x="1724" y="0" width="599" height="746" frameX="-1" frameY="-33" frameWidth="600" frameHeight="800" />
+<SubTexture name="Menu_Selever_Angry Idle0001" x="578" y="758" width="596" height="752" frameX="-2" frameY="-29" frameWidth="600" frameHeight="800" />
+<SubTexture name="Menu_Selever_Angry Idle0002" x="1136" y="0" width="588" height="754" frameX="-3" frameY="-28" frameWidth="600" frameHeight="800" />
+<SubTexture name="Menu_Selever_Angry Idle0003" x="0" y="758" width="578" height="753" frameX="-5" frameY="-29" frameWidth="600" frameHeight="800" />
+<SubTexture name="Menu_Selever_Angry Idle0004" x="568" y="0" width="568" height="757" frameX="-6" frameY="-24" frameWidth="600" frameHeight="800" />
+<SubTexture name="Menu_Selever_Angry Idle0005" x="0" y="0" width="568" height="758" frameX="-6" frameY="-22" frameWidth="600" frameHeight="800" />
+</TextureAtlas>

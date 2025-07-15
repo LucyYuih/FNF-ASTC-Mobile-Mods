@@ -1,0 +1,84 @@
+{
+  "title": "VS Sky: REBORN (Mobile Edition)",
+  "description": "Should could be your wife... forever!",
+  "contributors": [
+    {
+          "name": "st4rcannon",
+          "color": "#ff9ecf",
+          "roles": "Director, Artist, Coder, Composer, Charter",
+          "url": "https://www.youtube.com/@_genzu"
+      },
+      {
+          "name": "GENZU",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "Co-Director, Coder, Composer, Charter",
+          "url": "https://www.youtube.com/@_genzu"
+      },
+      {
+          "name": "Nebula S. Nova",
+          "icon": "nebula",
+          "color": "#9500ff",
+          "roles": "Main Coder",
+          "url": "https://www.youtube.com/@ChinosModded"
+      },
+      {
+          "name": "EffectsNotAffects",
+          "icon": "",
+          "color": "#9500ff",
+          "roles": "Logo Artist, Animation helper",
+          "url": "https://www.youtube.com/@ChinosModded"
+      },
+      {
+          "name": "fuhk5delta",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "Composer for Manifest",
+          "url": "https://www.youtube.com/@fuhk5delta"
+      },
+      {
+          "name": "Walker64",
+          "color": "#ff9ecf",
+          "roles": "Charter for Manifest Eerect",
+          "url": "https://www.youtube.com/@Walker64"
+      },
+      {
+          "name": "invalid_bruh",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "SFX for week cutscene",
+          "url": "https://www.youtube.com/@invalid_bruh"
+      },
+      {
+          "name": "LeggoMyZeldris",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "Special Shoutout!!",
+          "url": "https://www.youtube.com/@leggomyzeldris"
+      },
+      {
+          "name": "BBPANZU",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "!!GAVE US PERMISSION!!",
+          "url": "https://www.youtube.com/@bbpanzu213"
+      },
+      {
+          "name": "Dra9onSlayer5 (Dawn)",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "Co-Owner of Sky",
+          "url": "https://x.com/Dra9onSlayer5"
+      },
+      {
+          "name": "Alexander0110_ (Alex)",
+          "icon": "genzu",
+          "color": "#ff9ecf",
+          "roles": "The other Co-Owner of Sky",
+          "url": "https://x.com/Alexander0110_"
+      }
+  ],
+  "api_version": "0.6.4",
+  "mod_version": "1.0.0",
+  "license": "Apache 2.0"
+}

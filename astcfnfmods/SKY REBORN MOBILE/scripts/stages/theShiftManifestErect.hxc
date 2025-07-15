@@ -1,0 +1,190 @@
+package flixel.util;
+
+import funkin.play.stage.Stage;
+import funkin.play.PlayState;
+import funkin.util.MathUtil;
+import flixel.FlxG;
+import funkin.graphics.shaders.AdjustColorShader;
+import flixel.tweens.FlxEase;
+import funkin.graphics.FunkinSprite;
+import funkin.Conductor;
+import flixel.FlxSprite;
+import flixel.FlxObject;
+import funkin.util.FileUtil;
+import funkin.graphics.shaders.DropShadowShader;
+import flixel.addons.display.FlxBackdrop;
+import flixel.tweens.FlxTween;
+import funkin.modding.base.ScriptedFlxRuntimeShader;
+import funkin.play.character.CharacterType;
+
+class TheShiftManifestErectStage extends Stage {
+	var characterShader:AdjustColorShader;
+	var bluShader:AdjustColorShader;
+	var giygasOverlay:FlxBackdrop;
+	var wallBlurShader;
+
+	// laser shit
+	var laserAngle = 0;
+	var laserAngleR = 0;
+	var laserPos = 0;
+	var laserPosR = 0;
+	var laser:FlxSprite;
+	var laser2:FlxSprite;
+	var laserGrp = [];
+	var defaultLaserPos = 1600;
+
+	public function new() {
+		super('theShiftManifestErect');
+	}
+
+	function onCreate(event:ScriptEvent) {
+		super.onCreate(event);
+
+		bluShader = new AdjustColorShader();
+		bluShader.hue = -98;
+		bluShader.saturation = 0;
+		bluShader.contrast = 0;
+		bluShader.brightness = 0;
+
+		laser = new FlxSprite(0, -500).loadGraphic(Paths.image('shift/manifest/delusionRay'));
+		laser.updateHitbox();
+		laser.frames = Paths.getSparrowAtlas('shift/manifest/delusionRay');
+		laser.animation.addByPrefix('idle', 'gaster laser', 24, true);
+		laser.animation.play('idle');
+		laser.scale.set(1, 4);
+		laser.angle = laserAngle;
+		laser.shader = bluShader;
+
+		laser.zIndex = 15;
+
+		laser2 = new FlxSprite(defaultLaserPos, -500).loadGraphic(Paths.image('shift/manifest/delusionRay'));
+		laser2.updateHitbox();
+		laser2.frames = Paths.getSparrowAtlas('shift/manifest/delusionRay');
+		laser2.animation.addByPrefix('idle', 'gaster laser', 24, true);
+		laser2.animation.play('idle');
+		laser2.scale.set(0.4, 4);
+		laser2.angle = laserAngle;
+		laser2.zIndex = 500;
+		laser2.blend = 0;
+		laser2.alpha = 1;
+		laser2.shader = bluShader;
+		add(laser2);
+
+		add(laser);
+		refresh();
+
+		giygasOverlay = new FlxBackdrop((Paths.image('shift/manifest/giygas')), 0x11, 0, 0);
+		giygasOverlay.velocity.set(50, 0);
+		giygasOverlay.y = -500;
+		giygasOverlay.frames = Paths.getSparrowAtlas('shift/manifest/giygas');
+		giygasOverlay.animation.addByPrefix('idle', 'giygas_gif', 12, true);
+		giygasOverlay.animation.play('idle');
+		giygasOverlay.alpha = 0.3;
+		giygasOverlay.zIndex = 1;
+		giygasOverlay.scale.set(6, 6);
+		giygasOverlay.blend = 0;
+		giygasOverlay.antialiasing = false;
+		giygasOverlay.updateHitbox();
+		giygasOverlay.shader = bluShader;
+		// giygasOverlay.screenCenter();
+
+		add(giygasOverlay);
+		var wall = new FlxBackdrop((Paths.image('shift/manifest/manifestWall')), 0x10, 0, 0);
+		wall.velocity.set(0, -2000);
+		wall.y = -150;
+		wall.frames = Paths.getSparrowAtlas('shift/manifest/manifestWall');
+		wall.animation.addByPrefix('idle', 'manifestText', 12, true);
+		wall.animation.play('idle');
+		wall.alpha = 0.5;
+		wall.zIndex = 18;
+		wall.scale.set(1, 1);
+		wall.blend = 0;
+		wall.antialiasing = false;
+		wall.updateHitbox();
+		wall.screenCenter();
+		wall.shader = bluShader;
+
+		add(wall);
+
+		laserGrp.push(laser);
+	laserGrp.push(laser2);
+
+		getNamedProp('gradientTop').shader = bluShader;
+		getNamedProp('gradientBottom').shader = bluShader;
+		getNamedProp('text').shader = bluShader;
+		PlayState.instance.refresh();
+	}
+
+	function onUpdate(elapsed) {
+		super.onUpdate(elapsed);
+
+		laser.angle = laserAngle;
+		laser2.angle = laserAngleR * 2;
+		laser.x = laserPos;
+		laser2.x = defaultLaserPos + laserPosR * 2;
+
+		laserPos = 1 + Math.sin((Conductor.instance.songPosition / 2500) * 10) * 200;
+		laserPosR = 1 - Math.sin((Conductor.instance.songPosition / 2500) * 10) * 200;
+
+		laserAngle = 1 + Math.sin((Conductor.instance.songPosition / 500) * 1) * 10;
+		laserAngleR = 1 - Math.sin((Conductor.instance.songPosition / 500) * 1) * 10;
+	}
+
+	function buildStage() {
+		super.buildStage();
+
+		getNamedProp('gradientTop').blend = 0;
+		getNamedProp('gradientBottom').blend = 0;
+
+
+	}
+
+	override function addCharacter(character:BaseCharacter, charType:CharacterType):Void {
+		// Apply the shader automatically to each character as it gets added.
+		super.addCharacter(character, charType);
+
+		trace('Applied stage shader to ' + character.characterName);
+
+		var rim = new DropShadowShader();
+		// bright, hue, contrast, saturation
+		rim.setAdjustColor(-30, -30, 38, 10);
+		rim.color = 0xFF3a00ff ;
+		character.shader = rim;
+		rim.attachedSprite = character;
+
+		switch (charType) {
+			case CharacterType.BF:
+				rim.angle = 140;
+
+				character.animation.callback = function() {
+					if (getBoyfriend() != null) {
+						rim.updateFrameInfo(getBoyfriend().frame);
+					}
+				};
+			case CharacterType.GF:
+				rim.angle = 90;
+
+				character.animation.callback = function() {
+					rim.updateFrameInfo(getGirlfriend().frame);
+				};
+
+			case CharacterType.DAD:
+				rim.angle = 45;
+				// rim.threshold = 0.6;
+
+				character.animation.callback = function() {
+					rim.updateFrameInfo(getDad().frame);
+				};
+			default:
+		}
+
+		// characterShader = new AdjustColorShader();
+
+		// characterShader.hue = -20;
+		// characterShader.saturation = 0;
+		// characterShader.contrast = 38;
+		// characterShader.brightness = -30;
+
+		// character.shader = characterShader;
+	}
+}

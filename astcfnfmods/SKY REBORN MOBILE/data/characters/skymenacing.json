@@ -1,0 +1,82 @@
+{
+	"danceEvery": 1,
+	"version": "1.0.0",
+	"renderType": "sparrow",
+	"name": "Sky (Menacing)",
+	"flipX": false,
+	"singTime": 8,
+	"assetPath": "characters/Sky_Menacing",
+	"healthIcon": {
+		"flipY": false,
+		"isPixel": false,
+		"offsets": [
+			0,
+			0
+		],
+		"scale": 1,
+		"id": "skymanifest",
+		"flipX": false
+	},
+	"generatedBy": "Nova Character Editor REFRESHED v0.1.0",
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"prefix": "sky idle",
+			"looped": false,
+			"name": "idle"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"frameIndices": [
+				11,
+				12,
+				13
+			],
+			"prefix": "sky idle",
+			"looped": true,
+			"name": "idle-hold"
+		},
+		{
+			"offsets": [
+				-109,
+				30
+			],
+			"prefix": "sky right",
+			"looped": false,
+			"name": "singRIGHT"
+		},
+		{
+			"offsets": [
+				-28,
+				-82
+			],
+			"prefix": "sky down",
+			"name": "singDOWN",
+			"looped": false
+		},
+		{
+			"offsets": [
+				36,
+				53
+			],
+			"prefix": "sky up",
+			"name": "singUP",
+			"looped": false
+		},
+		{
+			"offsets": [
+				166,
+				29
+			],
+			"prefix": "sky left",
+			"name": "singLEFT",
+			"looped": false
+		}
+	]
+}

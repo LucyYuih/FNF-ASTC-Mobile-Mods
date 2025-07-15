@@ -1,0 +1,39 @@
+import funkin.play.character.MultiSparrowCharacter;
+import funkin.play.character.CharacterType;
+import funkin.play.PlayState;
+import funkin.play.song.Song;
+import funkin.Conductor;
+import funkin.modding.module.ModuleHandler;
+import flixel.FlxG;
+import funkin.audio.FunkinSound;
+import flixel.math.FlxMath;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import funkin.play.stage.Stage;
+
+class BFSkyCharacter extends MultiSparrowCharacter {
+	function new() {
+		super('bf-sky');
+	}
+
+	var tauntAnimations = ["pointing"];
+
+	function onCreate(e) {
+		super.onCreate(e);
+	}
+
+	override function onBeatHit(event) {
+		super.onBeatHit(event);
+
+		if (PlayState.instance.currentSong.id == "sky" && PlayState.instance.currentVariation == 'default') {
+			if (event.beat == 64) {
+				PlayState.instance.disableKeys = true;
+				this.playAnimation(tauntAnimations[FlxG.random.int(0, tauntAnimations.length - 1)], true, false);
+
+				this.animation.finishCallback = (pointCutscene) -> {
+					PlayState.instance.disableKeys = false;
+				}
+			}
+		}
+	}
+}

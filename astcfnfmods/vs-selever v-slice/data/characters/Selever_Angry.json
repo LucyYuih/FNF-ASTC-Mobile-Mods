@@ -1,0 +1,65 @@
+{
+    "version": "1.0.0",
+    "name": "Selever_angry",
+    "assetPath": "characters/Selever_Angry",
+    "singTime": 6.1,
+    "isPixel": false,
+    "scale": null,
+    "healthIcon": {
+        "id": "Selever_Angry",
+        "isPixel": false,
+        "flipX": false,
+        "scale": 1
+    },
+    "animations": [
+        {
+            "name": "singRIGHT",
+            "prefix": "right0",
+            "offsets": [
+                -270,
+                120
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "down0",
+            "offsets": [
+                -206,
+                91
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "up0",
+            "offsets": [
+                -237,
+                181
+            ]
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "left0",
+            "offsets": [
+                -183,
+                135
+            ]
+        },
+        {
+            "name": "idle",
+            "prefix": "idle0",
+            "offsets": [
+                -225,
+                138
+            ]
+        },
+        {
+            "name": "scared",
+            "prefix": "idle0",
+            "offsets": [
+                -225,
+                138
+            ]
+        }
+    ],
+    "flipX": false
+}

@@ -1,0 +1,65 @@
+{
+    "version": "1.0.0",
+    "name": "Selever",
+    "assetPath": "characters/Selever",
+    "singTime": 6.1,
+    "isPixel": false,
+    "scale": null,
+    "healthIcon": {
+        "id": "Selever",
+        "isPixel": false,
+        "flipX": false,
+        "scale": 1
+    },
+    "animations": [
+        {
+            "name": "singRIGHT",
+            "prefix": "right0",
+            "offsets": [
+                -295,
+                131
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "down0",
+            "offsets": [
+                -237,
+                101
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "up0",
+            "offsets": [
+                -82,
+                200
+            ]
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "left0",
+            "offsets": [
+                -214,
+                145
+            ]
+        },
+        {
+            "name": "idle",
+            "prefix": "idle0",
+            "offsets": [
+                -225,
+                141
+            ]
+        },
+        {
+            "name": "scared",
+            "prefix": "idle0",
+            "offsets": [
+                -225,
+                141
+            ]
+        }
+    ],
+    "flipX": false
+}

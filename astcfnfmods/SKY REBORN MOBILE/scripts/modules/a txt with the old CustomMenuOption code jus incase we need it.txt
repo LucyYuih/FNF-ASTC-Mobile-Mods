@@ -1,0 +1,136 @@
+import flixel.FlxG;
+import flixel.addons.transition.FlxTransitionableState;
+import funkin.Conductor;
+import funkin.Paths;
+import funkin.ui.mainmenu.MainMenuState;
+import funkin.ui.AtlasMenuItem;
+import funkin.util.ReflectUtil;
+import flixel.util.FlxTimer;
+import funkin.modding.base.ScriptedMusicBeatState;
+import funkin.modding.module.Module;
+import funkin.modding.module.ModuleHandler;
+import funkin.modding.PolymodHandler;
+import funkin.save.Save;
+import flixel.tweens.FlxTween;
+import funkin.graphics.FunkinSprite;
+
+class GalleryMenuOption extends Module {
+	var currentState = "";
+	var menuItem;
+
+	var muteMusic:Bool = false;
+
+	var fade:FunkinSprite;
+
+	public function new() {
+		super('gallery-menu-option');
+	}
+
+	function onUpdate(event) {
+		super.onUpdate(event);
+		if (FlxG.keys.justPressed.F1) {
+			// var targetState = ScriptedMusicBeatState.init('GalleryMenuState');
+			// FlxTransitionableState.skipNextTransIn = true;
+			// FlxG.switchState(ScriptedMusicBeatState.init('GalleryMenuState'));
+		}
+		if (menuItem != null) {
+			if (currentState == "MainMenuState") {
+				var spacing = 160;
+				var top = (FlxG.height - (spacing * (FlxG.state.menuItems.length - 1))) / 2;
+				for (i in 0...FlxG.state.menuItems.length) {
+					var menuItem = FlxG.state.menuItems.members[i];
+					menuItem.x = (menuItem.width/2) + 50;//FlxG.width / 2;
+					menuItem.y = top + spacing * i;
+				}
+				/* switch (menuItem.animation.name) {
+									case "idle":
+										menuItem.scale.set(0.65, 0.65);
+
+									case "selected":
+										menuItem.scale.set(0.85, 0.85);
+				}*/
+			}
+		}
+		if (muteMusic) {
+			FlxG.sound.music.volume = 0;
+		}
+	}
+
+	public function onStateChangeEnd() {
+		super.onStateChangeEnd();
+		trace("gotHere0");
+		var daThing = ReflectUtil.getClassNameOf(FlxG.state).split(".");
+		currentState = daThing[daThing.length - 1];
+
+		if (currentState == "MainMenuState") {
+			initButton();
+			var vars = ModuleHandler.getModule("GalleryGlobalVars");
+			if (vars.scriptGet("justCameFromGallery")) {
+				vars.scriptSet("justCameFromGallery", false);
+				muteMusic = true;
+				fade = new FunkinSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+				fade.alpha = 1;
+				fade.scrollFactor.set();
+				fade.screenCenter();
+				FlxG.state.add(fade);
+				new FlxTimer().start(0.1, () -> {
+					muteMusic = false;
+				});
+				FlxTween.tween(FlxG.sound.music, {volume: 1}, 1, {startDelay: 0.1});
+				FlxTween.tween(fade, {alpha: 0}, 1);
+			}
+		}
+		// runupdate = Std.isOfType(event.targetState, MainMenuState);
+	}
+
+	function initButton() {
+		if (Save.instance.hasBeatenLevel('weekSky')) {
+			menuItem = createMenuItem('gallery', 'mainmenu/gallery', FlxG.state.menuItems.length, () -> {
+				fade = new FunkinSprite().makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+				fade.alpha = 0;
+				fade.scrollFactor.set();
+				fade.screenCenter();
+				FlxG.state.add(fade);
+				FlxTween.tween(FlxG.sound.music, {volume: 0}, 1, {
+					onComplete: () -> {
+						FlxG.sound.music.stop();
+					}
+				});
+				FlxTween.tween(fade, {alpha: 1}, 1, {
+					onComplete: () -> {
+						var currentState = FlxG.state;
+						var targetState = ScriptedMusicBeatState.init('GalleryMenuState');
+						FlxTransitionableState.skipNextTransIn = true;
+						FlxG.state.startExitState(targetState);
+					}
+				});
+			}, false);
+			FlxG.state.menuItems.addItem('gallery', menuItem);
+			repositionMenuItems(FlxG.state.menuItems);
+		}
+	}
+
+
+	function createMenuItem(name:String, atlas:String, id:Int, callback:Void->Void, fireInstantly:Bool):Void {
+		var item = new AtlasMenuItem(0, 0, name, Paths.getSparrowAtlas(atlas), callback);
+		item.fireInstantly = fireInstantly;
+		item.ID = id;
+
+		item.scrollFactor.set(0, 0.4);
+
+		item.centered = true;
+		item.changeAnim('idle');
+
+		return item;
+	}
+
+	function repositionMenuItems(menuItems:AtlasMenuList) {
+		var spacing = 160;
+		var top = (FlxG.height - (spacing * (menuItems.length - 1))) / 2;
+		for (i in 0...menuItems.length) {
+			var menuItem = menuItems.members[i];
+			menuItem.x = (menuItem.width/2) + 50;//FlxG.width / 2;
+			menuItem.y = top + spacing * i;
+		}
+	}
+}

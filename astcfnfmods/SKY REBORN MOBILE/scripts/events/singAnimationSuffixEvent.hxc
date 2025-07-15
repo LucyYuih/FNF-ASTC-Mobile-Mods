@@ -1,0 +1,121 @@
+import flixel.FlxG;
+import flixel.util.FlxTimer;
+import funkin.play.PlayState;
+import funkin.play.event.SongEvent;
+import funkin.modding.module.Module;
+import funkin.data.event.SongEventSchema;
+import funkin.play.character.CharacterType;
+
+class SingAnimationSuffixEvent extends SongEvent {
+
+    function new() {
+        super('SingAnimationSuffixEvent');
+    }
+
+    public override function getTitle():String {
+        return 'Sing Animation Suffix';
+    }
+
+    public override function getEventSchema() {
+        return [
+            {
+                name: 'character',
+                title: 'Character',
+                type: 'enum',
+                defaultValue: 'bf',
+                keys: [
+                    "Player" => 'player',
+                    "Opponent" => 'opponent',
+                    "Spectator" => 'spectator'
+                ]
+            },
+            {
+                name: 'suffix',
+                title: 'Suffix',
+                type: 'string',
+                defaultValue: '-alt',
+            }
+            {
+                name: 'isEnabled',
+                title: 'Enabled',
+                type: 'bool',
+                defaultValue: 'true',
+            }
+        ];
+    }
+
+    public override function handleEvent(data):Void {
+    
+    }
+    
+}
+
+class SingAnimationSuffixEventData extends Module {
+
+    var enabled;
+
+    var player;
+    var opponent;
+    var spectator;
+
+    var singSuffix:String;
+    
+    function new() {
+        super('SingAnimationSuffixEventData');
+    }
+
+    function onSongEvent(event) {
+        super.onSongEvent(event);
+        switch (event.eventData.eventKind) {
+            case "SingAnimationSuffixEvent":
+                singSuffix = event.eventData.value.suffix;
+                if (event.eventData.value.isEnabled) {
+                    enabled = true; 
+                    trace("\n\nSing Anim Suffix Event Enabled?: " + enabled + "\n");
+                } else if (!event.eventData.value.isEnabled) {
+                    enabled = false;
+                    trace("\n\nSing Anim Suffix Event Enabled?: " + enabled + "\n");
+                }
+                switch (event.eventData.value.character) {
+                    case 'player':
+                        player = true;
+                    case 'opponent':
+                        opponent = true;
+                        trace("\n\nEffect Opponent?: " + opponent + "\n");
+                    case 'spectator':
+                        spectator = true;
+
+                }
+        }
+    }
+
+    function onNoteHit(event:HitNoteScriptEvent) {
+        if (event.eventCanceled) {
+            return;
+        }
+
+        if (enabled) {
+            if (player){
+                
+            }
+            if (opponent && !event.note.noteData.getMustHitNote()) {
+                holdTimer = 0;
+                trace("\n\nOppenet Note Hit: " + opponent + "\n");
+                PlayState.instance.currentStage.getDad().playSingAnimation(event.note.noteData.getDirection(), false, singSuffix);
+            }
+            if (spectator) {
+                
+            }
+        }
+        super.onNoteHit(event);
+    }
+
+    function onSongRetry(){
+        super.onSongRetry();
+        enabled = false;
+
+        player = false;
+        opponent = false;
+        spectator = false;
+    }
+}

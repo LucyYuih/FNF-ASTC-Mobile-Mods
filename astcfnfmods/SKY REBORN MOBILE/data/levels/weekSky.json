@@ -1,0 +1,62 @@
+{
+  "version": "1.0.0",
+  "name": "BFSWIFEFOREVER",
+  "titleAsset": "storymenu/titles/weeksky",
+  "props": [
+    {
+      "assetPath": "storymenu/props/sky",
+      "scale": 0.5,
+      "offsets": [100, -30],
+      "animations": [
+        {
+          "name": "danceLeft",
+          "prefix": "sky menu idle",
+          "frameIndices": [0,1,2,3,4,5,6,7]
+        },
+        {
+          "name": "danceRight",
+          "prefix": "sky menu idle",
+          "frameIndices": [8,9,10,11,12,13,14]
+        }
+      ]
+    },
+    {
+      "assetPath": "storymenu/props/bf",
+      "scale": 1,
+      "offsets": [150, 80],
+      "animations": [
+        {
+          "name": "idle",
+          "prefix": "idle0",
+          "frameRate": 24
+        },
+        {
+          "name": "confirm",
+          "prefix": "confirm0",
+          "frameRate": 24
+        }
+      ]
+    },
+    {
+      "assetPath": "storymenu/props/gf",
+      "scale": 1.0,
+      "offsets": [200, 80],
+      "animations": [
+        {
+          "name": "danceLeft",
+          "prefix": "idle0",
+          "frameIndices": [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+        },
+        {
+          "name": "danceRight",
+          "prefix": "idle0",
+          "frameIndices": [
+            15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29
+          ]
+        }
+      ]
+    }
+  ],
+  "background": "#52bfff",
+  "songs": ["wife-forever", "sky", "manifest"]
+}

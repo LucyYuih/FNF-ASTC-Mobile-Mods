@@ -1,0 +1,22 @@
+{
+  "timeFormat": "ms",
+  "artist": "invalid_bruh",
+  "songName": "Scary",
+  "timeChanges": [
+    {
+      "d": 4,
+      "n": 4,
+      "t": 0,
+      "bt": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "bpm": 130
+    }
+  ],
+  "generatedBy": "Manual (by st4rcannon)",
+  "looped": false,
+  "version": "2.0.0"
+}

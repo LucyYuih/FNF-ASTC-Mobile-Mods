@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="giygas.png">
+	<!-- Created with Adobe Animate version 22.0.8.217 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="giygas_gif0000" x="11" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0001" x="274" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0002" x="537" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0003" x="800" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0004" x="1063" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0005" x="1326" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0006" x="1589" y="11" width="256" height="224"/>
+	<SubTexture name="giygas_gif0007" x="11" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0008" x="274" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0009" x="537" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0010" x="800" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0011" x="1063" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0012" x="1326" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0013" x="1589" y="242" width="256" height="224"/>
+	<SubTexture name="giygas_gif0014" x="11" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0015" x="274" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0016" x="537" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0017" x="800" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0018" x="1063" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0019" x="1326" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0020" x="1589" y="473" width="256" height="224"/>
+	<SubTexture name="giygas_gif0021" x="11" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0022" x="274" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0023" x="537" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0024" x="800" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0025" x="1063" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0026" x="1326" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0027" x="1589" y="704" width="256" height="224"/>
+	<SubTexture name="giygas_gif0028" x="11" y="935" width="256" height="224"/>
+	<SubTexture name="giygas_gif0029" x="274" y="935" width="256" height="224"/>
+</TextureAtlas>

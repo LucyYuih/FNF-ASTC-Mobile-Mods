@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="neneHangin.png">
+	<!-- Created with Adobe Animate version 22.0.8.217 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="nene hanging0000" x="14" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0001" x="14" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0002" x="14" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0003" x="14" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0004" x="14" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0005" x="14" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0006" x="285" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0007" x="285" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0008" x="285" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0009" x="285" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0010" x="285" y="14" width="264" height="742"/>
+	<SubTexture name="nene hanging0011" x="285" y="14" width="264" height="742"/>
+</TextureAtlas>

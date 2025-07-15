@@ -1,0 +1,71 @@
+import funkin.play.stage.Stage;
+import funkin.play.PlayState;
+import funkin.util.MathUtil;
+import flixel.FlxG;
+import funkin.graphics.shaders.AdjustColorShader;
+import flixel.tweens.FlxEase;
+import funkin.Conductor;
+import flixel.tweens.FlxTween;
+
+class TheShiftErectStage extends Stage {
+	var cameras = [
+		{
+			enabled: false,
+			interval: 4,
+			offset: 0,
+			intensity: 0.01
+		},
+		{
+			enabled: false,
+			interval: 4,
+			offset: 0,
+			intensity: 0.01
+		}
+	];
+	var dih:Int = 0;
+	var hudZoom;
+	var colorShader:AdjustColorShader;
+	var characterShader:AdjustColorShader;
+
+	public function new() {
+		super('theShiftErect');
+	}
+
+	function onCreate(event:ScriptEvent) {
+		super.onCreate(event);
+	}
+
+	function onUpdate(elapsed) {
+		super.onUpdate(elapsed);
+
+		super.onUpdate(elapsed);
+		colorShader = new AdjustColorShader();
+		colorShader.hue = dih;
+		colorShader.saturation = 10;
+		colorShader.contrast = 20;
+		colorShader.brightness = 0;
+		var backGround:FlxSprite = getNamedProp('pinkWorld');
+		backGround.shader = colorShader;
+
+		dih = 1 + Math.sin((Conductor.instance.songPosition / 150) * 1) * 100;
+	}
+
+	override function addCharacter(character:BaseCharacter, charType:CharacterType):Void {
+		// Apply the shader automatically to each character as it gets added.
+		super.addCharacter(character, charType);
+		trace('Applied stage shader to ' + character.characterName);
+
+		characterShader = new AdjustColorShader();
+
+		characterShader.hue = -23;
+		characterShader.saturation = 12;
+		characterShader.contrast = 22;
+		characterShader.brightness = -16;
+
+		character.shader = characterShader;
+
+		function onSongStart(event:ScriptEvent) {
+			super.onSongStart(event);
+		}
+	}
+}

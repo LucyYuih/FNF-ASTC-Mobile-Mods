@@ -1,0 +1,18 @@
+PATCH NOTES
+v1.0.1 -
+* erect remixes are now unlocked by default (cos the week is bugged for some people)
+* story menu assets updated
+* erect skins are no longer random, now they are guaranteed when u load the song
+* updated the gallery menu
+* updated the credits to include imperfectnore
+
+v1.0.2 -
+* added sky erect (v2)
+* fixed the sad part in sky erect
+* nerfed the healthdrain in manifest erect
+* fixed the resolution for mobile ports
+* removed additions to the title screen cos they broke on mobile
+* fixed the main menu background
+* removed manifest erect trail cos it messed stuff up
+* removed gallery
+* changed the background for manifest erect

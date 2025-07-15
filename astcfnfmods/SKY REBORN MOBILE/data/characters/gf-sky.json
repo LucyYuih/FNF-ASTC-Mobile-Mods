@@ -1,0 +1,227 @@
+{
+	"danceEvery": 1,
+	"renderType": "multisparrow",
+	"version": "1.0.0",
+	"flipX": false,
+	"name": "Girlfriend (Sky)",
+	"startingAnimation": "danceRight",
+	"singTime": 8,
+	"healthIcon": {
+		"isPixel": false,
+		"id": "gf"
+	},
+	"assetPath": "characters/GF_assets",
+	"generatedBy": "Nova Character Editor REFRESHED v0.1.0",
+	"animations": [
+		{
+			"offsets": [
+				0,
+				-9
+			],
+			"prefix": "GF Dancing Beat",
+			"frameIndices": [
+				30,
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14
+			],
+			"looped": false,
+			"name": "danceLeft"
+		},
+		{
+			"offsets": [
+				0,
+				-9
+			],
+			"prefix": "GF Dancing Beat",
+			"frameIndices": [
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29
+			],
+			"looped": false,
+			"name": "danceRight"
+		},
+		{
+			"offsets": [
+				2,
+				-21
+			],
+			"prefix": "gf sad",
+			"frameIndices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12
+			],
+			"looped": false,
+			"name": "sad"
+		},
+		{
+			"offsets": [
+				0,
+				-19
+			],
+			"prefix": "GF left note",
+			"looped": false,
+			"name": "singLEFT"
+		},
+		{
+			"offsets": [
+				0,
+				-20
+			],
+			"prefix": "GF Down Note",
+			"looped": false,
+			"name": "singDOWN"
+		},
+		{
+			"offsets": [
+				0,
+				4
+			],
+			"prefix": "GF Up Note",
+			"looped": false,
+			"name": "singUP"
+		},
+		{
+			"offsets": [
+				0,
+				-20
+			],
+			"prefix": "GF Right Note",
+			"looped": false,
+			"name": "singRIGHT"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"prefix": "GF Cheer",
+			"looped": false,
+			"name": "cheer"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"prefix": "GF Cheer",
+			"looped": false,
+			"name": "combo50"
+		},
+		{
+			"offsets": [
+				2,
+				-21
+			],
+			"prefix": "gf sad",
+			"frameIndices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12
+			],
+			"looped": false,
+			"name": "drop70"
+		},
+		{
+			"offsets": [
+				45,
+				-8
+			],
+			"frameIndices": [
+				0,
+				1,
+				2,
+				3
+			],
+			"prefix": "GF Dancing Beat Hair blowing",
+			"name": "hairBlow"
+		},
+		{
+			"offsets": [
+				0,
+				-9
+			],
+			"frameIndices": [
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11
+			],
+			"prefix": "GF Dancing Beat Hair Landing",
+			"name": "hairFall"
+		},
+		{
+			"offsets": [
+				-2,
+				-17
+			],
+			"prefix": "GF FEAR",
+			"name": "scared"
+		},
+		{
+			"offsets": [
+				19,
+				-9
+			],
+			"frameRate": 20,
+			"assetPath": "characters/manifest/GFManifest",
+			"prefix": "GF reaction",
+			"looped": false,
+			"name": "react"
+		}
+	]
+}

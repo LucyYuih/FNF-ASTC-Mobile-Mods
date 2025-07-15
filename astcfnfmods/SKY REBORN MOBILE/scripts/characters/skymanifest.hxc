@@ -1,0 +1,28 @@
+import funkin.play.character.SparrowCharacter;
+import funkin.play.character.CharacterType;
+import funkin.play.PlayState;
+
+class SkyManifestCharacter extends SparrowCharacter {
+	function new() {
+		super('skymanifest');
+	}
+
+	function onNoteHit(event:HitNoteScriptEvent) {
+		if (!event.note.noteData.getMustHitNote()
+			&& characterType == CharacterType.DAD
+			&& PlayState.instance.health > 0.1
+			&& PlayState.instance.currentVariation == 'erect'
+			&& PlayState.lastParams.targetDifficulty == "nightmare") {
+			PlayState.instance.health = PlayState.instance.health - 0.04;
+		} else if (!event.note.noteData.getMustHitNote()
+			&& characterType == CharacterType.DAD
+			&& PlayState.lastParams.targetDifficulty == "erect"
+			&& PlayState.instance.health > 0.1) {
+			PlayState.instance.health = PlayState.instance.health - 0.01;
+		}
+		// this script makes sky do healthdrain
+		// on nightmare it is really intense, on erect it is slightly less intenecse
+
+		super.onNoteHit(event);
+	}
+}

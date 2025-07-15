@@ -1,0 +1,80 @@
+{
+    "props": [
+        {
+            "danceEvery": 0,
+            "zIndex": -2,
+            "position": [
+                -850,
+                -1625
+            ],
+            "scale": [
+                1.3,
+                1.3
+            ],
+            "name": "back",
+            "isPixel": false,
+            "assetPath": "stages/bg",
+            "scroll": [
+                1,
+                1
+            ]
+        },
+        {
+            "danceEvery": 0,
+            "zIndex": -1,
+            "position": [
+                -10000,
+                -500
+            ],
+            "scale": [
+                1,
+                1
+            ],
+            "name": "blammedLightsBlack",
+            "isPixel": false,
+            "assetPath": "stages/blackwall",
+            "scroll": [
+                1,
+                1
+            ]
+        }
+    ],
+    "cameraZoom": 0.8,
+    "version": "1.0.0",
+    "characters": {
+        "bf": {
+            "zIndex": 300,
+            "position": [
+                770,
+                180
+            ],
+            "cameraOffsets": [
+                -200,
+                -200
+            ]
+        },
+        "dad": {
+            "zIndex": 200,
+            "position": [
+                -130,
+                350
+            ],
+            "cameraOffsets": [
+                400,
+                -200
+            ]
+        },
+        "gf": {
+            "zIndex": 100,
+            "cameraOffsets": [
+                0,
+                50
+            ],
+            "position": [
+                420,
+                30
+            ]
+        }
+    },
+    "name": "bg"
+}

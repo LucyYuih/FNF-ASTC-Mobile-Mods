@@ -1,0 +1,30 @@
+import funkin.play.character.SparrowCharacter;
+import funkin.play.character.CharacterType;
+import funkin.play.PlayState;
+import funkin.play.song.Song;
+import funkin.Conductor;
+import funkin.modding.module.ModuleHandler;
+import flixel.FlxG;
+import funkin.audio.FunkinSound;
+import flixel.math.FlxMath;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import funkin.play.stage.Stage;
+
+class NeneManifest extends SparrowCharacter {
+	function new() {
+		super('nene-manifest');
+	}
+
+	var swingSpeed:Float = 2;
+	var swingAmount:Float = 50;
+	var neneX:Float = this.x;
+	var angleOffset = 1;
+
+	override function onUpdate(event) {
+		super.onUpdate(event);
+
+		this.x = 100 + Math.sin(angleOffset) * swingAmount;
+		angleOffset += elapsed.elapsed * swingSpeed;
+	}
+}

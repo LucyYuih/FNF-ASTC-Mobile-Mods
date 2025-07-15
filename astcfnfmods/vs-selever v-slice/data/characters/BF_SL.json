@@ -1,0 +1,161 @@
+{
+    "version": "1.0.0",
+    "name": "Bf_sl",
+    "assetPath": "characters/BF",
+    "singTime": 4,
+    "isPixel": false,
+    "scale": null,
+    "healthIcon": {
+        "id": "bf",
+        "isPixel": false,
+        "flipX": false,
+        "scale": 1
+    },
+    "animations": [
+        {
+            "name": "idle",
+            "prefix": "BF idle dance",
+            "offsets": [
+                -5,
+                0
+            ]
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "BF NOTE LEFT0",
+            "offsets": [
+                5,
+                -6
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "BF NOTE DOWN0",
+            "offsets": [
+                -10,
+                -50
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "BF NOTE UP0",
+            "offsets": [
+                -29,
+                27
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "BF NOTE RIGHT0",
+            "offsets": [
+                -48,
+                -7
+            ]
+        },
+        {
+            "name": "singLEFTmiss",
+            "prefix": "BF NOTE LEFT MISS",
+            "offsets": [
+                7,
+                19
+            ]
+        },
+        {
+            "name": "singDOWNmiss",
+            "prefix": "BF NOTE DOWN MISS",
+            "offsets": [
+                -15,
+                -19
+            ]
+        },
+        {
+            "name": "singUPmiss",
+            "prefix": "BF NOTE UP MISS",
+            "offsets": [
+                -36,
+                27
+            ]
+        },
+        {
+            "name": "singRIGHTmiss",
+            "prefix": "BF NOTE RIGHT MISS",
+            "offsets": [
+                -44,
+                22
+            ]
+        },
+        {
+            "name": "hey",
+            "prefix": "BF HEY",
+            "offsets": [
+                -3,
+                5
+            ]
+        },
+        {
+            "name": "hurt",
+            "prefix": "BF hit",
+            "offsets": [
+                15,
+                18
+            ]
+        },
+        {
+            "name": "scared",
+            "prefix": "BF idle shaking",
+            "offsets": [
+                -4,
+                0
+            ]
+        },
+        {
+            "name": "firstDeath",
+            "prefix": "BF dies",
+            "offsets": [
+                37,
+                11
+            ]
+        },
+        {
+            "name": "deathLoop",
+            "prefix": "BF Dead Loop",
+            "offsets": [
+                37,
+                5
+            ]
+        },
+        {
+            "name": "deathConfirm",
+            "prefix": "BF Dead confirm",
+            "offsets": [
+                37,
+                69
+            ]
+        },
+        {
+            "name": "dodge",
+            "prefix": "boyfriend dodge",
+            "offsets": [
+                -10,
+                -16
+            ]
+        },
+        {
+            "name": "attack",
+            "prefix": "boyfriend attack",
+            "offsets": [
+                294,
+                267
+            ]
+        },
+        {
+            "name": "pre-attack",
+            "prefix": "bf pre attack",
+            "offsets": [
+                -40,
+                -40
+            ]
+        }
+    ],
+    "flipX": true
+}

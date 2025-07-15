@@ -1,0 +1,232 @@
+package flixel.util;
+import funkin.play.stage.Stage;
+import funkin.play.PlayState;
+import funkin.util.MathUtil;
+import funkin.play.PlayStatePlaylist;
+import flixel.FlxG;
+import funkin.graphics.shaders.AdjustColorShader;
+import flixel.tweens.FlxEase;
+import funkin.graphics.FunkinSprite;
+import funkin.Conductor;
+import flixel.FlxSprite;
+import funkin.play.song.Song;
+import flixel.FlxObject;
+import funkin.util.FileUtil;
+import funkin.audio.FunkinSound;
+import funkin.graphics.shaders.DropShadowShader;
+import flixel.addons.display.FlxBackdrop;
+import flixel.tweens.FlxTween;
+import funkin.modding.base.ScriptedFlxRuntimeShader;
+import flixel.util.FlxTimer;
+import funkin.play.character.CharacterType;
+import openfl.filters.ShaderFilter;
+
+
+class TheShiftManifestStage extends Stage {
+
+    var characterShader:AdjustColorShader;
+	var giygasOverlay:FlxBackdrop;
+	var giygasOverlay:FunkinSprite;
+	var glitchShader;
+	var canLoadLaser:Bool;
+	
+	//laser shit 
+	var laserAngle = 0;
+	var laserAngleR = 0;
+	var laserPos = 0;
+	var laserPosR = 0;
+	var laser:FlxSprite;
+	var laser2:FlxSprite;
+	var laserGrp:Array<FlxSprite> = ['laser', 'laser2'];
+	var defaultLaserPos = 1600;
+
+	//end cutscene
+	var dramaticBlack:FunkinSprite;
+
+	public function new() {
+		super('theShiftManifest');
+		canLoadLaser = true;
+	}
+
+    function onCreate(event:ScriptEvent) {
+        super.onCreate(event);
+		//glitchShader = new ScriptedFlxRuntimeShader(Paths.frag("glitch")); // Doesn't Fucking Work in V-Slice
+		
+		if (PlayState.instance.currentVariation == 'default' && PlayStatePlaylist.isStoryMode && PlayState.instance.currentSong.id == 'manifest') {
+			dramaticBlack = new FunkinSprite(0, 0);
+			dramaticBlack.makeSolidColor(2000, 2500, 0xFF000000);
+			dramaticBlack.cameras = [PlayState.instance.camCutscene]; // Show over the HUD but below the video.
+			dramaticBlack.zIndex = -10000;
+			dramaticBlack.alpha = 0;
+			PlayState.instance.add(dramaticBlack);
+			PlayState.instance.refresh();
+		}
+    	
+		
+        laser = new FlxSprite(0, -500).loadGraphic(Paths.image('shift/manifest/delusionRay'));
+        laser.updateHitbox();
+		laser.frames = Paths.getSparrowAtlas('shift/manifest/delusionRay');
+		laser.animation.addByPrefix('idle', 'gaster laser', 24, true);
+		laser.animation.play('idle');
+		laser.scale.set(1,4);
+        laser.angle = laserAngle;
+		
+        laser.zIndex = 15;
+        PlayState.instance.currentStage.add(laser);
+        PlayState.instance.currentStage.refresh();
+		
+		laser2 = new FlxSprite(defaultLaserPos, -500).loadGraphic(Paths.image('shift/manifest/delusionRay'));
+        laser2.updateHitbox();
+		laser2.frames = Paths.getSparrowAtlas('shift/manifest/delusionRay');
+		laser2.animation.addByPrefix('idle', 'gaster laser', 24, true);
+		laser2.animation.play('idle');
+		laser2.scale.set(0.4,4);
+        laser2.angle = laserAngle;
+        laser2.zIndex = 500;
+		laser2.blend = 0;
+		laser2.alpha = 1;
+        PlayState.instance.currentStage.add(laser2);
+        PlayState.instance.currentStage.refresh();
+		
+
+		var wall = new FlxBackdrop((Paths.image('shift/manifest/manifestWall')), 0x10, 0, 0);
+		wall.velocity.set(0,-2000);
+		wall.y = -150;
+		wall.frames = Paths.getSparrowAtlas('shift/manifest/manifestWall');
+		wall.animation.addByPrefix('idle', 'manifestText', 12, true);
+		wall.animation.play('idle');
+		wall.alpha = 0.5;
+		wall.zIndex = 18;
+		wall.scale.set(1, 1);
+		wall.blend = 0;
+		wall.antialiasing = false;
+		wall.updateHitbox();
+		wall.screenCenter();	
+		
+		add(wall);
+
+	
+		PlayState.instance.refresh();
+
+		//PlayState.instance.camHUD.filters = [new ShaderFilter(glitchShader)];
+    }
+
+    function onUpdate(event) {
+        super.onUpdate(event);
+		//yo its st4rcannon wassup
+		laser.angle = laserAngle;
+		laser2.angle = laserAngleR * 2;
+		laser.x = laserPos;
+		laser2.x = defaultLaserPos + laserPosR * 2;
+		
+		laserPos = 1 + Math.sin((Conductor.instance.songPosition  / 2500) * 10) * 100 ; 
+		laserPosR = 1 - Math.sin((Conductor.instance.songPosition  / 2500) * 10) * 100 ;
+		 
+		laserAngle = 1 + Math.sin((Conductor.instance.songPosition  / 500) * 1) * 10 ;
+		laserAngleR = 1 - Math.sin((Conductor.instance.songPosition  / 500) * 1) * 10 ;
+		// if (canLoadLaser)
+		// {
+		// 	loadLaser();
+		// }
+
+    }
+
+	function loadLaser():Void 
+	{
+		// laserBool = FlxG.random.int(4, 12);
+		// laser.x = FlxG.random.int(-400, 1200);
+		// canLoadLaser = false;
+		// laser.alpha = 0;
+		// new FlxTimer().start(laserBool + 1, function(tmr)
+		// {
+		// 	FlxTween.tween(laser, { alpha: 1}, laserBool / 4);
+		// 	if (laser.alpha == 0)
+		// 	{
+		// 	canLoadLaser = true;
+		// 	}
+			 
+		// });
+		// new FlxTimer().start(laserBool, function(tmr)
+		// {
+		// 	FlxTween.tween(laser, { alpha: 0}, laserBool / 4);
+		// });
+	}
+
+    function buildStage()
+    {
+        super.buildStage();
+
+
+		getNamedProp('gradientTop').blend = 0;
+        getNamedProp('gradientBottom').blend = 0;
+    }
+
+    override function addCharacter(character:BaseCharacter, charType:CharacterType):Void {
+		// Apply the shader automatically to each character as it gets added.
+	super.addCharacter(character, charType);
+    
+	trace('Applied stage shader to ' + character.characterName);
+
+    var rim = new DropShadowShader();
+						// bright, hue, contrast, saturation
+        rim.setAdjustColor(-30, -20, 38, 10);
+        rim.color = 0xFFff0000;
+		character.shader = rim;
+		rim.attachedSprite = character;
+
+        switch(charType){
+			case CharacterType.BF:
+
+				rim.angle = 140;
+
+				character.animation.callback = function() {
+					if (getBoyfriend() != null)
+					{
+      			        rim.updateFrameInfo(getBoyfriend().frame);
+					}
+    		};
+			case CharacterType.GF:
+
+				rim.angle = 90;
+
+				character.animation.callback = function() {
+      		rim.updateFrameInfo(getGirlfriend().frame);
+    		};
+
+			case CharacterType.DAD:
+
+				rim.angle = 45;
+				//rim.threshold = 0.6;
+
+				character.animation.callback = function() {
+      		rim.updateFrameInfo(getDad().frame);
+    		};
+			default: 
+
+		}
+	}
+	
+	// characterShader = new AdjustColorShader();
+
+    // characterShader.hue = -20;
+	// characterShader.saturation = 0;
+	// characterShader.contrast = 38;
+	// characterShader.brightness = -30;
+
+	// character.shader = characterShader;
+	override function onBeatHit(event) {
+		super.onBeatHit(event);
+		curBeat = event.beat;
+		if (PlayState.instance.currentVariation == 'default' && PlayStatePlaylist.isStoryMode && PlayState.instance.currentSong.id == 'manifest') {
+			switch (event.beat) {
+				// transition to the credits
+		
+				case 424:
+					
+					FlxTween.tween(dramaticBlack, { alpha: 1}, 2, {startDelay: 0}, function(){dramaticBlack.visible = false;});
+					
+			}
+		}
+	
+    }
+}

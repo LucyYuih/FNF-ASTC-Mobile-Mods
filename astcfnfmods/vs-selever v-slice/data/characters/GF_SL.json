@@ -1,0 +1,105 @@
+{
+    "version": "1.0.0",
+    "name": "Gf_sl",
+    "assetPath": "characters/GF",
+    "singTime": 4,
+    "isPixel": false,
+    "scale": null,
+    "healthIcon": {
+        "id": "gf",
+        "isPixel": false,
+        "flipX": false,
+        "scale": 1
+    },
+    "animations": [
+        {
+            "name": "cheer",
+            "prefix": "GF Cheer",
+            "offsets": [
+                3,
+                0
+            ]
+        },
+        {
+            "name": "singLEFT",
+            "prefix": "GF left note",
+            "offsets": [
+                0,
+                -19
+            ]
+        },
+        {
+            "name": "singDOWN",
+            "prefix": "GF Down Note",
+            "offsets": [
+                0,
+                -20
+            ]
+        },
+        {
+            "name": "singUP",
+            "prefix": "GF Up Note",
+            "offsets": [
+                0,
+                4
+            ]
+        },
+        {
+            "name": "singRIGHT",
+            "prefix": "GF Right Note",
+            "offsets": [
+                0,
+                -20
+            ]
+        },
+        {
+            "name": "sad",
+            "prefix": "gf sad",
+            "offsets": [
+                -2,
+                -21
+            ]
+        },
+        {
+            "name": "danceLeft",
+            "prefix": "GF Dancing Beat",
+            "offsets": [
+                0,
+                -9
+            ]
+        },
+        {
+            "name": "danceRight",
+            "prefix": "GF Dancing Beat",
+            "offsets": [
+                0,
+                -9
+            ]
+        },
+        {
+            "name": "hairBlow",
+            "prefix": "GF Dancing Beat Hair blowing",
+            "offsets": [
+                45,
+                -8
+            ]
+        },
+        {
+            "name": "hairFall",
+            "prefix": "GF Dancing Beat Hair Landing",
+            "offsets": [
+                0,
+                -9
+            ]
+        },
+        {
+            "name": "scared",
+            "prefix": "GF FEAR",
+            "offsets": [
+                -2,
+                -17
+            ]
+        }
+    ],
+    "flipX": false
+}

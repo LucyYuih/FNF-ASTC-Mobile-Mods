@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="Sky_Sad.png">
+	<!-- Created with Adobe Animate version 22.0.8.217 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="sky down sad0000" x="14" y="14" width="361" height="588" frameX="-1" frameY="-3" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0001" x="382" y="14" width="361" height="586" frameX="-1" frameY="-5" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0002" x="750" y="14" width="361" height="592" frameX="0" frameY="0" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0003" x="1118" y="14" width="361" height="590" frameX="0" frameY="-2" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0004" x="750" y="14" width="361" height="592" frameX="0" frameY="0" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0005" x="1118" y="14" width="361" height="590" frameX="0" frameY="-2" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0006" x="750" y="14" width="361" height="592" frameX="0" frameY="0" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0007" x="1118" y="14" width="361" height="590" frameX="0" frameY="-2" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0008" x="750" y="14" width="361" height="592" frameX="0" frameY="0" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0009" x="1118" y="14" width="361" height="590" frameX="0" frameY="-2" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0010" x="750" y="14" width="361" height="592" frameX="0" frameY="0" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0011" x="1118" y="14" width="361" height="590" frameX="0" frameY="-2" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0012" x="750" y="14" width="361" height="592" frameX="0" frameY="0" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky down sad0013" x="1118" y="14" width="361" height="590" frameX="0" frameY="-2" frameWidth="362" frameHeight="592"/>
+	<SubTexture name="sky idle sad0000" x="1486" y="14" width="360" height="574" frameX="-2" frameY="-5" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0001" x="1486" y="14" width="360" height="574" frameX="-2" frameY="-5" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0002" x="1853" y="14" width="360" height="578" frameX="-5" frameY="-1" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0003" x="1853" y="14" width="360" height="578" frameX="-5" frameY="-1" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0004" x="2220" y="14" width="361" height="578" frameX="-9" frameY="-1" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0005" x="2220" y="14" width="361" height="578" frameX="-9" frameY="-1" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0006" x="2588" y="14" width="361" height="577" frameX="-12" frameY="-2" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0007" x="2588" y="14" width="361" height="577" frameX="-12" frameY="-2" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0008" x="2956" y="14" width="361" height="574" frameX="-14" frameY="-5" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0009" x="2956" y="14" width="361" height="574" frameX="-14" frameY="-5" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0010" x="3324" y="14" width="361" height="579" frameX="-8" frameY="0" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0011" x="3324" y="14" width="361" height="579" frameX="-8" frameY="0" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0012" x="3692" y="14" width="360" height="578" frameX="-3" frameY="-1" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0013" x="3692" y="14" width="360" height="578" frameX="-3" frameY="-1" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0014" x="14" y="613" width="360" height="576" frameX="0" frameY="-3" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky idle sad0015" x="14" y="613" width="360" height="576" frameX="0" frameY="-3" frameWidth="375" frameHeight="579"/>
+	<SubTexture name="sky left sad0000" x="381" y="613" width="460" height="597"/>
+	<SubTexture name="sky left sad0001" x="848" y="613" width="460" height="590" frameX="0" frameY="-7" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0002" x="1315" y="613" width="457" height="594" frameX="-3" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0003" x="1779" y="613" width="457" height="587" frameX="-3" frameY="-10" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0004" x="1315" y="613" width="457" height="594" frameX="-3" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0005" x="1779" y="613" width="457" height="587" frameX="-3" frameY="-10" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0006" x="1315" y="613" width="457" height="594" frameX="-3" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0007" x="1779" y="613" width="457" height="587" frameX="-3" frameY="-10" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0008" x="1315" y="613" width="457" height="594" frameX="-3" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0009" x="1779" y="613" width="457" height="587" frameX="-3" frameY="-10" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0010" x="1315" y="613" width="457" height="594" frameX="-3" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0011" x="1779" y="613" width="457" height="587" frameX="-3" frameY="-10" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0012" x="1315" y="613" width="457" height="594" frameX="-3" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky left sad0013" x="1779" y="613" width="457" height="587" frameX="-3" frameY="-10" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0000" x="2243" y="613" width="460" height="594" frameX="0" frameY="-3" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0001" x="2710" y="613" width="460" height="591" frameX="0" frameY="-6" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0002" x="3177" y="613" width="450" height="597" frameX="-1" frameY="0" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0003" x="14" y="1217" width="450" height="593" frameX="-1" frameY="-4" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0004" x="3177" y="613" width="450" height="597" frameX="-1" frameY="0" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0005" x="14" y="1217" width="450" height="593" frameX="-1" frameY="-4" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0006" x="3177" y="613" width="450" height="597" frameX="-1" frameY="0" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0007" x="14" y="1217" width="450" height="593" frameX="-1" frameY="-4" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0008" x="3177" y="613" width="450" height="597" frameX="-1" frameY="0" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0009" x="14" y="1217" width="450" height="593" frameX="-1" frameY="-4" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0010" x="3177" y="613" width="450" height="597" frameX="-1" frameY="0" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0011" x="14" y="1217" width="450" height="593" frameX="-1" frameY="-4" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0012" x="3177" y="613" width="450" height="597" frameX="-1" frameY="0" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky right sad0013" x="14" y="1217" width="450" height="593" frameX="-1" frameY="-4" frameWidth="460" frameHeight="597"/>
+	<SubTexture name="sky sobbing0000" x="471" y="1217" width="399" height="633" frameX="-2" frameY="0" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0001" x="471" y="1217" width="399" height="633" frameX="-2" frameY="0" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0002" x="877" y="1217" width="395" height="627" frameX="0" frameY="-6" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0003" x="877" y="1217" width="395" height="627" frameX="0" frameY="-6" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0004" x="1279" y="1217" width="398" height="628" frameX="-1" frameY="-5" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0005" x="1279" y="1217" width="398" height="628" frameX="-1" frameY="-5" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0006" x="1684" y="1217" width="394" height="630" frameX="-6" frameY="-3" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky sobbing0007" x="1684" y="1217" width="394" height="630" frameX="-6" frameY="-3" frameWidth="401" frameHeight="633"/>
+	<SubTexture name="sky up sad0000" x="2085" y="1217" width="356" height="616" frameX="-1" frameY="0" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0001" x="2085" y="1217" width="356" height="616" frameX="-1" frameY="0" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0002" x="2448" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0003" x="2812" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0004" x="2448" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0005" x="2812" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0006" x="2448" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0007" x="2812" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0008" x="2448" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0009" x="2812" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0010" x="2448" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0011" x="2812" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0012" x="2448" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+	<SubTexture name="sky up sad0013" x="2812" y="1217" width="357" height="612" frameX="0" frameY="-4" frameWidth="357" frameHeight="616"/>
+</TextureAtlas>

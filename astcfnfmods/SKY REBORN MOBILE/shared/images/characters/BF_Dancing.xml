@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="BF_Dancing.png">
+	<!-- Created with Adobe Animate version 22.0.8.217 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="BF dance0000" x="11" y="11" width="455" height="456" frameX="0" frameY="-8" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0001" x="11" y="11" width="455" height="456" frameX="0" frameY="-8" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0002" x="473" y="11" width="455" height="461" frameX="-10" frameY="-4" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0003" x="473" y="11" width="455" height="461" frameX="-10" frameY="-4" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0004" x="935" y="11" width="447" height="461" frameX="-21" frameY="-4" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0005" x="935" y="11" width="447" height="461" frameX="-21" frameY="-4" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0006" x="1389" y="11" width="447" height="462" frameX="-22" frameY="-3" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0007" x="1389" y="11" width="447" height="462" frameX="-22" frameY="-3" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0008" x="1843" y="11" width="450" height="462" frameX="-19" frameY="-3" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0009" x="1843" y="11" width="450" height="462" frameX="-19" frameY="-3" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0010" x="2300" y="11" width="407" height="465" frameX="-55" frameY="0" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0011" x="2300" y="11" width="407" height="465" frameX="-55" frameY="0" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0012" x="2714" y="11" width="380" height="450" frameX="-61" frameY="-14" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0013" x="2714" y="11" width="380" height="450" frameX="-61" frameY="-14" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0014" x="3101" y="11" width="383" height="454" frameX="-60" frameY="-10" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0015" x="3101" y="11" width="383" height="454" frameX="-60" frameY="-10" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0016" x="3491" y="11" width="384" height="456" frameX="-59" frameY="-8" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0017" x="3491" y="11" width="384" height="456" frameX="-59" frameY="-8" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0018" x="11" y="483" width="392" height="464" frameX="-56" frameY="0" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF dance0019" x="11" y="483" width="392" height="464" frameX="-56" frameY="0" frameWidth="469" frameHeight="465"/>
+	<SubTexture name="BF listening0000" x="410" y="483" width="377" height="432" frameX="-3" frameY="-1" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF listening0001" x="410" y="483" width="377" height="432" frameX="-3" frameY="-1" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF listening0002" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0003" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0004" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0005" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0006" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0007" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0008" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0009" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0010" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0011" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0012" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF listening0013" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0000" x="794" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0001" x="1185" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0002" x="1576" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0003" x="1576" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0004" x="1967" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0005" x="1967" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0006" x="2358" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0007" x="2358" y="483" width="384" height="433"/>
+	<SubTexture name="BF realization0008" x="2749" y="483" width="383" height="433" frameX="0" frameY="0" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0009" x="2749" y="483" width="383" height="433" frameX="0" frameY="0" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0010" x="3139" y="483" width="383" height="432" frameX="0" frameY="-1" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0011" x="3139" y="483" width="383" height="432" frameX="0" frameY="-1" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0012" x="3529" y="483" width="381" height="432" frameX="0" frameY="-1" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0013" x="3529" y="483" width="381" height="432" frameX="0" frameY="-1" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0014" x="11" y="954" width="379" height="431" frameX="-1" frameY="-2" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0015" x="11" y="954" width="379" height="431" frameX="-1" frameY="-2" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0016" x="397" y="954" width="377" height="430" frameX="-1" frameY="-3" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0017" x="397" y="954" width="377" height="430" frameX="-1" frameY="-3" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0018" x="781" y="954" width="374" height="428" frameX="-1" frameY="-5" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0019" x="781" y="954" width="374" height="428" frameX="-1" frameY="-5" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0020" x="1162" y="954" width="370" height="426" frameX="-1" frameY="-7" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0021" x="1162" y="954" width="370" height="426" frameX="-1" frameY="-7" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0022" x="1539" y="954" width="366" height="424" frameX="-1" frameY="-9" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0023" x="1539" y="954" width="366" height="424" frameX="-1" frameY="-9" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0024" x="1912" y="954" width="360" height="421" frameX="-2" frameY="-12" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0025" x="1912" y="954" width="360" height="421" frameX="-2" frameY="-12" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0026" x="2279" y="954" width="354" height="418" frameX="-2" frameY="-15" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0027" x="2279" y="954" width="354" height="418" frameX="-2" frameY="-15" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0028" x="2640" y="954" width="351" height="414" frameX="-3" frameY="-19" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0029" x="2998" y="954" width="351" height="412" frameX="-3" frameY="-21" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0030" x="2998" y="954" width="351" height="412" frameX="-3" frameY="-21" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0031" x="3356" y="954" width="349" height="414" frameX="-5" frameY="-19" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0032" x="3356" y="954" width="349" height="414" frameX="-5" frameY="-19" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0033" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0034" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0035" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0036" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0037" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0038" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0039" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0040" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0041" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0042" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="BF realization0043" x="3712" y="954" width="349" height="416" frameX="-5" frameY="-17" frameWidth="384" frameHeight="433"/>
+	<SubTexture name="bf putting hand in pocket0000" x="11" y="1392" width="349" height="416" frameX="-9" frameY="-22" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0001" x="11" y="1392" width="349" height="416" frameX="-9" frameY="-22" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0002" x="367" y="1392" width="374" height="427" frameX="0" frameY="-11" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0003" x="367" y="1392" width="374" height="427" frameX="0" frameY="-11" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0004" x="748" y="1392" width="372" height="428" frameX="-22" frameY="-10" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0005" x="748" y="1392" width="372" height="428" frameX="-22" frameY="-10" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0006" x="1127" y="1392" width="372" height="428" frameX="-22" frameY="-10" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0007" x="1127" y="1392" width="372" height="428" frameX="-22" frameY="-10" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0008" x="1506" y="1392" width="378" height="428" frameX="-22" frameY="-10" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0009" x="1506" y="1392" width="378" height="428" frameX="-22" frameY="-10" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0010" x="1891" y="1392" width="376" height="432" frameX="-22" frameY="-6" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0011" x="1891" y="1392" width="376" height="432" frameX="-22" frameY="-6" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0012" x="2274" y="1392" width="369" height="437" frameX="-23" frameY="-1" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0013" x="2274" y="1392" width="369" height="437" frameX="-23" frameY="-1" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0014" x="2650" y="1392" width="361" height="438" frameX="-30" frameY="0" frameWidth="400" frameHeight="438"/>
+	<SubTexture name="bf putting hand in pocket0015" x="2650" y="1392" width="361" height="438" frameX="-30" frameY="0" frameWidth="400" frameHeight="438"/>
+</TextureAtlas>

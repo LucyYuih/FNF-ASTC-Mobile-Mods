@@ -1,0 +1,63 @@
+{
+  "version": "2.2.4",
+  "songName": "Wife Forever!",
+  "artist": "st4rcannon",
+  
+  "divisions": 96,
+  "looped": false,
+  "offsets": {
+    "instrumental": 0,
+    "altInstrumentals": {    },
+    "vocals": {    },
+    "altVocals": {    }
+  },
+  "playData": {
+    "stickerPack": "sky",
+    "songVariations": ["erect"],
+    "difficulties": [
+      "easy",
+      "normal",
+      "hard"
+    ],
+    "album": "skyreborn",
+    "characters": {
+      "player": "bf-wifeforever",
+      "girlfriend": "gf",
+      "opponent": "sky",
+      "instrumental": "",
+      "altInstrumentals": [      ],
+      "opponentVocals": [
+        "sky"
+      ],
+      "playerVocals": [
+        "bf"
+      ]
+    },
+    "stage": "theShift",
+    "noteStyle": "funkin",
+    "ratings": {
+      "easy": 3,
+      "normal": 5,
+      "hard": 7
+    },
+    "previewStart": 0,
+    "previewEnd": 0
+  },
+  "generatedBy": "Friday Night Funkin' - v0.6.4",
+  "timeFormat": "ms",
+  "timeChanges": [
+    {
+      "t": 0,
+      "b": 0,
+      "bpm": 200,
+      "n": 4,
+      "d": 4,
+      "bt": [
+        4,
+        4,
+        4,
+        4
+      ]
+    }
+  ]
+}

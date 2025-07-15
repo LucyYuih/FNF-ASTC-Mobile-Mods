@@ -1,0 +1,154 @@
+import funkin.play.stage.Stage;
+import funkin.play.PlayState;
+import funkin.util.MathUtil;
+import flixel.FlxG;
+import funkin.graphics.shaders.AdjustColorShader;
+import flixel.tweens.FlxEase;
+import funkin.Conductor;
+import flixel.tweens.FlxTween;
+
+class TheShiftDarkStage extends Stage {
+
+    var cameras = [
+        {
+            enabled: false,
+            interval: 4,
+            offset: 0,
+            intensity: 0.01
+        },
+        {
+            enabled: false,
+            interval: 4,
+            offset: 0,
+            intensity: 0.01
+        }
+    ];
+    var dih:Int = 0;
+    var hudZoom;
+    var colorShader:AdjustColorShader;
+	public function new() {
+		super('theShiftDark');
+	}
+
+    function onCreate(event:ScriptEvent) {
+        super.onCreate(event);
+        hudZoom = PlayState.instance.defaultHUDCameraZoom;
+    }
+
+    function onUpdate(elapsed) {
+        super.onUpdate(elapsed);
+
+        super.onUpdate(elapsed);
+        colorShader = new AdjustColorShader();
+        colorShader.hue = dih;
+        colorShader.saturation = -46;
+		colorShader.contrast = 5;
+		colorShader.brightness = -80;
+        var backGround:FlxSprite = getNamedProp('pinkWorld');
+		backGround.shader = colorShader;
+
+		dih = 1 + Math.sin((Conductor.instance.songPosition / 1000) * 1) * 100 ;
+
+        /* PlayState.instance.cameraZoomRate = 0;
+        var index = 0;
+        for (camera in cameras) {
+            if (index == 0) {
+                PlayState.instance.currentCameraZoom =  MathUtil.coolLerp(PlayState.instance.currentCameraZoom, 0.7, 0.1);
+                PlayState.instance.camGame.zoom =  PlayState.instance.currentCameraZoom;
+            } else if (index == 1) {
+                if (hudZoom != null) {
+                    PlayState.instance.camHUD.zoom = hudZoom;
+                    hudZoom = MathUtil.coolLerp(hudZoom, PlayState.instance.defaultHUDCameraZoom, 0.1);
+                }
+            }
+            index++;
+        } */
+    }
+
+    override function onBeatHit(event) {
+
+    
+		
+        super.onBeatHit(event);
+    }
+
+    override function onStepHit(event:SongTimeScriptEvent) {
+        /* super.onStepHit(event);
+        var index = 0;
+        for (camera in cameras) {
+            if (camera.enabled) {
+                if (event.step % camera.interval == camera.offset) {
+                    if (index == 0) {
+                        PlayState.instance.currentCameraZoom += camera.intensity;
+                    } else if (index == 1) {
+                        hudZoom += camera.intensity;
+                    }
+                }
+            }
+            index++;
+        } */
+    }
+    
+    function onNoteHit(event:HitNoteScriptEvent) {
+		super.onNoteHit(event);
+    }
+
+	function onNoteMiss(event:NoteScriptEvent) {
+		super.onNoteMiss(event);
+	}
+
+    function onSongEvent(event) {
+        super.onSongEvent(event);
+        /* switch (event.eventData.eventKind) {
+            case "CameraBopEvent":
+                if (event.eventData.value.cameraType != "both") {
+                    var daCamera = cameras[["game", "hud"].indexOf(event.eventData.value.cameraType)];
+                    daCamera.enabled = event.eventData.value.enabled;
+                    daCamera.interval = event.eventData.value.interval;
+                    daCamera.intensity = event.eventData.value.intensity;
+                    daCamera.offset = event.eventData.value.offset;
+                } else {
+                    for (daCamera in cameras) {
+                        daCamera.enabled = event.eventData.value.enabled;
+                        daCamera.interval = event.eventData.value.interval;
+                        daCamera.intensity = event.eventData.value.intensity;
+                        daCamera.offset = event.eventData.value.offset;
+                    }
+                }
+            case "AddCameraZoom":
+                if (event.eventData.value.cameraType != "both") {
+                    if (event.eventData.value.cameraType == "hud") {
+                        hudZoom += event.eventData.value.intensity;
+                    } else {
+                        PlayState.instance.currentCameraZoom += event.eventData.value.intensity;
+                        PlayState.instance.camGame.zoom += event.eventData.value.intensity;
+                    }
+                } else {
+                    hudZoom += event.eventData.value.intensity;
+                    PlayState.instance.currentCameraZoom += event.eventData.value.intensity;
+                    PlayState.instance.camGame.zoom += event.eventData.value.intensity;
+                }
+        } */
+    }
+
+	public override function onSongEnd(event:CountdownScriptEvent) {
+		super.onSongEnd(event);
+	}
+
+    override function onSongRetry(event){
+        if (PlayState.instance == null || PlayState.instance.currentStage == null) return;
+        if (PlayState.instance.isMinimalMode) return;
+        for (i in cameras) {
+            i.enabled = false;
+        }
+        super.onSongRetry(event);
+    }
+    
+    public override function onCountdownStart(event:CountdownScriptEvent) {
+		super.onCountdownStart(event);
+    }
+
+    function onSongStart(event:ScriptEvent) {
+        super.onSongStart(event);
+    }
+}
