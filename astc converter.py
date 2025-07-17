@@ -8,6 +8,7 @@ import json
 import math
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import warnings # Importar o módulo warnings
 
 # Tentar importar ttkbootstrap, caso contrário, usar ttk padrão
 try:
@@ -15,6 +16,9 @@ try:
     ttk_style_available = True
 except ImportError:
     ttk_style_available = False
+
+# Suprimir DecompressionBombWarning
+warnings.filterwarnings("ignore", category=Image.DecompressionBombWarning)
 
 CONFIG_FILE = os.path.join(os.path.expanduser("~"), "astc_config.json")
 BLOCK_SIZES = ["4x4","5x4","5x5","6x5","6x6","8x5","8x6","8x8","10x5","10x6","10x8","10x10","12x10","12x12"]
@@ -306,7 +310,8 @@ class ASTCConverterGUI:
             result = future.result()
             self.log_message(result)
             self.processed_count += 1
-            self.root.after(0, lambda: self.progress.set(self.processed_count))
+            # Correção: Atribuir diretamente ao 'value' do Progressbar
+            self.root.after(0, lambda: self.progress.__setitem__('value', self.processed_count))
         
         # Garantir que todos os threads são encerrados
         self.executor.shutdown(wait=True)
@@ -333,5 +338,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = ASTCConverterGUI(root)
     root.mainloop()
-
-
