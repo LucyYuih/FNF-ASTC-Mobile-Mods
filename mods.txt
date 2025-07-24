@@ -1,153 +1,148 @@
 #astcfnfmobile
 
 
-
 [vslice]Mobile Extra Controls 0.2.2
 https://ranoz.gg/file/w9ozc5HX
 
 Original
 https://gamebanana.com/tools/20296
 
-
-
+-
 Time Bar [V-Slice Mod]
 https://ranoz.gg/file/PlAyNM4K
 
 Original
 https://gamebanana.com/mods/517012
 
-
-
+-
 Combos Reimplemented [V-Slice Mod]
 https://ranoz.gg/file/Z5CLJR9i
 
 Original
 https://gamebanana.com/mods/516489
 
-
-
+-
 Sky Reborn
 https://ranoz.gg/file/LOFSBice
 
 Original
 https://gamebanana.com/mods/602414
 
-
-
+-
 Vs Selever 2.1 port V2.2
 https://ranoz.gg/file/USo9zvoN
 
 Original
 https://gamebanana.com/mods/517639
 
-
-
+-
 0.01% chance withered foxy jumpscare every second
 https://ranoz.gg/file/lmd3hTqN
 
 original
 https://gamebanana.com/mods/606823
 
-
-
+-
 Shaggy
 https://ranoz.gg/file/SEEZ0YRc
 
 Original
 https://gamebanana.com/mods/512013
 
-
-
+-
 QT Rewired
 https://ranoz.gg/file/Fgq2miQP
 
 Original
 https://gamebanana.com/mods/566597
 
-
-
+-
 literally every fnf mod ever (Vs Bob) v-slice
 https://ranoz.gg/file/DcQ6F0nj
 
 Original
 https://gamebanana.com/mods/514629
 
-
-
+-
 Spooky Mix MODPACK (v2.0.1)
 https://ranoz.gg/file/TFiTiGqO
 
 Original
 https://gamebanana.com/mods/551727
 
-
-
+-
 Smoke 'Em Out Struggle V-Slice
 https://ranoz.gg/file/2pjGxh1Z
 
 Original
 https://gamebanana.com/mods/511838
 
-
-
+-
 Bambi 3D Songs Pack Port [V-Slice]
 https://ranoz.gg/file/VjzGibBV
 
 Original
 https://gamebanana.com/mods/518258
 
-
-
+-
 Doki Doki Takeover! - BAD ENDING V-Slice Port
 https://ranoz.gg/file/oKAH1efV
 
 Original
 https://gamebanana.com/mods/594282
 
-
-
+-
 VS. Huggy Wuggy V-SLICE Port
 https://ranoz.gg/file/m6zyNe7u
 
 Original
 https://gamebanana.com/mods/607608
 
-
-
+-
 RIVALS V-SLICE
 https://ranoz.gg/file/RFwnf3NY
 
 Original
 https://gamebanana.com/mods/607663
 
-
-
+-
 VS MATT VSlice port
 https://ranoz.gg/file/aIN2KbR5
 
 Original
 https://gamebanana.com/mods/607595
 
-
-
+-
 VS Cassette Girl [v-slice]
 https://ranoz.gg/file/gxooMIRF
 
 Original
 https://gamebanana.com/mods/512420
 
-
-
+-
 Trick or World
 https://ranoz.gg/file/QBonjWKG
 
 Original
 https://gamebanana.com/mods/607909
 
-
-
+-
 BUNNY FUNKIN! - V-SLICE PORT [ONESHOT]
 https://ranoz.gg/file/v0RmChXU
 
 Original
 https://gamebanana.com/mods/608070
+
+-
+Vs Ritz
+https://ranoz.gg/file/okitwdFR
+
+Original
+https://gamebanana.com/mods/608102
+
+-
+Vs Sky
+https://ranoz.gg/file/OkIZtmBk
+
+Original
+https://gamebanana.com/mods/516067
