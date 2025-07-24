@@ -27,7 +27,7 @@ class ASTCConverterGUI:
 
         self.input_folder = tk.StringVar(value=self.cfg.get('input_folder', ''))
         self.astcenc_path = tk.StringVar(value=self.cfg.get('astcenc_path', ''))
-        self.block_size = tk.StringVar(value=self.cfg.get('block_size', '8x8'))
+        self.block_size = tk.StringVar(value=self.cfg.get('block_size', 'auto'))
         self.quality = tk.StringVar(value=self.cfg.get('quality', '-fast'))
         self.auto = tk.BooleanVar(value=(self.block_size.get().lower() == 'auto'))
         self.cancel_event = threading.Event()
