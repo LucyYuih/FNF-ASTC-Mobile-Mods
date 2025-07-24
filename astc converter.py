@@ -2,140 +2,94 @@ import os
 import subprocess
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
-from PIL import Image
+from PIL import Image, ImageTk
 import tempfile
 import json
 import math
 import threading
-from concurrent.futures import ThreadPoolExecutor, as_completed
-import warnings # Importar o módulo warnings
+from concurrent.futures import ThreadPoolExecutor
 
-# Tentar importar ttkbootstrap, caso contrário, usar ttk padrão
-try:
-    from ttkbootstrap import Style
-    ttk_style_available = True
-except ImportError:
-    ttk_style_available = False
-
-# Suprimir DecompressionBombWarning
-warnings.filterwarnings("ignore", category=Image.DecompressionBombWarning)
-
-CONFIG_FILE = os.path.join(os.path.expanduser("~"), "astc_config.json")
-BLOCK_SIZES = ["4x4","5x4","5x5","6x5","6x6","8x5","8x6","8x8","10x5","10x6","10x8","10x10","12x10","12x12"]
-IGNORE_PATH = os.path.join("images", "freeplay", "icons")  # Caminho a ser ignorado
+CONFIG_FILE = os.path.join(os.path.expanduser('~'), 'astc_config.json')
+BLOCK_SIZES = ['4x4','5x4','5x5','6x5','6x6','8x5','8x6','8x8','10x5','10x6','10x8','10x10','12x10','12x12']
+IGNORE_PATH = os.path.join('images', 'freeplay', 'icons')
+PIXEL_FOLDER_NAME = 'pixel'
+WEEK6_FOLDER_NAME = 'week6'
+PIXEL_ART_THRESHOLD = (10240, 10240)
+MIN_SELECT_SIZE = (256, 256)
+THUMB_SIZE = (128, 128)
 
 class ASTCConverterGUI:
     def __init__(self, root):
         self.root = root
-        self.root.title("ASTC Converter Pydroid3 + Tkinter")
-        self.root.geometry("600x550")
-        self.root.resizable(True, True)
+        self.root.title("ASTC Converter com Seleção")
+        self.root.geometry("750x750")
         self.load_config()
 
-        if ttk_style_available:
-            self.style = Style(theme=self.cfg.get("theme", "darkly")) # Tema padrão: darkly
-            self.root.tk_setPalette(background=self.style.colors.bg)
-        else:
-            self.style = None
-
-        self.input_folder = tk.StringVar(value=self.cfg.get("input_folder", ""))
-        self.astcenc_path = tk.StringVar(value=self.cfg.get("astcenc_path", ""))
-        self.block_size = tk.StringVar(value=self.cfg.get("block_size", "8x8"))
-        self.quality = tk.StringVar(value=self.cfg.get("quality", "-fast"))
-        self.auto = tk.BooleanVar(value=(self.block_size.get().lower() == "auto"))
+        self.input_folder = tk.StringVar(value=self.cfg.get('input_folder', ''))
+        self.astcenc_path = tk.StringVar(value=self.cfg.get('astcenc_path', ''))
+        self.block_size = tk.StringVar(value=self.cfg.get('block_size', '8x8'))
+        self.quality = tk.StringVar(value=self.cfg.get('quality', '-fast'))
+        self.auto = tk.BooleanVar(value=(self.block_size.get().lower() == 'auto'))
         self.cancel_event = threading.Event()
-        self.executor = None # Para gerenciar o ThreadPoolExecutor
+        self.selected_images = []
 
-        self._create_widgets()
+        self.build_main_ui()
 
-    def _create_widgets(self):
-        main_frame = ttk.Frame(self.root, padding="10 10 10 10")
-        main_frame.pack(fill=tk.BOTH, expand=True)
+    def build_main_ui(self):
+        frame = ttk.Frame(self.root, padding=10)
+        frame.pack(fill=tk.BOTH, expand=True)
+        # Inputs
+        ttk.Label(frame, text="Pasta de Imagens:").grid(row=0, column=0, sticky="w")
+        ttk.Entry(frame, textvariable=self.input_folder, width=40).grid(row=0, column=1)
+        ttk.Button(frame, text="Procurar", command=self.browse_folder).grid(row=0, column=2)
 
-        # Configuração de grid para responsividade
-        main_frame.columnconfigure(1, weight=1)
-        main_frame.rowconfigure(7, weight=1)
+        ttk.Label(frame, text="astcenc Path:").grid(row=1, column=0, sticky="w", pady=5)
+        ttk.Entry(frame, textvariable=self.astcenc_path, width=40).grid(row=1, column=1)
+        ttk.Button(frame, text="Procurar", command=self.browse_astcenc).grid(row=1, column=2)
 
-        # Pasta de Imagens
-        ttk.Label(main_frame, text="Pasta de Imagens:").grid(row=0, column=0, sticky=tk.W, pady=2)
-        ttk.Entry(main_frame, textvariable=self.input_folder, width=50).grid(row=0, column=1, sticky=(tk.W, tk.E), padx=5)
-        ttk.Button(main_frame, text="Procurar", command=self.browse_folder).grid(row=0, column=2, sticky=tk.E)
+        # Options
+        ttk.Label(frame, text="Tamanho do Bloco:").grid(row=2, column=0, sticky="w", pady=5)
+        block_combo = ttk.Combobox(frame, textvariable=self.block_size, width=10, values=['Auto'] + BLOCK_SIZES)
+        block_combo.grid(row=2, column=1, sticky="w")
+        block_combo.bind('<<ComboboxSelected>>', lambda e: self.auto.set(self.block_size.get().lower() == 'auto'))
 
-        # astcenc Path
-        ttk.Label(main_frame, text="astcenc Path:").grid(row=1, column=0, sticky=tk.W, pady=2)
-        ttk.Entry(main_frame, textvariable=self.astcenc_path, width=50).grid(row=1, column=1, sticky=(tk.W, tk.E), padx=5)
-        ttk.Button(main_frame, text="Procurar", command=self.browse_astcenc).grid(row=1, column=2, sticky=tk.E)
+        ttk.Label(frame, text="Qualidade:").grid(row=3, column=0, sticky="w", pady=5)
+        quality_combo = ttk.Combobox(frame, textvariable=self.quality, width=10,
+                                     values=['-fast', '-medium', '-thorough', '-exhaustive'])
+        quality_combo.grid(row=3, column=1, sticky="w")
 
-        # Tamanho do Bloco
-        ttk.Label(main_frame, text="Tamanho do Bloco:").grid(row=2, column=0, sticky=tk.W, pady=2)
-        block_combo = ttk.Combobox(main_frame, textvariable=self.block_size, width=15, values=["Auto"] + BLOCK_SIZES, state="readonly")
-        block_combo.grid(row=2, column=1, sticky=tk.W, padx=5)
-        block_combo.bind("<<ComboboxSelected>>", lambda e: self.auto.set(self.block_size.get().lower() == "auto"))
+        # Buttons
+        ttk.Button(frame, text="Selecionar Pixel Art", command=self.open_selection_window).grid(row=4, column=0, pady=10)
+        self.btn_convert = ttk.Button(frame, text="Converter", command=self.start_conversion)
+        self.btn_convert.grid(row=4, column=1, pady=10)
+        self.btn_cancel = ttk.Button(frame, text="Cancelar", command=self.cancel_conversion, state=tk.DISABLED)
+        self.btn_cancel.grid(row=4, column=2, pady=10)
 
-        # Qualidade
-        ttk.Label(main_frame, text="Qualidade:").grid(row=3, column=0, sticky=tk.W, pady=2)
-        quality_combo = ttk.Combobox(main_frame, textvariable=self.quality, width=15, values=["-fast", "-medium", "-thorough", "-exhaustive"], state="readonly")
-        quality_combo.grid(row=3, column=1, sticky=tk.W, padx=5)
-
-        # Botão de Tema (Dark/Light)
-        if ttk_style_available:
-            self.theme_button = ttk.Button(main_frame, text="Alternar Tema", command=self.toggle_theme)
-            self.theme_button.grid(row=3, column=2, sticky=tk.E, padx=5)
-
-        # Botões de Ação
-        button_frame = ttk.Frame(main_frame)
-        button_frame.grid(row=4, column=0, columnspan=3, pady=10)
-        self.btn_convert = ttk.Button(button_frame, text="Converter", command=self.start_conversion)
-        self.btn_convert.pack(side=tk.LEFT, padx=5)
-        self.btn_cancel = ttk.Button(button_frame, text="Cancelar", command=self.cancel_conversion, state=tk.DISABLED)
-        self.btn_cancel.pack(side=tk.LEFT, padx=5)
-
-        # Barra de Progresso
-        self.progress = ttk.Progressbar(main_frame, orient="horizontal", mode="determinate")
-        self.progress.grid(row=5, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=5)
-
-        # Log
-        ttk.Label(main_frame, text="Log:").grid(row=6, column=0, sticky=tk.W)
-        self.log = tk.Text(main_frame, height=10, state=tk.DISABLED, wrap=tk.WORD)
-        self.log.grid(row=7, column=0, columnspan=3, sticky=(tk.N, tk.S, tk.E, tk.W))
-        log_scrollbar = ttk.Scrollbar(main_frame, command=self.log.yview)
-        log_scrollbar.grid(row=7, column=3, sticky=(tk.N, tk.S))
-        self.log["yscrollcommand"] = log_scrollbar.set
-
-        # Status Bar
-        self.status_label = ttk.Label(main_frame, text="Pronto.", relief=tk.SUNKEN, anchor=tk.W)
-        self.status_label.grid(row=8, column=0, columnspan=3, sticky=(tk.W, tk.E), pady=5)
+        # Progress and log
+        self.progress = ttk.Progressbar(frame, orient="horizontal", mode="determinate")
+        self.progress.grid(row=5, column=0, columnspan=3, sticky="we", pady=5)
+        ttk.Label(frame, text="Log:").grid(row=6, column=0, sticky="w")
+        self.log = tk.Text(frame, height=10)
+        self.log.grid(row=7, column=0, columnspan=3, sticky="nsew")
+        frame.rowconfigure(7, weight=1)
+        frame.columnconfigure(1, weight=1)
 
     def load_config(self):
         try:
-            with open(CONFIG_FILE, "r") as f:
+            with open(CONFIG_FILE, 'r') as f:
                 self.cfg = json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
+        except:
             self.cfg = {}
 
     def save_config(self):
         cfg = {
-            "input_folder": self.input_folder.get(),
-            "astcenc_path": self.astcenc_path.get(),
-            "block_size": self.block_size.get(),
-            "quality": self.quality.get(),
-            "theme": self.style.theme.name if self.style else ""
+            'input_folder': self.input_folder.get(),
+            'astcenc_path': self.astcenc_path.get(),
+            'block_size': self.block_size.get(),
+            'quality': self.quality.get()
         }
-        try:
-            with open(CONFIG_FILE, "w") as f:
-                json.dump(cfg, f, indent=4)
-        except IOError as e:
-            self.log_message(f"Erro ao salvar configuração: {e}", level="error")
-
-    def toggle_theme(self):
-        if not ttk_style_available: return
-        current_theme = self.style.theme.name
-        if current_theme == "darkly":
-            self.style.theme_use("flatly") # Exemplo de tema claro
-        else:
-            self.style.theme_use("darkly") # Exemplo de tema escuro
-        self.root.tk_setPalette(background=self.style.colors.bg)
-        self.save_config()
+        with open(CONFIG_FILE, 'w') as f:
+            json.dump(cfg, f)
 
     def browse_folder(self):
         d = filedialog.askdirectory()
@@ -143,198 +97,186 @@ class ASTCConverterGUI:
             self.input_folder.set(d)
 
     def browse_astcenc(self):
-        f = filedialog.askopenfilename(filetypes=[("Executável", "*.exe"), ("Todos os Arquivos", "*.*")])
+        f = filedialog.askopenfilename(filetypes=[('Executável', '*.exe'), ('Todos', '*.*')])
         if f:
             self.astcenc_path.set(f)
 
-    def log_message(self, msg, level="info"):
-        self.root.after(0, lambda:
-            self._insert_log_message(msg, level))
-
-    def _insert_log_message(self, msg, level):
-        self.log.config(state=tk.NORMAL)
-        if level == "error":
-            self.log.insert(tk.END, "ERRO: " + msg + "\n", "error")
-        elif level == "warning":
-            self.log.insert(tk.END, "AVISO: " + msg + "\n", "warning")
-        else:
-            self.log.insert(tk.END, msg + "\n")
+    def log_message(self, msg):
+        self.log.insert(tk.END, msg + "\n")
         self.log.see(tk.END)
-        self.log.config(state=tk.DISABLED)
-
-        # Configurar tags para cores
-        self.log.tag_config("error", foreground="red")
-        self.log.tag_config("warning", foreground="orange")
-
-    def update_status(self, msg):
-        self.root.after(0, lambda: self.status_label.config(text=msg))
 
     def choose_best_block(self, w, h, file_size):
-        best, best_diff = None, float("inf")
+        best, best_diff = None, None
         for b in BLOCK_SIZES:
-            bx, by = map(int, b.split("x"))
-            # Calcular o número de blocos necessários para cobrir a imagem
-            blocks_x = math.ceil(w / bx)
-            blocks_y = math.ceil(h / by)
-            total_blocks = blocks_x * blocks_y
-            # Cada bloco ASTC de 16 bytes
-            est_size = total_blocks * 16
+            bx, by = map(int, b.split('x'))
+            blocks = math.ceil(w/bx) * math.ceil(h/by)
+            est_size = blocks * 16
             diff = abs(est_size - file_size)
-            if diff < best_diff:
+            if best_diff is None or diff < best_diff:
                 best_diff, best = diff, (bx, by)
         return best
 
     def pad_image(self, img, bx, by):
         w, h = img.size
-        nw, nh = math.ceil(w / bx) * bx, math.ceil(h / by) * by
-        if (nw, nh) == (w, h):
-            return img
-        new = Image.new("RGBA", (nw, nh), (0, 0, 0, 0))
+        nw, nh = math.ceil(w/bx)*bx, math.ceil(h/by)*by
+        if (nw, nh) == (w, h): return img
+        new = Image.new('RGBA', (nw, nh), (0, 0, 0, 0))
         new.paste(img, (0, 0))
         return new
 
-    def convert_one(self, path):
-        if self.cancel_event.is_set():
-            return f"Cancelado: {path}"
-        try:
-            norm_ignore_path = IGNORE_PATH.replace("\\", "/").lower()
-            norm_path = path.replace("\\", "/").lower()
-            if norm_ignore_path in norm_path:
-                return f"Ignorado (padrão): {path}"
+    def scan_small(self):
+        small = []
+        for r, _, files in os.walk(self.input_folder.get()):
+            bn = os.path.basename(r).lower()
+            if bn in (PIXEL_FOLDER_NAME, WEEK6_FOLDER_NAME): continue
+            for f in files:
+                if f.lower().endswith(('.png','.jpg','.jpeg','.bmp','.tga','.tif','.tiff','.webp')):
+                    p=os.path.join(r,f); norm=p.replace('\\','/').lower()
+                    if IGNORE_PATH.replace('\\','/').lower() in norm: continue
+                    try:
+                        with Image.open(p) as im: w,h=im.size
+                    except: continue
+                    if w<=PIXEL_ART_THRESHOLD[0] and h<=PIXEL_ART_THRESHOLD[1]: small.append({'path':p,'size':(w,h)})
+        return small
 
-            astcenc = self.astcenc_path.get()
-            out = os.path.splitext(path)[0] + ".astc"
-            if os.path.exists(out):
-                return f"Pulando: {path}"
+    def scan_all(self):
+        all_imgs=[]
+        for r,_,files in os.walk(self.input_folder.get()):
+            bn=os.path.basename(r).lower()
+            if bn in (PIXEL_FOLDER_NAME,WEEK6_FOLDER_NAME): continue
+            for f in files:
+                if f.lower().endswith(('.png','.jpg','.jpeg','.bmp','.tga','.tif','.tiff','.webp')):
+                    p=os.path.join(r,f); norm=p.replace('\\','/').lower()
+                    if IGNORE_PATH.replace('\\','/').lower() in norm: continue
+                    all_imgs.append(p)
+        return all_imgs
 
-            # Verificar se o arquivo de entrada existe e não está vazio
-            if not os.path.exists(path) or os.path.getsize(path) == 0:
-                raise FileNotFoundError(f"Arquivo de imagem inválido ou vazio: {path}")
+    def open_selection_window(self):
+        small = self.scan_small()
+        if not small:
+            messagebox.showinfo("Nada", "Nenhuma pixel art encontrada.")
+            return
+        sel = tk.Toplevel(self.root)
+        sel.title("Seleção Pixel Art")
+        sel.geometry("800x600")
 
-            file_size = os.path.getsize(path)
-            with Image.open(path) as img:
-                w, h = img.size
-                if self.auto.get():
-                    bx, by = self.choose_best_block(w, h, file_size)
-                else:
-                    bx, by = map(int, self.block_size.get().split("x"))
-                
-                # Converter para RGBA antes de salvar, se necessário
-                if img.mode != "RGBA":
-                    img = img.convert("RGBA")
+        canvas = tk.Canvas(sel)
+        vsb = ttk.Scrollbar(sel, orient='vertical', command=canvas.yview)
+        hsb = ttk.Scrollbar(sel, orient='horizontal', command=canvas.xview)
+        frame = tk.Frame(canvas)
+        frame.bind('<Configure>', lambda e: canvas.configure(scrollregion=canvas.bbox('all')))
+        canvas.create_window((0, 0), window=frame, anchor='nw')
+        canvas.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
+        canvas.pack(fill='both', expand=True)
+        vsb.pack(side='right', fill='y')
+        hsb.pack(side='bottom', fill='x')
 
-                img = self.pad_image(img, bx, by)
-                
-                # Usar um nome de arquivo temporário mais robusto
-                tmp_fd, tmp_path = tempfile.mkstemp(suffix=".png", prefix="astc_")
-                os.close(tmp_fd) # Fechar o descritor de arquivo imediatamente
-                img.save(tmp_path, "PNG", compress_level=1)
+        self.vars = {}
+        cols = 4
 
-            if self.cancel_event.is_set():
-                try: os.remove(tmp_path)
-                except OSError: pass
-                return f"Cancelado: {path}"
+        for idx, info in enumerate(small):
+            row, col = divmod(idx, cols)
+            p = info['path']
+            w, h = info['size']
+            default = not (w < MIN_SELECT_SIZE[0] and h < MIN_SELECT_SIZE[1])
+            var = tk.BooleanVar(value=default)
 
-            cmd = [astcenc, "-cl", tmp_path, out, f"{bx}x{by}", self.quality.get()]
-            
-            # Adicionar timeout para subprocess.run
-            res = subprocess.run(cmd, capture_output=True, text=True, timeout=300) # 5 minutos de timeout
-            
-            try: os.remove(tmp_path)
-            except OSError: pass
+            try:
+                im = Image.open(p)
+                im.thumbnail(THUMB_SIZE)
+                photo = ImageTk.PhotoImage(im)
+            except:
+                continue
 
-            if res.returncode != 0:
-                error_msg = res.stderr.strip() if res.stderr else "Erro desconhecido"
-                return f"ERRO em {os.path.basename(path)}: {error_msg}"
-            else:
-                # Remover o arquivo original apenas se a conversão for bem-sucedida
-                try:
-                    os.remove(path)
-                except OSError as e:
-                    self.log_message(f"AVISO: Não foi possível remover o arquivo original {path}: {e}", level="warning")
-                return f"Convertido ({bx}x{by}): {path}"
-        except FileNotFoundError as e:
-            return f"ERRO: {e}"
-        except subprocess.TimeoutExpired:
-            try: os.remove(tmp_path)
-            except OSError: pass
-            return f"ERRO em {os.path.basename(path)}: O processo de conversão excedeu o tempo limite."
-        except Exception as e:
-            return f"ERRO: {e}"
+            lbl = ttk.Label(frame, image=photo)
+            lbl.image = photo
+            lbl.grid(row=row*2, column=col, padx=5, pady=5)
+
+            cb = ttk.Checkbutton(frame, text=f"{os.path.relpath(p, self.input_folder.get())} ({w}x{h})", variable=var)
+            cb.grid(row=row*2+1, column=col, sticky='w')
+            self.vars[p] = var
+
+        ttk.Button(sel, text="Confirmar", command=lambda: self.confirm_selection(sel)).pack(pady=5)
+
+    def confirm_selection(self, win):
+        self.selected_images = [p for p, v in self.vars.items() if v.get()]
+        win.destroy()
+        self.log_message(f"{len(self.selected_images)} pixel art selecionadas.")
 
     def start_conversion(self):
-        inp = self.input_folder.get()
-        astc = self.astcenc_path.get()
-        if not os.path.isdir(inp):
-            messagebox.showerror("Erro", "A pasta de imagens não existe ou é inválida.")
-            return
-        if not os.path.isfile(astc):
-            messagebox.showerror("Erro", "O caminho do astcenc não existe ou é inválido.")
+        all_imgs = self.scan_all()
+        small_paths = [i['path'] for i in self.scan_small()]
+        large = [p for p in all_imgs if p not in small_paths]
+        to_convert = self.selected_images + large
+
+        if not to_convert:
+            messagebox.showwarning("Nada", "Nenhuma imagem para converter.")
             return
 
         self.save_config()
         self.cancel_event.clear()
-        self.btn_convert.config(state=tk.DISABLED)
-        self.btn_cancel.config(state=tk.NORMAL)
-        self.update_status("Iniciando conversão...")
-        self.log.delete(1.0, tk.END)
+        self.btn_convert.config(state='disabled')
+        self.btn_cancel.config(state='normal')
+        self.progress['maximum'] = len(to_convert)
+        self.progress['value'] = 0
+        self.log.delete('1.0', tk.END)
 
-        img_files = [
-            os.path.join(r, f)
-            for r, _, fs in os.walk(inp)
-            for f in fs
-            if f.lower().endswith((".png", ".jpg", ".jpeg",
-                                    ".bmp", ".tga", ".tif", ".tiff", ".webp"))
-        ]
+        done = {'n': 0}
 
-        total_files = len(img_files)
-        if total_files == 0:
-            messagebox.showinfo("Nada encontrado", "Nenhuma imagem válida encontrada na pasta especificada.")
-            self.finish_conversion()
+        def cb():
+            done['n'] += 1
+            self.progress['value'] = done['n']
+            if done['n'] >= len(to_convert):
+                self.finish_conversion()
+
+        exec = ThreadPoolExecutor(max_workers=os.cpu_count() or 4)
+        for p in to_convert:
+            exec.submit(self.convert_one, p, cb)
+
+    def convert_one(self, path, callback):
+        if self.cancel_event.is_set():
+            self.root.after(0, lambda: self.log_message(f"Cancelado: {path}"))
+            self.root.after(0, callback)
             return
 
-        self.progress["maximum"] = total_files
-        self.progress["value"] = 0
-        self.processed_count = 0
-
-        self.executor = ThreadPoolExecutor(max_workers=os.cpu_count() or 4) # Limitar workers para evitar sobrecarga
-        futures = [self.executor.submit(self.convert_one, path) for path in img_files]
-
-        # Iniciar um thread para monitorar os futuros
-        threading.Thread(target=self._monitor_conversion, args=(futures,)).start()
-
-    def _monitor_conversion(self, futures):
-        for future in as_completed(futures):
+        out = os.path.splitext(path)[0] + '.astc'
+        try:
+            size = os.path.getsize(path)
+            with Image.open(path) as im:
+                w, h = im.size
+                im = im.convert('RGBA')
+            bx, by = (self.choose_best_block(w, h, size) if self.auto.get() else map(int, self.block_size.get().split('x')))
+            im = self.pad_image(im, bx, by)
+            tmp = os.path.join(tempfile.gettempdir(), os.path.basename(path) + '.png')
+            im.save(tmp, 'PNG', compress_level=1)
             if self.cancel_event.is_set():
-                break # Sair do loop se o cancelamento for solicitado
-            result = future.result()
-            self.log_message(result)
-            self.processed_count += 1
-            # Correção: Atribuir diretamente ao 'value' do Progressbar
-            self.root.after(0, lambda: self.progress.__setitem__('value', self.processed_count))
-        
-        # Garantir que todos os threads são encerrados
-        self.executor.shutdown(wait=True)
-        self.root.after(0, self.finish_conversion)
+                os.remove(tmp)
+                self.root.after(0, lambda: self.log_message(f"Cancelado: {path}"))
+                self.root.after(0, callback)
+                return
+            res = subprocess.run([self.astcenc_path.get(), '-cl', tmp, out, f'{bx}x{by}', self.quality.get()], capture_output=True, text=True)
+            os.remove(tmp)
+            if res.returncode != 0:
+                self.root.after(0, lambda: self.log_message(f"ERRO em {os.path.basename(path)}: {res.stderr.strip()}"))
+            else:
+                os.remove(path)
+                self.root.after(0, lambda: self.log_message(f"Convertido: {path}"))
+        except Exception as e:
+            self.root.after(0, lambda: self.log_message(f"Erro: {e}"))
+        finally:
+            self.root.after(0, callback)
 
     def cancel_conversion(self):
         self.cancel_event.set()
-        self.btn_cancel.config(state=tk.DISABLED)
-        self.update_status("Cancelamento solicitado...")
-        # Não chamar finish_conversion aqui, será chamado pelo _monitor_conversion
+        self.btn_cancel.config(state='disabled')
+        self.log_message("Cancelando...")
 
     def finish_conversion(self):
-        self.btn_convert.config(state=tk.NORMAL)
-        self.btn_cancel.config(state=tk.DISABLED)
-        if self.cancel_event.is_set():
-            self.update_status("Conversão cancelada.")
-            messagebox.showinfo("Cancelado", "Conversão foi cancelada pelo usuário.")
-        else:
-            self.update_status("Conversão concluída!")
-            messagebox.showinfo("Pronto", "Conversão concluída!")
-        self.cancel_event.clear() # Limpar o evento para a próxima conversão
+        self.btn_convert.config(state='normal')
+        self.btn_cancel.config(state='disabled')
+        messagebox.showinfo("Pronto", "Conversão concluída!" if not self.cancel_event.is_set() else "Cancelado pelo usuário.")
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     root = tk.Tk()
     app = ASTCConverterGUI(root)
     root.mainloop()
