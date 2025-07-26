@@ -43,13 +43,6 @@ original
 https://gamebanana.com/mods/606823
 
 -
-Shaggy
-https://ranoz.gg/file/SEEZ0YRc
-
-Original
-https://gamebanana.com/mods/512013
-
--
 QT Rewired
 https://ranoz.gg/file/Fgq2miQP
 
@@ -291,3 +284,8 @@ Original
 https://gamebanana.com/mods/607689
 
 -
+Shaggy
+https://ranoz.gg/file/Pa6hzthF
+
+Original
+https://gamebanana.com/mods/609364
