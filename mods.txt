@@ -1,6 +1,16 @@
 #astcfnfmobile
 
+---------------------------------------------
+                 tools
+---------------------------------------------
 
+Fnf Mobile Hitbox Definitive (Transparente Custom)
+https://ranoz.gg/file/jB2QYxHz
+
+Original
+https://gamebanana.com/mods/607451
+
+-
 [vslice]Mobile Extra Controls 0.2.2
 https://ranoz.gg/file/w9ozc5HX
 
@@ -20,6 +30,10 @@ https://ranoz.gg/file/gIzNUmp1
 
 Original
 https://gamebanana.com/mods/516489
+
+---------------------------------------------
+                   mods
+---------------------------------------------
 
 -
 Sky Reborn [UPDATED]
@@ -289,3 +303,10 @@ https://ranoz.gg/file/Pa6hzthF
 
 Original
 https://gamebanana.com/mods/609364
+
+-
+Indie Cross
+https://ranoz.gg/file/eKRoIHNx
+
+Original
+https://gamebanana.com/mods/562444
