@@ -25,9 +25,8 @@ Original
 https://gamebanana.com/mods/517012
 
 -
-Combos Reimplemented [V-Slice Mod] 1.3.4
-https://ranoz.gg/file/gIzNUmp1
-
+Combos Reimplemented [V-Slice Mod] 1.3.5
+https://ranoz.gg/file/EHu321gF
 Original
 https://gamebanana.com/mods/516489
 
@@ -37,6 +36,16 @@ https://ranoz.gg/file/CH8kHb8z
 
 Original
 https://gamebanana.com/mods/609644
+
+---------------------------------------------
+                  skins
+---------------------------------------------
+
+Thicc GF Who Stole BF's Sneakers V2!
+https://ranoz.gg/file/zAx8B1NU
+
+Original
+https://gamebanana.com/mods/506218
 
 ---------------------------------------------
                    mods
@@ -120,10 +129,13 @@ Original
 https://gamebanana.com/mods/607663
 
 -
-VS MATT VSlice port
-https://ranoz.gg/file/aIN2KbR5
+High-Effort VS Matt
+https://ranoz.gg/file/4xOkMtlT
 
 Original
+Updated
+https://gamejolt.com/games/mattvslice/1010496
+Old
 https://gamebanana.com/mods/607595
 
 -
@@ -176,8 +188,8 @@ Original
 https://gamebanana.com/mods/566888
 
 -
-Vs Nonsense (v1.5)
-https://ranoz.gg/file/ydxbML5D
+Vs Nonsense (v1.5) 1.5.1.e
+https://ranoz.gg/file/56EjgCsj
 
 Original
 https://gamebanana.com/mods/606077
@@ -198,7 +210,7 @@ https://gamebanana.com/mods/608743
 
 -
 C:DM V-Slice PORT
-https://ranoz.gg/file/jMIRHwdf
+https://ranoz.gg/file/EXQbJ361
 
 Original
 https://gamebanana.com/mods/608693
@@ -319,8 +331,8 @@ Original
 https://gamebanana.com/mods/609364
 
 -
-Arcarde Showdown (Vs. Kapi) Mobile support
-https://ranoz.gg/file/zYvp5NmC
+Arcade Showdown (Vs. Kapi) Mobile support
+https://ranoz.gg/file/eoCIhRLQ
 
 Original
 https://gamebanana.com/mods/609516
@@ -387,3 +399,55 @@ https://ranoz.gg/file/OKpXAElH
 
 Original
 https://gamebanana.com/mods/599301
+
+-
+Og B-sides in V-slice
+https://ranoz.gg/file/yT7ASjBk
+
+Original
+https://gamebanana.com/mods/512497
+
+-
+Duxo-mod-v1
+https://ranoz.gg/file/8n8CTxCR
+
+Original
+https://gamebanana.com/mods/611218
+
+-
+FNF Aura Unoficial Mobile Port
+https://ranoz.gg/file/tSbmuEtE
+
+Original
+https://gamebanana.com/mods/611369
+
+-
+[V-Slice] Friday Night Funk Paper Education Port
+https://ranoz.gg/file/y4L1H8fA
+
+Original
+https://gamebanana.com/mods/610015
+
+-
+Mistful Crimson Morning V1.2 V-Slice Port 0.85
+https://ranoz.gg/file/8KUH60OD
+
+Original
+https://gamebanana.com/mods/609918
+
+-
+VS Arumu 1.5.0
+https://ranoz.gg/file/F8ssacsi
+
+Original
+https://gamebanana.com/mods/611266
+
+-
+Carol V-SLICE Port / Mobile
+https://ranoz.gg/file/xXVVXYU5
+
+Low End Phones
+https://ranoz.gg/file/A21dFEJv
+
+Original
+https://gamebanana.com/mods/610238
