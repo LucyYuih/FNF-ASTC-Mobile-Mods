@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mobile ASTC Mods [OPT]</title>
+<style>
+:root{
+  --bg:#0b0f14; --muted:#97a0ac; --accent:#7c5cf7; --glass: rgba(255,255,255,0.03);
+  --radius:14px; --gap:18px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#07090c 0%, #0b0f14 100%);color:#e6eef8;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto,Arial;}
+.app{max-width:1200px;margin:28px auto;padding:20px;}
+header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.brand{display:flex;gap:12px;align-items:center;}
+.square{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),#4bb6ff);font-weight:800;color:#06111a;font-size:20px;}
+.titleWrap{display:flex;flex-direction:column;}
+.titleWrap h1{font-size:18px;margin:0}
+.titleWrap .lead{margin:0;color:var(--muted);font-size:13px}
+.controls{display:flex;gap:12px;align-items:center;}
+.search{background:var(--glass);padding:10px 12px;border-radius:999px;display:flex;gap:8px;align-items:center;min-width:220px;}
+.search input{background:transparent;border:0;color:inherit;outline:none;font-size:14px;width:220px}
+.tabs{display:flex;gap:8px;padding:12px 0;margin-bottom:12px;flex-wrap:wrap}
+.tab{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;color:var(--muted);cursor:pointer;font-weight:600;font-size:13px;}
+.tab.active{background:linear-gradient(90deg, rgba(124,92,247,0.12), rgba(75,182,255,0.06));border-color:transparent;color:#e9f0ff;box-shadow:0 6px 20px rgba(16,18,22,0.4)}
+.grid{display:grid;gap:var(--gap);grid-template-columns: repeat(3, 1fr);align-items:start;overflow:auto;padding-bottom:6px;}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:var(--radius);display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.03);min-height:220px;}
+.thumb{height:138px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#07101a,#0b1420);box-shadow:inset 0 -20px 40px rgba(0,0,0,0.35);}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.title{font-size:15px;margin:0;color:#eaf2ff;font-weight:700;line-height:1.15}
+.meta{font-size:12px;color:var(--muted);display:block;margin-top:-2px}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.btn{flex:1 1 auto;padding:8px 10px;border-radius:10px;border:0;background:transparent;color:#cfe3ff;font-weight:700;font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,0.04);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+.btn.primary{background:linear-gradient(90deg,var(--accent),#4bb6ff);color:#06111a;box-shadow:0 8px 30px rgba(124,92,247,0.12);border:0}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.03)}
+.btn.small{padding:6px 8px;font-size:12px;border-radius:8px}
+.extra-buttons{display:flex;gap:6px;flex-wrap:wrap}
+@media (max-width:1000px){ .grid{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:640px){
+  header{flex-direction:column;align-items:stretch;gap:12px}
+  .search input{width:100%}
+  .grid{grid-auto-flow:column;grid-auto-columns: 80%;grid-template-columns: none;gap:14px;overflow-x:auto;padding-bottom:14px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
+  .card{scroll-snap-align:center;min-height:240px}
+}
+.footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
+.manual-fallback{margin-top:12px}
+.manual-fallback textarea{width:100%;min-height:140px;margin-top:8px;border-radius:10px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:inherit}
+</style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="square">FNF</div>
+        <div class="titleWrap">
+          <h1>Mobile ASTC Mods [OPT]</h1>
+          <div class="lead">Optimized Mods for Mobile</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="search" title="Search by name">
+          🔎 <input id="search" placeholder="Search by name..." />
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-cat="all">All</button>
+      <button class="tab" data-cat="Tools">Tools</button>
+      <button class="tab" data-cat="Skins">Skins</button>
+      <button class="tab" data-cat="Mods">Mods</button>
+    </nav>
+
+    <main>
+      <section id="grid" class="grid" aria-live="polite"></section>
+    </main>
+
+    <div class="footer">@LucyYuih</div>
+
+    <!-- fallback: appears only if fetch fails -->
+    <div id="manualContainer" class="manual-fallback" style="display:none">
+      <div style="color:var(--muted);font-size:13px">Paste the content of mods.txt here and press Parse:</div>
+      <textarea id="manualArea"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="manualParse" class="btn primary">Parse</button>
+        <button id="manualClear" class="btn ghost">Clear</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* Auto-load & thumb resolve script (ignores lines starting with #) */
+const GITHUB_BLOB = 'https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/blob/main/mods.txt';
+const manualContainer = document.getElementById('manualContainer');
+const manualArea = document.getElementById('manualArea');
+document.getElementById('manualParse').addEventListener('click', ()=> {
+  const txt = manualArea.value.trim();
+  if(!txt) return alert('Paste the mods.txt content here.');
+  doParseAndRender(txt, 'mods.txt (manual)');
+});
+document.getElementById('manualClear').addEventListener('click', ()=> manualArea.value='');
+
+document.addEventListener('DOMContentLoaded', ()=> {
+  const raw = blobToRaw(GITHUB_BLOB);
+  loadFromUrl(raw).then(() => {});
+});
+
+function blobToRaw(blobUrl){
+  try{
+    const u = new URL(blobUrl);
+    if(u.hostname.includes('github.com') && u.pathname.includes('/blob/')){
+      const parts = u.pathname.split('/');
+      const user = parts[1], repo = parts[2], branch = parts[4];
+      const path = parts.slice(5).join('/');
+      return `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${path}`;
+    }
+  }catch(e){}
+  return blobUrl;
+}
+
+async function loadFromUrl(url){
+  try{
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    const txt = await res.text();
+    doParseAndRender(txt, url);
+  }catch(err){
+    // If fetch fails (CORS/network), show manual paste fallback silently
+    manualContainer.style.display = 'block';
+    console.warn('Fetch failed; showing manual fallback.', err);
+  }
+}
+
+function doParseAndRender(txt, sourceLabel){
+  const items = parseModsTxt(txt);
+  renderGrid(items);
+  // after rendering, start automatic thumbnail resolution
+  setTimeout(()=> resolveAllThumbnails(), 300);
+}
+
+/* Parser for the mods.txt format
+   - ignores lines starting with '#' (so hashtags like #astcfnfmobile are skipped)
+   - blocks separated by a single '-' line
+   - categories indicated by lines 'tools', 'skins', 'mods' */
+function parseModsTxt(txt){
+  const lines = txt.split(/\r?\n/);
+  let currentCategory = null;
+  const items = []; let block = [];
+  function flushBlock(){ if(block.length===0) return; const item=parseBlock(block,currentCategory); if(item) items.push(item); block=[]; }
+  for(let i=0;i<lines.length;i++){
+    const raw = lines[i];
+    const line = raw.replace(/\u00A0/g,' ').trim();
+    if(!line) continue;
+    // ignore comment/hashtag lines
+    if(line.startsWith('#')) continue;
+    const lower = line.toLowerCase();
+    if(lower === 'tools' || lower === 'skins' || lower === 'mods'){ flushBlock(); currentCategory = capitalize(lower); continue; }
+    if(/^[-]{3,}$/.test(line)) continue;
+    if(line === '-') { flushBlock(); continue; }
+    block.push(line);
+  }
+  flushBlock();
+  return items;
+}
+function parseBlock(blockLines, currentCategory){
+  const lines = blockLines.filter(l => l && l.trim() !== '');
+  if(lines.length === 0) return null;
+  const title = lines[0].trim();
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  const urls = [];
+  for(const ln of lines){
+    const m = ln.match(urlRegex);
+    if(m) for(const u of m) urls.push(u.replace(/[),.]+$/,''));
+  }
+  let category = currentCategory || 'Mods';
+  if(!currentCategory){
+    const joined = lines.join(' ').toLowerCase();
+    if(joined.includes('skin')) category='Skins';
+    else if(joined.includes('tool')||joined.includes('install')) category='Tools';
+  }
+  return { title, category, urls, img: null, rawLines: lines };
+}
+function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
+
+/* Rendering */
+function makeCard(item){
+  const el = document.createElement('div'); el.className='card'; el.dataset.title=item.title.toLowerCase(); el.dataset.category=item.category;
+  const thumb = document.createElement('div'); thumb.className='thumb';
+  if(item.img){
+    const im=document.createElement('img'); im.src=item.img; im.alt=item.title; thumb.appendChild(im);
+  } else {
+    const placeholder=document.createElement('div'); placeholder.style.width='100%'; placeholder.style.height='100%'; placeholder.style.display='flex'; placeholder.style.alignItems='center'; placeholder.style.justifyContent='center'; placeholder.style.fontWeight='800'; placeholder.style.fontSize='28px'; placeholder.style.color='#eaf2ff';
+    const cleanTitle = item.title.replace(/^[\[\(]+/,'').trim();
+    placeholder.textContent = (cleanTitle.slice(0,2) || 'M').toUpperCase(); thumb.appendChild(placeholder);
+  }
+  const title = document.createElement('div'); title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
+  const buttons = document.createElement('div'); buttons.className='buttons';
+  if(item.urls.length>0){
+    const aDl=document.createElement('a'); aDl.className='btn primary'; aDl.href=item.urls[0]; aDl.target='_blank'; aDl.rel='noopener'; aDl.textContent='Download'; buttons.appendChild(aDl);
+    const aOrig=document.createElement('a'); aOrig.className='btn ghost'; aOrig.href=item.urls[item.urls.length-1]; aOrig.target='_blank'; aOrig.rel='noopener'; aOrig.textContent='Original'; buttons.appendChild(aOrig);
+    if(item.urls.length>2){
+      const wrap=document.createElement('div'); wrap.className='extra-buttons';
+      for(let i=1;i<item.urls.length-1;i++){ const ext=document.createElement('a'); ext.className='btn small ghost'; ext.href=item.urls[i]; ext.target='_blank'; ext.rel='noopener'; ext.textContent=`Link ${i+1}`; wrap.appendChild(ext); }
+      buttons.appendChild(wrap);
+    }
+  } else {
+    const no=document.createElement('div'); no.className='btn ghost'; no.textContent='No link'; buttons.appendChild(no);
+  }
+  el.appendChild(thumb); el.appendChild(title); el.appendChild(buttons);
+  return el;
+}
+function renderGrid(items){
+  const grid=document.getElementById('grid'); grid.innerHTML=''; window.currentItems=items; const frag=document.createDocumentFragment();
+  for(const it of items) frag.appendChild(makeCard(it));
+  grid.appendChild(frag);
+  filterAndShow();
+}
+
+/* Search & Tabs */
+document.getElementById('search').addEventListener('input', filterAndShow);
+document.getElementById('tabs').addEventListener('click', (e)=>{ const b=e.target.closest('.tab'); if(!b) return; document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); filterAndShow(); });
+function filterAndShow(){
+  const q=document.getElementById('search').value.trim().toLowerCase();
+  const active=document.querySelector('.tab.active')?.dataset?.cat||'all';
+  const grid=document.getElementById('grid'); const cards=Array.from(grid.children); let shown=0;
+  for(const c of cards){
+    const title=(c.dataset.title||'').toLowerCase(); const cat=(c.dataset.category||'').toLowerCase();
+    const matchQ = !q || title.includes(q); const matchCat = active==='all' || cat === (active||'').toLowerCase();
+    if(matchQ && matchCat){ c.style.display=''; shown++; } else c.style.display='none';
+  }
+}
+
+/* --- Thumbnails resolution (automatic) --- */
+async function resolveAllThumbnails(){
+  const items = window.currentItems || [];
+  let targets = items.filter(it => !it.img && it.urls.some(u => /gamebanana\.com|gamejolt\.com/i.test(u)));
+  if(targets.length === 0) return;
+  for(const it of targets){
+    const candidate = it.urls.find(u => /gamebanana\.com|gamejolt\.com/i.test(u));
+    if(!candidate) continue;
+    try{
+      const resp = await fetch(candidate, { mode: 'cors' });
+      if(!resp.ok) throw new Error('HTTP ' + resp.status);
+      const html = await resp.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      let img = null;
+      const og = doc.querySelector('meta[property="og:image"], meta[name="og:image"]');
+      if(og && og.content) img = og.content;
+      const tw = doc.querySelector('meta[name="twitter:image"]');
+      if(!img && tw && tw.content) img = tw.content;
+      if(!img){
+        const linkImg = doc.querySelector('link[rel="image_src"]');
+        if(linkImg && linkImg.href) img = linkImg.href;
+      }
+      if(img && img.startsWith('/')) img = (new URL(candidate)).origin + img;
+      if(img){
+        it.img = img;
+        updateCardImage(it);
+        continue;
+      }
+      const imgs = Array.from(doc.querySelectorAll('img')).map(i => i.src).filter(Boolean);
+      if(imgs.length){
+        const pick = imgs.find(u=>/^https?:\/\//i.test(u));
+        if(pick){ it.img = pick; updateCardImage(it); continue; }
+      }
+    }catch(err){
+      console.warn('Thumb fetch failed for', candidate, err);
+    }
+  }
+}
+
+function updateCardImage(item){
+  const grid = document.getElementById('grid');
+  for(const c of grid.children){
+    if(c.dataset.title === item.title.toLowerCase()){
+      const thumb = c.querySelector('.thumb');
+      if(thumb){
+        thumb.innerHTML = '';
+        const im = document.createElement('img'); im.src = item.img; im.alt = item.title;
+        thumb.appendChild(im);
+      }
+      break;
+    }
+  }
+}
+
+/* util */
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+</script>
+</body>
+</html>
