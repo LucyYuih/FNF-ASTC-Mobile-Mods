@@ -73,6 +73,13 @@ original
 https://gamebanana.com/mods/606823
 
 -
+QT Rewired [+MOBILE]
+https://ranoz.gg/file/9fkxwoHF
+
+Original
+https://gamebanana.com/mods/613276
+
+-
 QT Rewired
 https://ranoz.gg/file/Fgq2miQP
 
@@ -525,21 +532,21 @@ Original
 https://gamebanana.com/mods/613268
 
 -
-FNF: GF MIXES [DD76 TAKE DEMO]
+FNF: GF MIXES [DD76 TAKE DEMO] 0.2.1
 https://ranoz.gg/file/WyFQU3mz
 
 Original
 https://gamebanana.com/mods/613040
 
 -
-FNF Ingrained Vslice Port
+FNF Ingrained Vslice Port 1.0
 https://ranoz.gg/file/HftJeHUM
 
 Original
 https://gamebanana.com/mods/613203
 
 -
-V-Slice LastDetermined DEMO (Only Star-of-a-tale)
+V-Slice LastDetermined DEMO (Only Star-of-a-tale) 1.0
 https://ranoz.gg/file/wx3SdYih
 
 Original
@@ -554,3 +561,24 @@ https://gamebanana.com/mods/613281
 
 -
 Vs. Mokey (V-Slice/Mobile Port)
+https://ranoz.gg/file/rcEkfgvI
+
+Original
+https://gamebanana.com/mods/611814
+
+-
+Shucks V2 Vslice Port (The Music Is In Normal Dif) 2.0
+https://ranoz.gg/file/yHkVUarG
+
+GoofyCutscene
+https://ranoz.gg/file/WDJKDWZl
+
+Original
+https://gamebanana.com/mods/611537
+
+-
+Friday Night Funkin' - Vs Yamato (Beta) 0.1.3
+https://ranoz.gg/file/2jwOnToK
+
+Original
+https://gamebanana.com/mods/611697
