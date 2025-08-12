@@ -24,8 +24,8 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 .tabs{display:flex;gap:8px;padding:12px 0;margin-bottom:12px;flex-wrap:wrap}
 .tab{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;color:var(--muted);cursor:pointer;font-weight:600;font-size:13px;}
 .tab.active{background:linear-gradient(90deg, rgba(124,92,247,0.12), rgba(75,182,255,0.06));border-color:transparent;color:#e9f0ff;box-shadow:0 6px 20px rgba(16,18,22,0.4)}
-.grid{display:grid;gap:var(--gap);grid-template-columns: repeat(3, 1fr);align-items:start;overflow:auto;padding-bottom:6px;}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:var(--radius);display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.03);min-height:220px;}
+.grid{display:grid;gap:var(--gap);grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));align-items:start;overflow:auto;padding-bottom:6px;transition:all 0.2s ease;}
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:var(--radius);display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.03);min-height:220px;transition:transform 0.2s ease;}
 .thumb{height:138px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#07101a,#0b1420);box-shadow:inset 0 -20px 40px rgba(0,0,0,0.35);}
 .thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .title{font-size:15px;margin:0;color:#eaf2ff;font-weight:700;line-height:1.15}
@@ -36,6 +36,31 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.03)}
 .btn.small{padding:6px 8px;font-size:12px;border-radius:8px}
 .extra-buttons{display:flex;gap:6px;flex-wrap:wrap}
+
+/* Options dropdown */
+.options-container { position: relative; }
+.options-menu {
+  display: none;
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background: var(--glass);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 12px;
+  min-width: 160px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  z-index: 20;
+}
+.options-menu label {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+.options-menu input[type=range] {
+  width: 100%;
+}
+
 @media (max-width:1000px){ .grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){
   header{flex-direction:column;align-items:stretch;gap:12px}
@@ -44,8 +69,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   .card{scroll-snap-align:center;min-height:240px}
 }
 .footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
-.manual-fallback{margin-top:12px}
-.manual-fallback textarea{width:100%;min-height:140px;margin-top:8px;border-radius:10px;padding:10px;background:transparent;border:1px solid rgba(255,255,255,0.03);color:inherit}
 </style>
 </head>
 <body>
@@ -63,6 +86,13 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
         <div class="search" title="Search by name">
           🔎 <input id="search" placeholder="Search by name..." />
         </div>
+        <div class="options-container">
+          <button id="optionsBtn" class="btn ghost">⚙ Options</button>
+          <div id="optionsMenu" class="options-menu">
+            <label for="zoomSlider">Columns:</label>
+            <input type="range" id="zoomSlider" min="1" max="8" step="1">
+          </div>
+        </div>
       </div>
     </header>
 
@@ -78,30 +108,10 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
     </main>
 
     <div class="footer">@LucyYuih</div>
-
-    <!-- fallback: appears only if fetch fails -->
-    <div id="manualContainer" class="manual-fallback" style="display:none">
-      <div style="color:var(--muted);font-size:13px">Paste the content of mods.txt here and press Parse:</div>
-      <textarea id="manualArea"></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button id="manualParse" class="btn primary">Parse</button>
-        <button id="manualClear" class="btn ghost">Clear</button>
-      </div>
-    </div>
   </div>
 
 <script>
-/* Auto-load & thumb resolve script (ignores lines starting with #) */
 const GITHUB_BLOB = 'https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/blob/main/mods.txt';
-const manualContainer = document.getElementById('manualContainer');
-const manualArea = document.getElementById('manualArea');
-document.getElementById('manualParse').addEventListener('click', ()=> {
-  const txt = manualArea.value.trim();
-  if(!txt) return alert('Paste the mods.txt content here.');
-  doParseAndRender(txt, 'mods.txt (manual)');
-});
-document.getElementById('manualClear').addEventListener('click', ()=> manualArea.value='');
-
 document.addEventListener('DOMContentLoaded', ()=> {
   const raw = blobToRaw(GITHUB_BLOB);
   loadFromUrl(raw).then(() => {});
@@ -125,25 +135,18 @@ async function loadFromUrl(url){
     const res = await fetch(url);
     if(!res.ok) throw new Error('HTTP ' + res.status);
     const txt = await res.text();
-    doParseAndRender(txt, url);
+    doParseAndRender(txt);
   }catch(err){
-    // If fetch fails (CORS/network), show manual paste fallback silently
-    manualContainer.style.display = 'block';
-    console.warn('Fetch failed; showing manual fallback.', err);
+    console.warn('Fetch failed.', err);
   }
 }
 
-function doParseAndRender(txt, sourceLabel){
+function doParseAndRender(txt){
   const items = parseModsTxt(txt);
   renderGrid(items);
-  // after rendering, start automatic thumbnail resolution
   setTimeout(()=> resolveAllThumbnails(), 300);
 }
 
-/* Parser for the mods.txt format
-   - ignores lines starting with '#' (so hashtags like #astcfnfmobile are skipped)
-   - blocks separated by a single '-' line
-   - categories indicated by lines 'tools', 'skins', 'mods' */
 function parseModsTxt(txt){
   const lines = txt.split(/\r?\n/);
   let currentCategory = null;
@@ -153,7 +156,6 @@ function parseModsTxt(txt){
     const raw = lines[i];
     const line = raw.replace(/\u00A0/g,' ').trim();
     if(!line) continue;
-    // ignore comment/hashtag lines
     if(line.startsWith('#')) continue;
     const lower = line.toLowerCase();
     if(lower === 'tools' || lower === 'skins' || lower === 'mods'){ flushBlock(); currentCategory = capitalize(lower); continue; }
@@ -184,7 +186,6 @@ function parseBlock(blockLines, currentCategory){
 }
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-/* Rendering */
 function makeCard(item){
   const el = document.createElement('div'); el.className='card'; el.dataset.title=item.title.toLowerCase(); el.dataset.category=item.category;
   const thumb = document.createElement('div'); thumb.className='thumb';
@@ -218,25 +219,22 @@ function renderGrid(items){
   filterAndShow();
 }
 
-/* Search & Tabs */
 document.getElementById('search').addEventListener('input', filterAndShow);
 document.getElementById('tabs').addEventListener('click', (e)=>{ const b=e.target.closest('.tab'); if(!b) return; document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); filterAndShow(); });
 function filterAndShow(){
   const q=document.getElementById('search').value.trim().toLowerCase();
   const active=document.querySelector('.tab.active')?.dataset?.cat||'all';
-  const grid=document.getElementById('grid'); const cards=Array.from(grid.children); let shown=0;
+  const grid=document.getElementById('grid'); const cards=Array.from(grid.children);
   for(const c of cards){
     const title=(c.dataset.title||'').toLowerCase(); const cat=(c.dataset.category||'').toLowerCase();
     const matchQ = !q || title.includes(q); const matchCat = active==='all' || cat === (active||'').toLowerCase();
-    if(matchQ && matchCat){ c.style.display=''; shown++; } else c.style.display='none';
+    c.style.display = (matchQ && matchCat) ? '' : 'none';
   }
 }
 
-/* --- Thumbnails resolution (automatic) --- */
 async function resolveAllThumbnails(){
   const items = window.currentItems || [];
   let targets = items.filter(it => !it.img && it.urls.some(u => /gamebanana\.com|gamejolt\.com/i.test(u)));
-  if(targets.length === 0) return;
   for(const it of targets){
     const candidate = it.urls.find(u => /gamebanana\.com|gamejolt\.com/i.test(u));
     if(!candidate) continue;
@@ -248,26 +246,9 @@ async function resolveAllThumbnails(){
       let img = null;
       const og = doc.querySelector('meta[property="og:image"], meta[name="og:image"]');
       if(og && og.content) img = og.content;
-      const tw = doc.querySelector('meta[name="twitter:image"]');
-      if(!img && tw && tw.content) img = tw.content;
-      if(!img){
-        const linkImg = doc.querySelector('link[rel="image_src"]');
-        if(linkImg && linkImg.href) img = linkImg.href;
-      }
       if(img && img.startsWith('/')) img = (new URL(candidate)).origin + img;
-      if(img){
-        it.img = img;
-        updateCardImage(it);
-        continue;
-      }
-      const imgs = Array.from(doc.querySelectorAll('img')).map(i => i.src).filter(Boolean);
-      if(imgs.length){
-        const pick = imgs.find(u=>/^https?:\/\//i.test(u));
-        if(pick){ it.img = pick; updateCardImage(it); continue; }
-      }
-    }catch(err){
-      console.warn('Thumb fetch failed for', candidate, err);
-    }
+      if(img){ it.img = img; updateCardImage(it); }
+    }catch(err){ console.warn('Thumb fetch failed for', candidate); }
   }
 }
 
@@ -285,10 +266,32 @@ function updateCardImage(item){
     }
   }
 }
-
-/* util */
 function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+/* --- Opções: quantidade de colunas --- */
+const optionsBtn = document.getElementById('optionsBtn');
+const optionsMenu = document.getElementById('optionsMenu');
+const zoomSlider = document.getElementById('zoomSlider');
+const gridEl = document.getElementById('grid');
+
+optionsBtn.addEventListener('click', () => {
+  optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
+});
+document.addEventListener('click', (e) => {
+  if (!optionsMenu.contains(e.target) && !optionsBtn.contains(e.target)) {
+    optionsMenu.style.display = 'none';
+  }
+});
+
+function applyColumns(cols) {
+  gridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+  localStorage.setItem('gridColumns', cols);
+}
+zoomSlider.addEventListener('input', e => applyColumns(e.target.value));
+
+const savedCols = localStorage.getItem('gridColumns') || 3;
+zoomSlider.value = savedCols;
+applyColumns(savedCols);
 </script>
 </body>
 </html>
