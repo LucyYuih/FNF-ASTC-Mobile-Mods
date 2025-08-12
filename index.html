@@ -64,10 +64,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 /* Mobile vertical slider */
 @media (max-width: 640px) {
   .options-menu {
-    display: none;
-    position: absolute;
-    top: 110%;
-    right: 0;
     flex-direction: column;
     align-items: center;
   }
@@ -83,8 +79,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 @media (max-width:640px){
   header{flex-direction:column;align-items:stretch;gap:12px}
   .search input{width:100%}
-  .grid{grid-auto-flow:column;grid-auto-columns: 80%;grid-template-columns: none;gap:14px;overflow-x:auto;padding-bottom:14px;-webkit-overflow-scrolling:touch;scroll-snap-type:x mandatory}
-  .card{scroll-snap-align:center;min-height:240px}
 }
 .footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
 </style>
