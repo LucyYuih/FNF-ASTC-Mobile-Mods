@@ -27,7 +27,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 .grid{display:grid;gap:var(--gap);grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));align-items:start;overflow:auto;padding-bottom:6px;transition:all 0.2s ease;}
 .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:var(--radius);display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.03);min-height:220px;transition:transform 0.2s ease;}
 .thumb{height:138px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#07101a,#0b1420);box-shadow:inset 0 -20px 40px rgba(0,0,0,0.35);}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition: opacity 0.3s ease;}
 .title{font-size:15px;margin:0;color:#eaf2ff;font-weight:700;line-height:1.15}
 .meta{font-size:12px;color:var(--muted);display:block;margin-top:-2px}
 .buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
@@ -207,6 +207,21 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   margin: 20px 0;
 }
 
+/* Loading spinner */
+.thumb .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top: 4px solid var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 @media (max-width:1000px){ .grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){
   header{flex-direction:column;align-items:stretch;gap:12px}
@@ -309,6 +324,8 @@ const GITHUB_BLOB = 'https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/blob/main/
 const REPO = 'LucyYuih/FNF-ASTC-Mobile-Mods';
 const ISSUES_API = `https://api.github.com/repos/${REPO}/issues`;
 
+let thumbnailObserver = null; // Global Intersection Observer
+
 document.addEventListener('DOMContentLoaded', ()=> {
   const raw = blobToRaw(GITHUB_BLOB);
   loadFromUrl(raw).then(() => {});
@@ -344,7 +361,7 @@ async function loadFromUrl(url){
 function doParseAndRender(txt){
   const items = parseModsTxt(txt);
   renderGrid(items);
-  setTimeout(()=> resolveAllThumbnails(), 300);
+  // Não mais resolveAllThumbnails aqui, será feito por IntersectionObserver
 }
 
 function parseModsTxt(txt){
@@ -376,47 +393,207 @@ function parseBlock(blockLines, currentCategory){
     const m = ln.match(urlRegex);
     if(m) for(const u of m) urls.push(u.replace(/[),.]+$/,''));
   }
+
+  // Encontrar a candidateUrl (primeira URL que for de GameBanana ou GameJolt)
+  let candidateUrl = null;
+  for (const u of urls) {
+    if (/gamebanana\.com|gamejolt\.com/i.test(u)) {
+      candidateUrl = u;
+      break;
+    }
+  }
+
   let category = currentCategory || 'Mods';
   if(!currentCategory){
     const joined = lines.join(' ').toLowerCase();
     if(joined.includes('skin')) category='Skins';
     else if(joined.includes('tool')||joined.includes('install')) category='Tools';
   }
-  return { title, category, urls, img: null, rawLines: lines };
+  return { 
+    title, 
+    category, 
+    urls, 
+    candidateUrl, // nova propriedade
+    img: null, 
+    rawLines: lines 
+  };
 }
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
 function makeCard(item){
-  const el = document.createElement('div'); el.className='card'; el.dataset.title=item.title.toLowerCase(); el.dataset.category=item.category;
-  const thumb = document.createElement('div'); thumb.className='thumb';
-  if(item.img){
-    const im=document.createElement('img'); im.src=item.img; im.alt=item.title; thumb.appendChild(im);
-  } else {
-    const placeholder=document.createElement('div'); placeholder.style.width='100%'; placeholder.style.height='100%'; placeholder.style.display='flex'; placeholder.style.alignItems='center'; placeholder.style.justifyContent='center'; placeholder.style.fontWeight='800'; placeholder.style.fontSize='28px'; placeholder.style.color='#eaf2ff';
-    const cleanTitle = item.title.replace(/^[\[\(]+/,'').trim();
-    placeholder.textContent = (cleanTitle.slice(0,2) || 'M').toUpperCase(); thumb.appendChild(placeholder);
+  const el = document.createElement('div'); 
+  el.className='card'; 
+  el.dataset.title=item.title.toLowerCase(); 
+  el.dataset.category=item.category;
+  
+  const thumb = document.createElement('div'); 
+  thumb.className='thumb';
+  // Adicionar a candidateUrl como atributo, se existir
+  if (item.candidateUrl) {
+    thumb.dataset.candidateUrl = item.candidateUrl;
   }
-  const title = document.createElement('div'); title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
-  const buttons = document.createElement('div'); buttons.className='buttons';
+
+  // Mostrar spinner enquanto carrega
+  const spinner = document.createElement('div');
+  spinner.className = 'spinner';
+  thumb.appendChild(spinner);
+  
+  const title = document.createElement('div'); 
+  title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
+  
+  const buttons = document.createElement('div'); 
+  buttons.className='buttons';
   if(item.urls.length>0){
-    const aDl=document.createElement('a'); aDl.className='btn primary'; aDl.href=item.urls[0]; aDl.target='_blank'; aDl.rel='noopener'; aDl.textContent='Download'; buttons.appendChild(aDl);
-    const aOrig=document.createElement('a'); aOrig.className='btn ghost'; aOrig.href=item.urls[item.urls.length-1]; aOrig.target='_blank'; aOrig.rel='noopener'; aOrig.textContent='Original'; buttons.appendChild(aOrig);
+    const aDl=document.createElement('a'); 
+    aDl.className='btn primary'; 
+    aDl.href=item.urls[0]; 
+    aDl.target='_blank'; 
+    aDl.rel='noopener'; 
+    aDl.textContent='Download'; 
+    buttons.appendChild(aDl);
+    
+    const aOrig=document.createElement('a'); 
+    aOrig.className='btn ghost'; 
+    aOrig.href=item.urls[item.urls.length-1]; 
+    aOrig.target='_blank'; 
+    aOrig.rel='noopener'; 
+    aOrig.textContent='Original'; 
+    buttons.appendChild(aOrig);
+    
     if(item.urls.length>2){
-      const wrap=document.createElement('div'); wrap.className='extra-buttons';
-      for(let i=1;i<item.urls.length-1;i++){ const ext=document.createElement('a'); ext.className='btn small ghost'; ext.href=item.urls[i]; ext.target='_blank'; ext.rel='noopener'; ext.textContent=`Link ${i+1}`; wrap.appendChild(ext); }
+      const wrap=document.createElement('div'); 
+      wrap.className='extra-buttons';
+      for(let i=1;i<item.urls.length-1;i++){ 
+        const ext=document.createElement('a'); 
+        ext.className='btn small ghost'; 
+        ext.href=item.urls[i]; 
+        ext.target='_blank'; 
+        ext.rel='noopener'; 
+        ext.textContent=`Link ${i+1}`; 
+        wrap.appendChild(ext); 
+      }
       buttons.appendChild(wrap);
     }
   } else {
-    const no=document.createElement('div'); no.className='btn ghost'; no.textContent='No link'; buttons.appendChild(no);
+    const no=document.createElement('div'); 
+    no.className='btn ghost'; 
+    no.textContent='No link'; 
+    buttons.appendChild(no);
   }
-  el.appendChild(thumb); el.appendChild(title); el.appendChild(buttons);
+  
+  el.appendChild(thumb); 
+  el.appendChild(title); 
+  el.appendChild(buttons);
+  
   return el;
 }
+
 function renderGrid(items){
-  const grid=document.getElementById('grid'); grid.innerHTML=''; window.currentItems=items; const frag=document.createDocumentFragment();
-  for(const it of items) frag.appendChild(makeCard(it));
+  const grid=document.getElementById('grid'); 
+  grid.innerHTML=''; 
+  window.currentItems=items; 
+  const frag=document.createDocumentFragment();
+  
+  for(const it of items) 
+    frag.appendChild(makeCard(it));
+  
   grid.appendChild(frag);
   filterAndShow();
+  
+  // Configurar o observador para os thumbnails
+  setupThumbnailObserver();
+}
+
+function setupThumbnailObserver() {
+  // Se não existir, criar o observador
+  if (!thumbnailObserver) {
+    thumbnailObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const thumb = entry.target;
+          const candidateUrl = thumb.dataset.candidateUrl;
+          if (candidateUrl) {
+            observer.unobserve(thumb);
+            loadThumbnail(thumb, candidateUrl);
+          }
+        }
+      });
+    }, {
+      rootMargin: '0px 0px 100px 0px' // carregar 100px antes de entrar na viewport
+    });
+  }
+
+  // Encontrar todos os thumbnails que têm candidateUrl e ainda não foram carregados
+  document.querySelectorAll('.thumb[data-candidate-url]').forEach(thumb => {
+    // Observar cada thumb que tenha o atributo
+    thumbnailObserver.observe(thumb);
+  });
+}
+
+async function loadThumbnail(thumbElement, candidateUrl) {
+  try {
+    const imgUrl = await fetchImageUrl(candidateUrl);
+    if (imgUrl) {
+      // Substituir o spinner pela imagem
+      thumbElement.innerHTML = '';
+      const img = document.createElement('img');
+      img.src = imgUrl;
+      img.alt = '';
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      thumbElement.appendChild(img);
+    }
+    // Remover o atributo para não tentar carregar novamente
+    delete thumbElement.dataset.candidateUrl;
+  } catch (error) {
+    console.warn('Failed to load thumbnail for', candidateUrl, error);
+    // Em caso de erro, mostrar placeholder
+    thumbElement.innerHTML = '';
+    const placeholder=document.createElement('div'); 
+    placeholder.style.width='100%'; 
+    placeholder.style.height='100%'; 
+    placeholder.style.display='flex'; 
+    placeholder.style.alignItems='center'; 
+    placeholder.style.justifyContent='center'; 
+    placeholder.style.fontWeight='800'; 
+    placeholder.style.fontSize='28px'; 
+    placeholder.style.color='#eaf2ff';
+    
+    // Tentar extrair iniciais do título
+    const card = thumbElement.closest('.card');
+    if (card && card.dataset.title) {
+      const title = card.dataset.title;
+      const cleanTitle = title.replace(/^[\[\(]+/,'').trim();
+      placeholder.textContent = (cleanTitle.slice(0,2) || 'M').toUpperCase();
+    } else {
+      placeholder.textContent = 'M';
+    }
+    
+    thumbElement.appendChild(placeholder);
+    delete thumbElement.dataset.candidateUrl;
+  }
+}
+
+async function fetchImageUrl(url) {
+  try {
+    const resp = await fetch(`https://corsproxy.io/?${encodeURIComponent(url)}`);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const html = await resp.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const og = doc.querySelector('meta[property="og:image"], meta[name="og:image"]');
+    if (og && og.content) {
+      let img = og.content;
+      if (img.startsWith('/')) {
+        img = new URL(img, url).href;
+      }
+      return img;
+    }
+    return null;
+  } catch (err) {
+    console.warn('Thumb fetch failed for', url, err);
+    return null;
+  }
 }
 
 // Request functions
@@ -567,7 +744,8 @@ function filterAndShow(){
   
   const q=document.getElementById('search').value.trim().toLowerCase();
   const active=document.querySelector('.tab.active')?.dataset?.cat||'all';
-  const grid=document.getElementById('grid'); const cards=Array.from(grid.children);
+  const grid=document.getElementById('grid'); 
+  const cards=Array.from(grid.children);
   
   for(const c of cards){
     const title=(c.dataset.title||'').toLowerCase(); 
@@ -576,42 +754,11 @@ function filterAndShow(){
     const matchCat = active==='all' || cat === (active||'').toLowerCase();
     c.style.display = (matchQ && matchCat) ? '' : 'none';
   }
+  
+  // Após filtrar, configurar o observador novamente para os elementos visíveis
+  setupThumbnailObserver();
 }
 
-async function resolveAllThumbnails(){
-  const items = window.currentItems || [];
-  let targets = items.filter(it => !it.img && it.urls.some(u => /gamebanana\.com|gamejolt\.com/i.test(u)));
-  for(const it of targets){
-    const candidate = it.urls.find(u => /gamebanana\.com|gamejolt\.com/i.test(u));
-    if(!candidate) continue;
-    try{
-      const resp = await fetch(candidate, { mode: 'cors' });
-      if(!resp.ok) throw new Error('HTTP ' + resp.status);
-      const html = await resp.text();
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      let img = null;
-      const og = doc.querySelector('meta[property="og:image"], meta[name="og:image"]');
-      if(og && og.content) img = og.content;
-      if(img && img.startsWith('/')) img = (new URL(candidate)).origin + img;
-      if(img){ it.img = img; updateCardImage(it); }
-    }catch(err){ console.warn('Thumb fetch failed for', candidate); }
-  }
-}
-
-function updateCardImage(item){
-  const grid = document.getElementById('grid');
-  for(const c of grid.children){
-    if(c.dataset.title === item.title.toLowerCase()){
-      const thumb = c.querySelector('.thumb');
-      if(thumb){
-        thumb.innerHTML = '';
-        const im = document.createElement('img'); im.src = item.img; im.alt = item.title;
-        thumb.appendChild(im);
-      }
-      break;
-    }
-  }
-}
 function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 /* --- Opções: quantidade de colunas --- */
