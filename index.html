@@ -75,10 +75,144 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   }
 }
 
+/* Request Form Styles */
+.request-form {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03));
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 24px;
+  display: none;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #d0d8e3;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 10px;
+  color: #eaf2ff;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: rgba(124,92,247,0.4);
+  box-shadow: 0 0 0 2px rgba(124,92,247,0.15);
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.requests-grid {
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.request-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.03);
+  position: relative;
+}
+
+.request-title {
+  font-weight: 700;
+  margin: 0 0 8px;
+  font-size: 15px;
+}
+
+.request-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.request-category {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(124,92,247,0.1);
+  border-radius: 6px;
+  color: #c6b3ff;
+}
+
+.request-body {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  color: #d0d8e3;
+}
+
+.request-status {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.status-open {
+  background: rgba(46, 204, 113, 0.15);
+  color: #2ecc71;
+}
+
+.status-closed {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+}
+
+.status-pending {
+  background: rgba(241, 196, 15, 0.15);
+  color: #f1c40f;
+}
+
+.request-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #7c5cf7;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.request-link:hover {
+  text-decoration: underline;
+}
+
+.request-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.05);
+  margin: 20px 0;
+}
+
 @media (max-width:1000px){ .grid{grid-template-columns:repeat(2,1fr)} }
 @media (max-width:640px){
   header{flex-direction:column;align-items:stretch;gap:12px}
   .search input{width:100%}
+  .requests-grid{grid-template-columns:1fr}
+  .form-actions{flex-direction:column;}
 }
 .footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
 </style>
@@ -113,10 +247,58 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
       <button class="tab" data-cat="Tools">Tools</button>
       <button class="tab" data-cat="Skins">Skins</button>
       <button class="tab" data-cat="Mods">Mods</button>
+      <button class="tab" data-cat="requests">Requests</button>
     </nav>
 
     <main>
       <section id="grid" class="grid" aria-live="polite"></section>
+      
+      <!-- Request Section -->
+      <section id="requestSection" style="display: none;">
+        <div class="request-form" id="requestForm">
+          <h2>Request a Mod/Skin/Tool</h2>
+          <p style="margin-bottom: 16px; color: var(--muted);">Submit your request for a new mod, skin or tool to be added to the collection.</p>
+          
+          <div class="form-group">
+            <label for="requestTitle">Title*</label>
+            <input type="text" id="requestTitle" class="form-control" placeholder="Name of the mod, skin, etc." required>
+          </div>
+          
+          <div class="form-group">
+            <label for="requestCategory">Category*</label>
+            <select id="requestCategory" class="form-control" required>
+              <option value="">Select a category</option>
+              <option value="Mods">Mods</option>
+              <option value="Skins">Skins</option>
+              <option value="Tools">Tools</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="requestLink">Link*</label>
+            <input type="url" id="requestLink" class="form-control" placeholder="https://..." required>
+            <small style="display: block; margin-top: 4px; color: var(--muted);">Where can we find this mod?</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="requestDescription">Description</label>
+            <textarea id="requestDescription" class="form-control" rows="4" placeholder="Provide any additional details..."></textarea>
+          </div>
+          
+          <div class="form-actions">
+            <button id="submitRequest" class="btn primary">Submit Request</button>
+            <a href="https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/issues" target="_blank" class="btn ghost">View All Requests</a>
+          </div>
+        </div>
+        
+        <div class="request-divider"></div>
+        
+        <h2>Recent Requests</h2>
+        <p style="margin-bottom: 16px; color: var(--muted);">Here are the most recent requests from the community.</p>
+        
+        <div class="requests-grid" id="requestsGrid"></div>
+      </section>
     </main>
 
     <div class="footer">@LucyYuih</div>
@@ -124,9 +306,15 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 
 <script>
 const GITHUB_BLOB = 'https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/blob/main/mods.txt';
+const REPO = 'LucyYuih/FNF-ASTC-Mobile-Mods';
+const ISSUES_API = `https://api.github.com/repos/${REPO}/issues`;
+
 document.addEventListener('DOMContentLoaded', ()=> {
   const raw = blobToRaw(GITHUB_BLOB);
   loadFromUrl(raw).then(() => {});
+  
+  // Load requests when the page loads
+  loadRequests();
 });
 
 function blobToRaw(blobUrl){
@@ -231,15 +419,161 @@ function renderGrid(items){
   filterAndShow();
 }
 
+// Request functions
+async function loadRequests() {
+  try {
+    const response = await fetch(ISSUES_API);
+    if (!response.ok) throw new Error('Failed to load requests');
+    const issues = await response.json();
+    renderRequests(issues);
+  } catch (error) {
+    console.error('Error loading requests:', error);
+    document.getElementById('requestsGrid').innerHTML = `<p style="color:var(--muted);">Failed to load requests. Please try again later.</p>`;
+  }
+}
+
+function renderRequests(issues) {
+  const container = document.getElementById('requestsGrid');
+  container.innerHTML = '';
+  
+  // Filter out issues that are not requests
+  const requests = issues.filter(issue => 
+    !issue.pull_request && 
+    issue.title.toLowerCase().includes('request:')
+  );
+  
+  if (requests.length === 0) {
+    container.innerHTML = `<p style="color:var(--muted);text-align:center;padding:20px;">No requests found. Be the first to submit one!</p>`;
+    return;
+  }
+  
+  // Show only the most recent 6 requests
+  const recentRequests = requests.slice(0, 6);
+  
+  recentRequests.forEach(issue => {
+    const requestCard = document.createElement('div');
+    requestCard.className = 'request-card';
+    
+    // Extract category from labels if available
+    let category = 'Other';
+    if (issue.labels && issue.labels.length > 0) {
+      const categoryLabel = issue.labels.find(label => 
+        ['Mods', 'Skins', 'Tools'].includes(label.name)
+      );
+      if (categoryLabel) category = categoryLabel.name;
+    }
+    
+    // Extract status
+    const status = issue.state === 'open' ? 'open' : 'closed';
+    
+    requestCard.innerHTML = `
+      <div class="request-meta">
+        <span class="request-category">${category}</span>
+        <span>${formatDate(issue.created_at)}</span>
+      </div>
+      <div class="request-status status-${status}">${status.toUpperCase()}</div>
+      <h3 class="request-title">${escapeHtml(issue.title.replace('Request:', '').trim())}</h3>
+      <div class="request-body">${truncateText(issue.body || 'No description provided', 120)}</div>
+      <a href="${issue.html_url}" target="_blank" class="request-link">View on GitHub →</a>
+    `;
+    
+    container.appendChild(requestCard);
+  });
+}
+
+function truncateText(text, maxLength) {
+  if (text.length <= maxLength) return escapeHtml(text);
+  return escapeHtml(text.substring(0, maxLength)) + '...';
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric'
+  });
+}
+
+function submitRequest() {
+  const title = document.getElementById('requestTitle').value;
+  const category = document.getElementById('requestCategory').value;
+  const link = document.getElementById('requestLink').value;
+  const description = document.getElementById('requestDescription').value;
+  
+  if (!title || !category || !link) {
+    alert('Please fill in all required fields');
+    return;
+  }
+  
+  // Format the issue title and body
+  const issueTitle = `Request: ${title}`;
+  let issueBody = `**Category:** ${category}\n\n`;
+  issueBody += `**Link:** ${link}\n\n`;
+  
+  if (description) {
+    issueBody += `**Description:**\n${description}\n\n`;
+  }
+  
+  issueBody += `_Submitted via ASTC Mobile Mods website_`;
+  
+  // Create the GitHub issue URL
+  const issueUrl = `https://github.com/${REPO}/issues/new?` + 
+    `title=${encodeURIComponent(issueTitle)}&` +
+    `body=${encodeURIComponent(issueBody)}&` +
+    `labels=Request`;
+  
+  // Open in a new tab
+  window.open(issueUrl, '_blank');
+  
+  // Reset form
+  document.getElementById('requestForm').reset();
+  
+  // Show success message
+  alert('Your request has been submitted! You\'ll need to log in to GitHub to complete the process.');
+}
+
+// Tab switching
+document.getElementById('tabs').addEventListener('click', (e)=>{
+  const b=e.target.closest('.tab');
+  if(!b) return;
+  
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  
+  const category = b.dataset.cat;
+  
+  if (category === 'requests') {
+    // Show requests section
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('requestSection').style.display = 'block';
+    document.getElementById('requestForm').style.display = 'block';
+    
+    // Reload requests
+    loadRequests();
+  } else {
+    // Show mods grid
+    document.getElementById('grid').style.display = 'grid';
+    document.getElementById('requestSection').style.display = 'none';
+    filterAndShow();
+  }
+});
+
 document.getElementById('search').addEventListener('input', filterAndShow);
-document.getElementById('tabs').addEventListener('click', (e)=>{ const b=e.target.closest('.tab'); if(!b) return; document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active')); b.classList.add('active'); filterAndShow(); });
+
 function filterAndShow(){
+  // Only apply filtering when on mods view
+  if (document.getElementById('requestSection').style.display === 'block') return;
+  
   const q=document.getElementById('search').value.trim().toLowerCase();
   const active=document.querySelector('.tab.active')?.dataset?.cat||'all';
   const grid=document.getElementById('grid'); const cards=Array.from(grid.children);
+  
   for(const c of cards){
-    const title=(c.dataset.title||'').toLowerCase(); const cat=(c.dataset.category||'').toLowerCase();
-    const matchQ = !q || title.includes(q); const matchCat = active==='all' || cat === (active||'').toLowerCase();
+    const title=(c.dataset.title||'').toLowerCase(); 
+    const cat=(c.dataset.category||'').toLowerCase();
+    const matchQ = !q || title.includes(q); 
+    const matchCat = active==='all' || cat === (active||'').toLowerCase();
     c.style.display = (matchQ && matchCat) ? '' : 'none';
   }
 }
@@ -304,6 +638,9 @@ zoomSlider.addEventListener('input', e => applyColumns(e.target.value));
 const savedCols = localStorage.getItem('gridColumns') || 3;
 zoomSlider.value = savedCols;
 applyColumns(savedCols);
+
+// Request submission
+document.getElementById('submitRequest').addEventListener('click', submitRequest);
 </script>
 </body>
 </html>
