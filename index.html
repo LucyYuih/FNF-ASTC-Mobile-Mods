@@ -6,51 +6,129 @@
 <title>Mobile ASTC Mods [OPT]</title>
 <style>
 :root{
-  --bg:#0b0f14; --muted:#97a0ac; --accent:#7c5cf7; --glass: rgba(255,255,255,0.03);
-  --radius:14px; --gap:18px;
-  --request-blue-start:#4bb6ff; --request-blue-end:#7c5cf7;
+  --bg:#0b0f14;
+  --muted:#97a0ac;
+  --accent:#7c5cf7;
+  --glass: rgba(255,255,255,0.03);
+  --radius:14px;
+  --gap:18px;
+
+  --cols: 3;      /* controlled by slider */
+  --card-scale: 1;/* ONLY cards use this scale */
+  --title-size: calc(15px * var(--card-scale));
+  --meta-size: calc(12px * var(--card-scale));
+  --btn-font: calc(13px * var(--card-scale));
+  --btn-padding-vert: calc(8px * var(--card-scale));
+  --btn-padding-horiz: calc(10px * var(--card-scale));
+  --thumb-aspect: 16 / 9;
 }
+
+/* reset / base */
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;background:linear-gradient(180deg,#07090c 0%, #0b0f14 100%);color:#e6eef8;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto,Arial;}
+html,body{height:100%;margin:0;background:linear-gradient(180deg,#07090c 0%, #0b0f14 100%);color:#e6eef8;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto,Arial;overflow-x:hidden;}
 .app{max-width:1200px;margin:28px auto;padding:20px;}
-header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px;}
+header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;}
 .brand{display:flex;gap:12px;align-items:center;}
 .square{width:56px;height:56px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),#4bb6ff);font-weight:800;color:#06111a;font-size:20px;}
 .titleWrap{display:flex;flex-direction:column;}
 .titleWrap h1{font-size:18px;margin:0}
 .titleWrap .lead{margin:0;color:var(--muted);font-size:13px}
-.controls{display:flex;gap:12px;align-items:center;}
-.search{background:var(--glass);padding:10px 12px;border-radius:999px;display:flex;gap:8px;align-items:center;min-width:220px;}
-.search input{background:transparent;border:0;color:inherit;outline:none;font-size:14px;width:220px}
+.controls{display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.search{background:var(--glass);padding:10px 12px;border-radius:999px;display:flex;gap:8px;align-items:center;min-width:160px;max-width:420px;}
+.search input{background:transparent;border:0;color:inherit;outline:none;font-size:14px;width:100%;min-width:0;}
 
 /* sort selector */
 .sort-wrap{display:flex;align-items:center;gap:8px;margin-left:8px}
 .sort-select{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:8px;border-radius:10px;color:inherit;font-weight:600}
 
-/* tabs: left group + requests on right */
-.tabs{display:flex;gap:8px;padding:12px 0;margin-bottom:12px;align-items:center;}
-.tab-group{display:flex;gap:8px;flex:1;align-items:center;}
+/* tabs */
+.tabs{display:flex;gap:8px;padding:12px 0;margin-bottom:12px;align-items:center;flex-wrap:wrap;}
+.tab-group{display:flex;gap:8px;flex:1;align-items:center;flex-wrap:wrap;}
 .tab{background:transparent;border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:12px;color:var(--muted);cursor:pointer;font-weight:600;font-size:13px;}
 .tab.active{background:linear-gradient(90deg, rgba(124,92,247,0.12), rgba(75,182,255,0.06));border-color:transparent;color:#e9f0ff;box-shadow:0 6px 20px rgba(16,18,22,0.4)}
-/* requests tab on right, highlighted blue */
-.tab.requests-tab{margin-left:auto;background:linear-gradient(90deg,var(--request-blue-start),var(--request-blue-end));color:#06111a;border:0;box-shadow:0 8px 30px rgba(75,182,255,0.12);}
+.tab.requests-tab{margin-left:auto;background:linear-gradient(90deg,#4bb6ff,#7c5cf7);color:#06111a;border:0;box-shadow:0 8px 30px rgba(75,182,255,0.12);}
 
-/* Grid & cards */
-.grid{display:grid;gap:var(--gap);grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));align-items:start;overflow:auto;padding-bottom:6px;transition:all 0.2s ease;}
-.card{background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));padding:12px;border-radius:var(--radius);display:flex;flex-direction:column;gap:10px;border:1px solid rgba(255,255,255,0.03);min-height:220px;transition:transform 0.2s ease;}
-.thumb{height:138px;border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(135deg,#07101a,#0b1420);box-shadow:inset 0 -20px 40px rgba(0,0,0,0.35);}
-.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition: opacity 0.3s ease;}
-.title{font-size:15px;margin:0;color:#eaf2ff;font-weight:700;line-height:1.15}
-.meta{font-size:12px;color:var(--muted);display:block;margin-top:-2px}
-.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
-.btn{flex:1 1 auto;padding:8px 10px;border-radius:10px;border:0;background:transparent;color:#cfe3ff;font-weight:700;font-size:13px;cursor:pointer;border:1px solid rgba(255,255,255,0.04);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+/* grid: responsive columns via --cols; use minmax(0,1fr) so columns shrink */
+.grid{
+  display:grid;
+  gap:var(--gap);
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  align-items:start;
+  overflow:auto;
+  padding-bottom:6px;
+  transition:all 0.18s ease;
+  width:100%;
+}
+
+/* CARD: only elements inside .card use var(--card-scale) */
+.card{
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  padding:calc(12px * var(--card-scale));
+  border-radius:var(--radius);
+  display:flex;
+  flex-direction:column;
+  gap:calc(10px * var(--card-scale));
+  border:1px solid rgba(255,255,255,0.03);
+  transition:transform 0.18s ease;
+}
+
+/* thumb uses aspect-ratio so it scales with width; min-height fallback */
+.thumb{
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:linear-gradient(135deg,#07101a,#0b1420);
+  box-shadow:inset 0 -20px 40px rgba(0,0,0,0.35);
+  aspect-ratio: var(--thumb-aspect);
+  width:100%;
+  min-height:60px;
+}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition: opacity 0.25s ease;}
+
+/* scaled text & buttons inside cards */
+.card .title{font-size:var(--title-size);margin:0;color:#eaf2ff;font-weight:700;line-height:1.15}
+.card .meta{font-size:var(--meta-size);color:var(--muted);display:block;margin-top:-2px}
+
+/* global button style (header, options, request buttons) - NOT affected by card scale */
+.btn{
+  flex:0 0 auto;
+  padding:8px 10px;
+  border-radius:10px;
+  border:0;
+  background:transparent;
+  color:#cfe3ff;
+  font-weight:700;
+  font-size:13px;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.04);
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:32px;
+}
+
+/* buttons inside cards override with card-scale */
+.card .btn{
+  flex:1 1 auto;
+  padding: var(--btn-padding-vert) var(--btn-padding-horiz);
+  font-size: var(--btn-font);
+  min-height: calc(32px * var(--card-scale));
+}
+
+/* variants */
 .btn.primary{background:linear-gradient(90deg,var(--accent),#4bb6ff);color:#06111a;box-shadow:0 8px 30px rgba(124,92,247,0.12);border:0}
 .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.03)}
 .btn.small{padding:6px 8px;font-size:12px;border-radius:8px}
 .extra-buttons{display:flex;gap:6px;flex-wrap:wrap}
 
-/* Options dropdown (unchanged) */
-.options-container { position: relative; }
+/* Options dropdown - slider ALWAYS horizontal (deitado) */
+.options-container { 
+  position: relative; 
+  margin-left: auto; /* Força o container para o canto direito */
+}
 .options-menu {
   display: none;
   position: absolute;
@@ -64,41 +142,127 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   box-shadow: 0 6px 20px rgba(0,0,0,0.3);
   z-index: 20;
 }
-.options-menu label { display:block; font-size:13px; margin-bottom:6px;}
-.options-menu input[type=range] { width:100%; }
 
-/* Requests UI (same as before) */
+.options-menu.show {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* horizontal slider for all screens */
+.options-menu input[type=range]{
+  -webkit-appearance: none;
+  appearance: none;
+  width:140px;
+  height:8px;
+  background: linear-gradient(90deg,#2b3340,#111418);
+  border-radius:6px;
+  outline:none;
+}
+
+/* thumb style for range */
+.options-menu input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#4bb6ff);box-shadow:0 6px 18px rgba(0,0,0,0.4);
+}
+.options-menu input[type=range]::-moz-range-thumb{
+  width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#4bb6ff);border:0;
+}
+
+/* small box that shows numeric columns */
+.cols-count{
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:800;
+  color:#eaf2ff;
+  min-width:38px;
+  text-align:center;
+  font-size:14px;
+}
+
+/* Request styles restored + improved UI for open/closed tabs */
 .request-form { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03)); border-radius: var(--radius); padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px; display: none; }
 .form-group { margin-bottom: 16px; }
 .form-control { width:100%; padding:10px 12px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px; color:#eaf2ff; }
 .requests-grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-.request-card { background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); padding: 16px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.03); position: relative; }
-.request-meta { color: var(--muted); font-size: 12px; margin-bottom: 12px; display:flex; gap:12px; }
-.request-category { display:inline-block; padding:2px 8px; background: rgba(124,92,247,0.1); border-radius:6px; color:#c6b3ff; }
-.request-status { position:absolute; top:16px; right:16px; font-size:11px; padding:2px 8px; border-radius:6px; font-weight:700; }
-.status-open { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
-.status-closed { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
-.status-pending { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
-.request-link { color: #7c5cf7; text-decoration:none; }
+
+/* request card */
+.request-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
+  padding: 16px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255,255,255,0.03);
+  position: relative;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
+}
+.request-title{font-size:16px;margin:8px 0;font-weight:700;color:#eaf2ff}
+.request-meta { color: var(--muted); font-size:13px; margin-bottom: 10px; display:flex; gap:12px; align-items:center; }
+.request-category { display:inline-block; padding:4px 10px; background: rgba(124,92,247,0.1); border-radius:6px; color:#c6b3ff; font-weight:700; font-size:13px;}
+.request-body{font-size:14px;color:#d0d8e3;line-height:1.4;margin-bottom:8px}
+.request-status { position:absolute; top:16px; right:16px; font-size:11px; padding:6px 8px; border-radius:6px; font-weight:700; }
+
+/* Styled Open/Closed request tabs */
+.request-tabs { display:flex; gap:8px; margin:12px 0; }
+.request-tab {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:10px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--muted);
+  font-weight:700;
+  cursor:pointer;
+  font-size:13px;
+}
+.request-tab.active {
+  background: linear-gradient(90deg, rgba(124,92,247,0.14), rgba(75,182,255,0.08));
+  color:#eaf2ff;
+  border:0;
+  box-shadow:0 8px 20px rgba(0,0,0,0.35);
+}
+
+/* Request View Tabs (All/My) */
+.request-view-tab {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  padding:10px 16px;
+  border-radius:12px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.08);
+  color:var(--muted);
+  font-weight:700;
+  cursor:pointer;
+  font-size:14px;
+  transition: all 0.2s ease;
+}
+.request-view-tab.active {
+  background: linear-gradient(90deg, rgba(124,92,247,0.18), rgba(75,182,255,0.12));
+  color:#eaf2ff;
+  border:0;
+  box-shadow:0 10px 25px rgba(0,0,0,0.4);
+  transform: translateY(-1px);
+}
+.request-view-tab:hover:not(.active) {
+  background: rgba(255,255,255,0.04);
+  color:#cfe3ff;
+}
+
+/* badges for request status */
+.status-open { background: rgba(46, 204, 113, 0.12); color: #2ecc71; border:1px solid rgba(46,204,113,0.08) }
+.status-closed { background: rgba(231, 76, 60, 0.12); color: #e74c3c; border:1px solid rgba(231,76,60,0.08) }
+.request-link { color: #7c5cf7; text-decoration:none; font-weight:700 }
 
 /* spinner */
-.thumb .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent); border-radius:50%; animation: spin 1s linear infinite; }
-@keyframes spin { 0%{transform:rotate(0)} 100%{transform:rotate(360deg)} }
+.thumb .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* small request subtabs */
-.request-tabs { display:flex; gap:8px; margin:12px 0; }
-.request-tab { padding:6px 10px; border-radius:8px; background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--muted); cursor:pointer; font-weight:700; }
-.request-tab.active { background:linear-gradient(90deg, rgba(124,92,247,0.12), rgba(75,182,255,0.06)); color:#e9f0ff; border:0; }
-
-/* responsive tweaks */
-@media (max-width:1000px){ .grid{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:640px){
-  header{flex-direction:column;align-items:stretch;gap:12px}
-  .search input{width:100%}
-  .requests-grid{grid-template-columns:1fr}
-  .form-actions{flex-direction:column;}
-  .sort-wrap{margin-top:8px}
-}
 .footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
 </style>
 </head>
@@ -118,8 +282,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
           <div class="search" title="Search by name">
             🔎 <input id="search" placeholder="Search by name..." />
           </div>
-
-          <!-- Sort selector (Updated option removed) -->
           <div class="sort-wrap">
             <label for="sortSelect" style="font-size:13px;color:var(--muted)">Sort:</label>
             <select id="sortSelect" class="sort-select" title="Sort mods">
@@ -130,12 +292,11 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
           </div>
         </div>
 
-        <!-- Keep options button -->
         <div class="options-container">
           <button id="optionsBtn" class="btn ghost">⚙ Options</button>
-          <div id="optionsMenu" class="options-menu">
-            <label for="zoomSlider">Columns:</label>
-            <input type="range" id="zoomSlider" min="1" max="8" step="1">
+          <div id="optionsMenu" class="options-menu" aria-hidden="true">
+            <input type="range" id="zoomSlider" min="1" max="8" step="1" />
+            <div class="cols-count" id="colsCount">3</div>
           </div>
         </div>
       </div>
@@ -148,7 +309,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
         <button class="tab" data-cat="Skins">Skins</button>
         <button class="tab" data-cat="Mods">Mods</button>
       </div>
-
       <button class="tab requests-tab" data-cat="requests" id="requestsTab">Requests</button>
     </nav>
 
@@ -157,9 +317,62 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
       
       <!-- Request Section -->
       <section id="requestSection" style="display: none;">
-        <div class="request-form" id="requestForm">
+        <form class="request-form" id="requestForm">
           <h2>Request a Mod/Skin/Tool</h2>
-          <p style="margin-bottom: 16px; color: var(--muted);">Submit your request for a new mod, skin or tool to be added to the collection.</p>
+          <p style="margin-bottom: 16px; color: var(--muted);">Submit your request for a new mod, skin or tool to be added to the collection (requires GitHub login).</p>
+          
+          <!-- GitHub Login Section -->
+          <div id="githubLoginSection" style="margin-bottom: 20px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+            <div id="loginForm" style="display: block;">
+              <h3 style="margin: 0 0 12px 0; color: #eaf2ff; font-size: 16px;">GitHub Authentication</h3>
+              <p style="margin: 0 0 16px 0; color: var(--muted); font-size: 14px;">Login with your GitHub Personal Access Token to submit and manage requests</p>
+              
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label for="githubUsername" style="display: block; margin-bottom: 6px; color: #eaf2ff; font-weight: 600; font-size: 13px;">GitHub Username*</label>
+                <input type="text" id="githubUsernameInput" class="form-control" placeholder="your-github-username" required>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="githubToken" style="display: block; margin-bottom: 6px; color: #eaf2ff; font-weight: 600; font-size: 13px;">Personal Access Token*</label>
+                <input type="password" id="githubTokenInput" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
+                <small style="display: block; margin-top: 4px; color: var(--muted); font-size: 12px;">
+                  <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent); text-decoration: none;">Create a token</a> with 'repo' and 'user' scopes
+                </small>
+              </div>
+              
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button id="githubLoginBtn" class="btn primary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  Login
+                </button>
+                <div id="loginSpinner" style="display: none;">
+                  <div class="spinner" style="width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                </div>
+              </div>
+              
+              <div id="loginError" style="display: none; margin-top: 12px; padding: 10px; background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.2); border-radius: 6px; color: #e74c3c; font-size: 13px;"></div>
+            </div>
+            
+            <div id="loginSuccess" style="display: none;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <img id="userAvatar" src="" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; display: none;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center;" id="defaultAvatar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p style="margin: 0; color: #2ecc71; font-weight: 700; font-size: 14px;">Logged in as <span id="githubUsername"></span></p>
+                    <p style="margin: 0; color: var(--muted); font-size: 12px;">You can now submit and manage requests</p>
+                  </div>
+                </div>
+                <button id="githubLogoutBtn" class="btn ghost small">Logout</button>
+              </div>
+            </div>
+          </div>
           <div class="form-group">
             <label for="requestTitle">Title*</label>
             <input type="text" id="requestTitle" class="form-control" placeholder="Name of the mod, skin, etc." required>
@@ -192,11 +405,41 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
         <div class="request-divider"></div>
         
         <h2>Requests</h2>
-        <div class="request-tabs">
-          <button class="request-tab active" id="openRequestsTab">Open</button>
-          <button class="request-tab" id="closedRequestsTab">Closed</button>
+        
+        <!-- Request View Tabs (All/My) -->
+        <div class="request-view-tabs" style="display: flex; gap: 8px; margin: 12px 0;">
+          <button class="request-view-tab active" id="allRequestsViewTab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            All Requests
+          </button>
+          <button class="request-view-tab" id="myRequestsViewTab" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
+              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+            My Requests
+          </button>
         </div>
-        <p style="margin-bottom: 16px; color: var(--muted);">Recent requests from the community.</p>
+        
+        <!-- Status Filter Tabs (Open/Closed) -->
+        <div class="request-tabs">
+          <button class="request-tab active" id="openRequestsTab">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
+              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            Open
+          </button>
+          <button class="request-tab" id="closedRequestsTab">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+            </svg>
+            Closed
+          </button>
+        </div>
+        
+        <p id="requestsDescription" style="margin-bottom: 16px; color: var(--muted);">Recent requests from the community.</p>
         <div class="requests-grid" id="requestsGrid"></div>
       </section>
     </main>
@@ -205,28 +448,60 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   </div>
 
 <script>
-/* ========== constants ========== */
+/* ========== constants & preserved logic ========== */
 const GITHUB_BLOB = 'https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/blob/main/mods.txt';
 const REPO = 'LucyYuih/FNF-ASTC-Mobile-Mods';
 const ISSUES_API = `https://api.github.com/repos/${REPO}/issues`;
 const CORS_PROXY = 'https://corsproxy.io/?';
 
-/* Keep the original variables / functions intact: */
-let thumbnailObserver = null; // Global Intersection Observer
-window._originalOrderTitles = null; // store original order to restore on "Default"
+let thumbnailObserver = null;
+window._originalOrderTitles = null;
 
-/* On load: fetch mods.txt and initialize */
+/* DOM ready */
 document.addEventListener('DOMContentLoaded', ()=> {
   const raw = blobToRaw(GITHUB_BLOB);
   loadFromUrl(raw).then(() => {});
   loadRequests();
 
-  // wire sort select
+  // wire controls (preserve existing function names)
   const sortSelect = document.getElementById('sortSelect');
   if (sortSelect) sortSelect.addEventListener('change', applySortAndReorder);
+
+  const zoomSlider = document.getElementById('zoomSlider');
+  const colsCount = document.getElementById('colsCount');
+  zoomSlider.addEventListener('input', e => {
+    applyColumns(e.target.value);
+    colsCount.textContent = e.target.value;
+  });
+
+  const optionsBtn = document.getElementById('optionsBtn');
+  const optionsMenu = document.getElementById('optionsMenu');
+  optionsBtn.addEventListener('click', ()=> {
+    const isVisible = optionsMenu.classList.contains('show');
+    if (isVisible) {
+      optionsMenu.classList.remove('show');
+      optionsMenu.setAttribute('aria-hidden', 'true');
+    } else {
+      optionsMenu.classList.add('show');
+      optionsMenu.setAttribute('aria-hidden', 'false');
+    }
+  });
+  document.addEventListener('click', (e) => {
+    if (!optionsMenu.contains(e.target) && !optionsBtn.contains(e.target)) {
+      optionsMenu.classList.remove('show');
+      optionsMenu.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  // init saved columns & numeric display
+  const savedCols = parseInt(localStorage.getItem('gridColumns') || getComputedStyle(document.documentElement).getPropertyValue('--cols') || 3, 10);
+  const slider = document.getElementById('zoomSlider');
+  slider.value = Math.min(8, Math.max(1, savedCols));
+  document.getElementById('colsCount').textContent = slider.value;
+  applyColumns(slider.value);
 });
 
-/* Convert blob -> raw helper (unchanged) */
+/* helper: convert blob -> raw */
 function blobToRaw(blobUrl){
   try{
     const u = new URL(blobUrl);
@@ -240,7 +515,7 @@ function blobToRaw(blobUrl){
   return blobUrl;
 }
 
-/* load mods.txt */
+/* load mods.txt (preserved) */
 async function loadFromUrl(url){
   try{
     const res = await fetch(url);
@@ -252,13 +527,12 @@ async function loadFromUrl(url){
   }
 }
 
-/* parse + render */
 function doParseAndRender(txt){
   const items = parseModsTxt(txt);
   renderGrid(items);
 }
 
-/* Parser: candidateUrl prioritizes GameBanana if both exist */
+/* parse functions (preserved) */
 function parseModsTxt(txt){
   const lines = txt.split(/\r?\n/);
   let currentCategory = null;
@@ -308,92 +582,90 @@ function parseBlock(blockLines, currentCategory){
 }
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-/* makeCard (unchanged) */
+/* makeCard (preserved) */
 function makeCard(item){
-  const el = document.createElement('div'); 
-  el.className='card'; 
-  el.dataset.title=item.title.toLowerCase(); 
+  const el = document.createElement('div');
+  el.className='card';
+  el.dataset.title=item.title.toLowerCase();
   el.dataset.category=item.category;
-  
-  const thumb = document.createElement('div'); 
+
+  const thumb = document.createElement('div');
   thumb.className='thumb';
   if (item.candidateUrl) thumb.dataset.candidateUrl = item.candidateUrl;
 
   const spinner = document.createElement('div');
   spinner.className = 'spinner';
   thumb.appendChild(spinner);
-  
-  const title = document.createElement('div'); 
+
+  const title = document.createElement('div');
   title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
-  
-  const buttons = document.createElement('div'); 
+
+  const buttons = document.createElement('div');
   buttons.className='buttons';
   if(item.urls.length>0){
-    const aDl=document.createElement('a'); 
-    aDl.className='btn primary'; 
-    aDl.href=item.urls[0]; 
-    aDl.target='_blank'; 
-    aDl.rel='noopener'; 
-    aDl.textContent='Download'; 
+    const aDl=document.createElement('a');
+    aDl.className='btn primary';
+    aDl.href=item.urls[0];
+    aDl.target='_blank';
+    aDl.rel='noopener';
+    aDl.textContent='Download';
     buttons.appendChild(aDl);
-    
-    const aOrig=document.createElement('a'); 
-    aOrig.className='btn ghost'; 
-    aOrig.href=item.urls[item.urls.length-1]; 
-    aOrig.target='_blank'; 
-    aOrig.rel='noopener'; 
-    aOrig.textContent='Original'; 
+
+    const aOrig=document.createElement('a');
+    aOrig.className='btn ghost';
+    aOrig.href=item.urls[item.urls.length-1];
+    aOrig.target='_blank';
+    aOrig.rel='noopener';
+    aOrig.textContent='Original';
     buttons.appendChild(aOrig);
-    
+
     if(item.urls.length>2){
-      const wrap=document.createElement('div'); 
+      const wrap=document.createElement('div');
       wrap.className='extra-buttons';
-      for(let i=1;i<item.urls.length-1;i++){ 
-        const ext=document.createElement('a'); 
-        ext.className='btn small ghost'; 
-        ext.href=item.urls[i]; 
-        ext.target='_blank'; 
-        ext.rel='noopener'; 
-        ext.textContent=`Link ${i+1}`; 
-        wrap.appendChild(ext); 
+      for(let i=1;i<item.urls.length-1;i++){
+        const ext=document.createElement('a');
+        ext.className='btn small ghost';
+        ext.href=item.urls[i];
+        ext.target='_blank';
+        ext.rel='noopener';
+        ext.textContent=`Link ${i+1}`;
+        wrap.appendChild(ext);
       }
       buttons.appendChild(wrap);
     }
   } else {
-    const no=document.createElement('div'); 
-    no.className='btn ghost'; 
-    no.textContent='No link'; 
+    const no=document.createElement('div');
+    no.className='btn ghost';
+    no.textContent='No link';
     buttons.appendChild(no);
   }
-  
-  el.appendChild(thumb); 
-  el.appendChild(title); 
+
+  el.appendChild(thumb);
+  el.appendChild(title);
   el.appendChild(buttons);
-  
+
   return el;
 }
 
-/* renderGrid: stores original order (based on parsed order) */
+/* renderGrid and store original order */
 function renderGrid(items){
-  const grid=document.getElementById('grid'); 
-  grid.innerHTML=''; 
-  window.currentItems=items; 
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  window.currentItems=items;
   const frag=document.createDocumentFragment();
-  
-  for(const it of items) 
+
+  for(const it of items)
     frag.appendChild(makeCard(it));
-  
+
   grid.appendChild(frag);
   filterAndShow();
 
-  // store original order of titles (used to restore Default)
   window._originalOrderTitles = Array.from(grid.children).map(c => c.dataset.title || '');
 
-  // Set up the observer for lazy-loading thumbnails
   setupThumbnailObserver();
 }
 
-/* IntersectionObserver for thumbnails */
+/* thumbs observer */
 function setupThumbnailObserver() {
   if (!thumbnailObserver) {
     thumbnailObserver = new IntersectionObserver((entries, observer) => {
@@ -416,7 +688,7 @@ function setupThumbnailObserver() {
   });
 }
 
-/* loadThumbnail uses CORS proxy and extracts og:image */
+/* loadThumbnail (preserved) */
 async function loadThumbnail(thumbElement, candidateUrl) {
   try {
     const imgUrl = await fetchImageUrl(candidateUrl);
@@ -431,14 +703,14 @@ async function loadThumbnail(thumbElement, candidateUrl) {
   } catch (error) {
     console.warn('Failed to load thumbnail for', candidateUrl, error);
     thumbElement.innerHTML = '';
-    const placeholder=document.createElement('div'); 
-    placeholder.style.width='100%'; 
-    placeholder.style.height='100%'; 
-    placeholder.style.display='flex'; 
-    placeholder.style.alignItems='center'; 
-    placeholder.style.justifyContent='center'; 
-    placeholder.style.fontWeight='800'; 
-    placeholder.style.fontSize='28px'; 
+    const placeholder=document.createElement('div');
+    placeholder.style.width='100%';
+    placeholder.style.height='100%';
+    placeholder.style.display='flex';
+    placeholder.style.alignItems='center';
+    placeholder.style.justifyContent='center';
+    placeholder.style.fontWeight='800';
+    placeholder.style.fontSize='28px';
     placeholder.style.color='#eaf2ff';
     const card = thumbElement.closest('.card');
     if (card && card.dataset.title) {
@@ -465,7 +737,6 @@ async function fetchImageUrl(url) {
       if (img.startsWith('/')) img = new URL(img, url).href;
       return img;
     }
-    // fallback: first external <img>
     const imgs = Array.from(doc.querySelectorAll('img')).map(i => i.src).filter(Boolean);
     const pick = imgs.find(u => /^https?:\/\//i.test(u));
     return pick || null;
@@ -475,74 +746,169 @@ async function fetchImageUrl(url) {
   }
 }
 
-/* Requests functions (unchanged) */
+/* Requests (updated for new filtering system) */
 async function loadRequests() {
   try {
-    const response = await fetch(ISSUES_API);
+    let apiUrl = ISSUES_API;
+    
+    // Add state parameter based on current filter
+    if (currentRequestStatus === 'closed') {
+      apiUrl += '?state=closed';
+    } else {
+      apiUrl += '?state=open';
+    }
+    
+    const response = await fetch(apiUrl);
     if (!response.ok) throw new Error('Failed to load requests');
     const issues = await response.json();
-    renderRequests(issues);
+    
+    // Filter issues to only include requests
+    let filteredIssues = issues.filter(issue => 
+      !issue.pull_request && 
+      issue.title.toLowerCase().includes('request:')
+    );
+    
+    // Apply user filter if in "My Requests" mode
+    if (currentRequestView === 'my' && githubUser) {
+      filteredIssues = filteredIssues.filter(issue => 
+        issue.user.login === githubUser.login
+      );
+    }
+    
+    renderRequests(filteredIssues);
   } catch (error) {
     console.error('Error loading requests:', error);
     document.getElementById('requestsGrid').innerHTML = `<p style="color:var(--muted);">Failed to load requests. Please try again later.</p>`;
   }
 }
-
 function renderRequests(issues) {
   const container = document.getElementById('requestsGrid');
   container.innerHTML = '';
-  const requests = issues.filter(issue => !issue.pull_request && issue.title.toLowerCase().includes('request:'));
-  if (requests.length === 0) {
-    container.innerHTML = `<p style="color:var(--muted);text-align:center;padding:20px;">No requests found. Be the first to submit one!</p>`;
+  
+  if (issues.length === 0) {
+    let message = 'No requests found.';
+    if (currentRequestView === 'my') {
+      message = currentRequestStatus === 'open' 
+        ? 'You have no open requests. Submit your first request above!'
+        : 'You have no closed requests.';
+    } else {
+      message = currentRequestStatus === 'open'
+        ? 'No open requests found. Be the first to submit one!'
+        : 'No closed requests found.';
+    }
+    container.innerHTML = `<p style="color:var(--muted);text-align:center;padding:20px;">${message}</p>`;
     return;
   }
-  const recentRequests = requests.slice(0, 12);
+  
+  // Show up to 12 most recent requests
+  const recentRequests = issues.slice(0, 12);
   recentRequests.forEach(issue => {
     const requestCard = document.createElement('div');
     requestCard.className = 'request-card';
+    
     let category = 'Other';
     if (issue.labels && issue.labels.length > 0) {
       const categoryLabel = issue.labels.find(label => ['Mods', 'Skins', 'Tools'].includes(label.name));
       if (categoryLabel) category = categoryLabel.name;
     }
+    
     const status = issue.state === 'open' ? 'open' : 'closed';
+    const isMyRequest = githubUser && issue.user.login === githubUser.login;
+    
     requestCard.innerHTML = `
       <div class="request-meta">
         <span class="request-category">${category}</span>
         <span>${formatDate(issue.created_at)}</span>
+        ${isMyRequest ? '<span style="color: var(--accent); font-weight: 700; font-size: 11px;">YOUR REQUEST</span>' : ''}
       </div>
       <div class="request-status ${status === 'open' ? 'status-open' : 'status-closed'}">${status.toUpperCase()}</div>
       <h3 class="request-title">${escapeHtml(issue.title.replace('Request:', '').trim())}</h3>
-      <div class="request-body">${truncateText(issue.body || 'No description provided', 120)}</div>
-      <a href="${issue.html_url}" target="_blank" class="request-link">View on GitHub →</a>
+      <div class="request-body">${truncateText(issue.body || 'No description provided', 240)}</div>
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
+        <span style="color: var(--muted); font-size: 12px;">by ${issue.user.login}</span>
+        <a href="${issue.html_url}" target="_blank" class="request-link">View on GitHub →</a>
+      </div>
     `;
     container.appendChild(requestCard);
   });
 }
 
-function submitRequest() {
-  const title = document.getElementById('requestTitle').value;
+/* submitRequest (updated to use GitHub API) */
+async function submitRequest() {
+  if (!githubUser || !githubToken) {
+    alert('Please login with GitHub first to submit requests');
+    return;
+  }
+  
+  const title = document.getElementById('requestTitle').value.trim();
   const category = document.getElementById('requestCategory').value;
-  const link = document.getElementById('requestLink').value;
-  const description = document.getElementById('requestDescription').value;
+  const link = document.getElementById('requestLink').value.trim();
+  const description = document.getElementById('requestDescription').value.trim();
+  
   if (!title || !category || !link) {
     alert('Please fill in all required fields');
     return;
   }
-  const issueTitle = `Request: ${title}`;
-  let issueBody = `**Category:** ${category}\n\n**Link:** ${link}\n\n`;
-  if (description) issueBody += `**Description:**\n${description}\n\n`;
-  issueBody += `_Submitted via ASTC Mobile Mods website_`;
-  const issueUrl = `https://github.com/${REPO}/issues/new?` + 
-    `title=${encodeURIComponent(issueTitle)}&` +
-    `body=${encodeURIComponent(issueBody)}&` +
-    `labels=Request`;
-  window.open(issueUrl, '_blank');
-  document.getElementById('requestForm').reset();
-  alert('Your request has been submitted! You\'ll need to log in to GitHub to complete the process.');
+  
+  const submitBtn = document.getElementById('submitRequest');
+  const originalText = submitBtn.textContent;
+  
+  try {
+    // Disable button and show loading state
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Submitting...';
+    submitBtn.style.opacity = '0.6';
+    
+    const issueTitle = `Request: ${title}`;
+    let issueBody = `**Category:** ${category}\n\n**Link:** ${link}\n\n`;
+    if (description) {
+      issueBody += `**Description:**\n${description}\n\n`;
+    }
+    issueBody += `_Submitted via ASTC Mobile Mods website by @${githubUser.login}_`;
+    
+    // Create issue via GitHub API
+    const response = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `token ${githubToken}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: issueTitle,
+        body: issueBody,
+        labels: ['Request', category]
+      })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to submit request');
+    }
+    
+    const newIssue = await response.json();
+    
+    // Clear form
+    document.getElementById('requestForm').reset();
+    
+    // Show success message
+    alert('Request submitted successfully! It will appear in the requests list shortly.');
+    
+    // Reload requests to show the new one
+    loadRequests();
+    
+  } catch (error) {
+    console.error('Error submitting request:', error);
+    alert('Failed to submit request: ' + error.message);
+  } finally {
+    // Re-enable button
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+    submitBtn.style.opacity = '1';
+  }
 }
 
-/* Tab switching */
+/* Tabs handling (kept) */
 document.getElementById('tabs').addEventListener('click', (e)=>{
   const b=e.target.closest('.tab');
   if(!b) return;
@@ -561,99 +927,39 @@ document.getElementById('tabs').addEventListener('click', (e)=>{
   }
 });
 
-/* request sub-tabs behavior */
-document.getElementById('openRequestsTab').addEventListener('click', ()=> {
-  document.getElementById('openRequestsTab').classList.add('active');
-  document.getElementById('closedRequestsTab').classList.remove('active');
-  fetch(ISSUES_API).then(r=>r.json()).then(issues => {
-    const openIssues = issues.filter(i=>!i.pull_request && i.title.toLowerCase().includes('request:') && i.state === 'open');
-    renderRequestsList(openIssues);
-  }).catch(err=>console.warn(err));
-});
-document.getElementById('closedRequestsTab').addEventListener('click', ()=> {
-  document.getElementById('closedRequestsTab').classList.add('active');
-  document.getElementById('openRequestsTab').classList.remove('active');
-  fetch(ISSUES_API+'?state=closed').then(r=>r.json()).then(issues => {
-    const closed = issues.filter(i=>!i.pull_request && i.title.toLowerCase().includes('request:') && i.state === 'closed');
-    renderRequestsList(closed);
-  }).catch(err=>console.warn(err));
-});
-function renderRequestsList(list) {
-  const container = document.getElementById('requestsGrid'); container.innerHTML = '';
-  if (list.length === 0) {
-    container.innerHTML = `<p style="color:var(--muted);text-align:center;padding:20px;">No requests found.</p>`;
-    return;
-  }
-  list.slice(0, 12).forEach(issue => {
-    const requestCard = document.createElement('div'); requestCard.className='request-card';
-    let category = 'Other';
-    if (issue.labels && issue.labels.length > 0) {
-      const categoryLabel = issue.labels.find(label => ['Mods', 'Skins', 'Tools'].includes(label.name));
-      if (categoryLabel) category = categoryLabel.name;
-    }
-    const status = issue.state === 'open' ? 'open' : 'closed';
-    requestCard.innerHTML = `
-      <div class="request-meta">
-        <span class="request-category">${category}</span>
-        <span>${formatDate(issue.created_at)}</span>
-      </div>
-      <div class="request-status ${status === 'open' ? 'status-open' : 'status-closed'}">${status.toUpperCase()}</div>
-      <h3 class="request-title">${escapeHtml(issue.title.replace('Request:', '').trim())}</h3>
-      <div class="request-body">${truncateText(issue.body || 'No description provided', 120)}</div>
-      <a href="${issue.html_url}" target="_blank" class="request-link">View on GitHub →</a>
-    `;
-    container.appendChild(requestCard);
-  });
-}
-
-/* filter/search */
+/* filter/search (kept) */
 document.getElementById('search').addEventListener('input', filterAndShow);
 function filterAndShow(){
   if (document.getElementById('requestSection').style.display === 'block') return;
   const q=document.getElementById('search').value.trim().toLowerCase();
   const active=document.querySelector('.tab.active')?.dataset?.cat||'all';
-  const grid=document.getElementById('grid'); 
+  const grid=document.getElementById('grid');
   const cards=Array.from(grid.children);
   for(const c of cards){
-    const title=(c.dataset.title||'').toLowerCase(); 
+    const title=(c.dataset.title||'').toLowerCase();
     const cat=(c.dataset.category||'').toLowerCase();
-    const matchQ = !q || title.includes(q); 
+    const matchQ = !q || title.includes(q);
     const matchCat = active==='all' || cat === (active||'').toLowerCase();
     c.style.display = (matchQ && matchCat) ? '' : 'none';
   }
-  setupThumbnailObserver(); // re-observe visible thumbs
+  setupThumbnailObserver();
 }
 
 function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/* Columns options */
-const optionsBtn = document.getElementById('optionsBtn');
-const optionsMenu = document.getElementById('optionsMenu');
-const zoomSlider = document.getElementById('zoomSlider');
-const gridEl = document.getElementById('grid');
-
-optionsBtn.addEventListener('click', () => {
-  optionsMenu.style.display = optionsMenu.style.display === 'block' ? 'none' : 'block';
-});
-document.addEventListener('click', (e) => {
-  if (!optionsMenu.contains(e.target) && !optionsBtn.contains(e.target)) {
-    optionsMenu.style.display = 'none';
-  }
-});
+/* ---------- applyColumns: sets --cols and --card-scale (only cards scale) ---------- */
 function applyColumns(cols) {
-  gridEl.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-  localStorage.setItem('gridColumns', cols);
+  cols = Math.max(1, Math.min(8, Number(cols) || 3));
+  document.documentElement.style.setProperty('--cols', cols);
+  // compute card-scale: fewer cols => scale closer to 1; more cols => smaller scale but clamp
+  let scale = 1 - (cols - 1) * 0.07;
+  if (scale < 0.58) scale = 0.58;
+  if (scale > 1) scale = 1;
+  document.documentElement.style.setProperty('--card-scale', scale.toString());
+  localStorage.setItem('gridColumns', String(cols));
 }
-zoomSlider.addEventListener('input', e => applyColumns(e.target.value));
-const savedCols = localStorage.getItem('gridColumns') || 3;
-zoomSlider.value = savedCols;
-applyColumns(savedCols);
 
-/* sort and reorder:
-   - default restores original parsed order
-   - alpha sorts alphabetically
-   - recent returns the reverse of the original parsed order (as requested)
-*/
+/* sorting (kept) */
 function applySortAndReorder() {
   const sortSelect = document.getElementById('sortSelect');
   const mode = sortSelect ? sortSelect.value : 'default';
@@ -661,7 +967,6 @@ function applySortAndReorder() {
   const cards = Array.from(grid.children);
   if (cards.length === 0) return;
 
-  // original recorded order
   const original = window._originalOrderTitles || cards.map(c => c.dataset.title || '');
   const originalIndex = {};
   original.forEach((t,i) => originalIndex[t] = i);
@@ -669,7 +974,6 @@ function applySortAndReorder() {
   let sorted = cards.slice();
 
   if (mode === 'default') {
-    // restore original order
     sorted.sort((a,b) => {
       const ta = a.dataset.title || '';
       const tb = b.dataset.title || '';
@@ -689,7 +993,7 @@ function applySortAndReorder() {
       return ta.localeCompare(tb);
     });
   } else if (mode === 'recent') {
-    // reverse of the original parsed order (items lower in the txt come first)
+    // reverse of original parsed order
     sorted.sort((a,b) => {
       const ta = a.dataset.title || '';
       const tb = b.dataset.title || '';
@@ -703,13 +1007,253 @@ function applySortAndReorder() {
   setupThumbnailObserver();
 }
 
-/* Utilities */
+/* utilities */
 function truncateText(text, maxLength) { if (!text) return ''; if (text.length <= maxLength) return escapeHtml(text); return escapeHtml(text.substring(0, maxLength)) + '...'; }
 function formatDate(dateString) { const date = new Date(dateString); return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }); }
 
-/* request wiring */
+/* wire submit request button */
 document.getElementById('submitRequest').addEventListener('click', submitRequest);
 
+/* ========== GitHub Login Functionality ========== */
+let githubToken = localStorage.getItem('github_token');
+let githubUser = null;
+let currentRequestView = 'all'; // 'all' or 'my'
+let currentRequestStatus = 'open'; // 'open' or 'closed'
+
+// Check if user is already logged in
+if (githubToken) {
+  checkGitHubAuth();
+}
+
+// GitHub Login Button
+document.getElementById('githubLoginBtn').addEventListener('click', async () => {
+  const username = document.getElementById('githubUsernameInput').value.trim();
+  const token = document.getElementById('githubTokenInput').value.trim();
+  
+  if (!username || !token) {
+    showLoginError('Please enter both username and token');
+    return;
+  }
+  
+  await authenticateWithGitHub(username, token);
+});
+
+// GitHub Logout Button
+document.getElementById('githubLogoutBtn').addEventListener('click', () => {
+  githubToken = null;
+  githubUser = null;
+  localStorage.removeItem('github_token');
+  localStorage.removeItem('github_user');
+  updateLoginUI();
+  
+  // Hide My Requests tab and switch to All Requests
+  document.getElementById('myRequestsViewTab').style.display = 'none';
+  switchRequestView('all');
+});
+
+// Request View Tabs (All/My)
+document.getElementById('allRequestsViewTab').addEventListener('click', () => {
+  switchRequestView('all');
+});
+
+document.getElementById('myRequestsViewTab').addEventListener('click', () => {
+  switchRequestView('my');
+});
+
+// Request Status Tabs (Open/Closed) - Updated to work with both views
+document.getElementById('openRequestsTab').addEventListener('click', () => {
+  switchRequestStatus('open');
+});
+
+document.getElementById('closedRequestsTab').addEventListener('click', () => {
+  switchRequestStatus('closed');
+});
+
+async function authenticateWithGitHub(username, token) {
+  showLoginSpinner(true);
+  hideLoginError();
+  
+  try {
+    // Test the token by fetching user info
+    const response = await fetch('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${token}`,
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    });
+    
+    if (!response.ok) {
+      throw new Error('Invalid token or authentication failed');
+    }
+    
+    const userData = await response.json();
+    
+    // Verify the username matches
+    if (userData.login.toLowerCase() !== username.toLowerCase()) {
+      throw new Error('Username does not match the token owner');
+    }
+    
+    // Store authentication data
+    githubToken = token;
+    githubUser = userData;
+    localStorage.setItem('github_token', token);
+    localStorage.setItem('github_user', JSON.stringify(userData));
+    
+    updateLoginUI();
+    
+    // Show My Requests tab
+    document.getElementById('myRequestsViewTab').style.display = 'inline-flex';
+    
+    // Reload requests to show updated data
+    loadRequests();
+    
+  } catch (error) {
+    console.error('GitHub authentication error:', error);
+    showLoginError(error.message || 'Authentication failed. Please check your credentials.');
+  } finally {
+    showLoginSpinner(false);
+  }
+}
+
+async function checkGitHubAuth() {
+  try {
+    const storedUser = localStorage.getItem('github_user');
+    if (storedUser && githubToken) {
+      githubUser = JSON.parse(storedUser);
+      
+      // Verify token is still valid
+      const response = await fetch('https://api.github.com/user', {
+        headers: {
+          'Authorization': `token ${githubToken}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      });
+      
+      if (response.ok) {
+        updateLoginUI();
+        document.getElementById('myRequestsViewTab').style.display = 'inline-flex';
+      } else {
+        // Token is invalid, clear stored data
+        githubToken = null;
+        githubUser = null;
+        localStorage.removeItem('github_token');
+        localStorage.removeItem('github_user');
+      }
+    }
+  } catch (error) {
+    console.error('Error checking GitHub auth:', error);
+    githubToken = null;
+    githubUser = null;
+    localStorage.removeItem('github_token');
+    localStorage.removeItem('github_user');
+  }
+}
+
+function updateLoginUI() {
+  const loginForm = document.getElementById('loginForm');
+  const loginSuccess = document.getElementById('loginSuccess');
+  const githubUsername = document.getElementById('githubUsername');
+  const submitBtn = document.getElementById('submitRequest');
+  const userAvatar = document.getElementById('userAvatar');
+  const defaultAvatar = document.getElementById('defaultAvatar');
+
+  if (githubUser && githubToken) {
+    loginForm.style.display = 'none';
+    loginSuccess.style.display = 'block';
+    githubUsername.textContent = githubUser.login;
+    
+    // Show user avatar if available
+    if (githubUser.avatar_url) {
+      userAvatar.src = githubUser.avatar_url;
+      userAvatar.style.display = 'block';
+      defaultAvatar.style.display = 'none';
+    } else {
+      userAvatar.style.display = 'none';
+      defaultAvatar.style.display = 'flex';
+    }
+    
+    submitBtn.disabled = false;
+    submitBtn.style.opacity = '1';
+  } else {
+    loginForm.style.display = 'block';
+    loginSuccess.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.5';
+    
+    // Clear form
+    document.getElementById('githubUsernameInput').value = '';
+    document.getElementById('githubTokenInput').value = '';
+  }
+}
+
+function showLoginSpinner(show) {
+  const spinner = document.getElementById('loginSpinner');
+  const loginBtn = document.getElementById('githubLoginBtn');
+  
+  if (show) {
+    spinner.style.display = 'block';
+    loginBtn.disabled = true;
+    loginBtn.style.opacity = '0.6';
+  } else {
+    spinner.style.display = 'none';
+    loginBtn.disabled = false;
+    loginBtn.style.opacity = '1';
+  }
+}
+
+function showLoginError(message) {
+  const errorDiv = document.getElementById('loginError');
+  errorDiv.textContent = message;
+  errorDiv.style.display = 'block';
+}
+
+function hideLoginError() {
+  const errorDiv = document.getElementById('loginError');
+  errorDiv.style.display = 'none';
+}
+
+function switchRequestView(view) {
+  currentRequestView = view;
+  
+  // Update tab states
+  document.querySelectorAll('.request-view-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  if (view === 'all') {
+    document.getElementById('allRequestsViewTab').classList.add('active');
+    document.getElementById('requestsDescription').textContent = 'Recent requests from the community.';
+  } else {
+    document.getElementById('myRequestsViewTab').classList.add('active');
+    document.getElementById('requestsDescription').textContent = 'Your submitted requests.';
+  }
+  
+  // Reload requests with new filter
+  loadRequests();
+}
+
+function switchRequestStatus(status) {
+  currentRequestStatus = status;
+  
+  // Update tab states
+  document.querySelectorAll('.request-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  
+  if (status === 'open') {
+    document.getElementById('openRequestsTab').classList.add('active');
+  } else {
+    document.getElementById('closedRequestsTab').classList.add('active');
+  }
+  
+  // Reload requests with new filter
+  loadRequests();
+}
+
+// Initialize login UI on page load
+document.addEventListener('DOMContentLoaded', () => {
+  updateLoginUI();
+});
 </script>
 </body>
 </html>
