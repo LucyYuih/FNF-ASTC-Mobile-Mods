@@ -13,8 +13,8 @@
   --radius:14px;
   --gap:18px;
 
-  --cols: 3;      /* controlled by slider */
-  --card-scale: 1;/* ONLY cards use this scale */
+  --cols: 3;
+  --card-scale: 1;
   --title-size: calc(15px * var(--card-scale));
   --meta-size: calc(12px * var(--card-scale));
   --btn-font: calc(13px * var(--card-scale));
@@ -60,7 +60,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   width:100%;
 }
 
-/* CARD: only elements inside .card use var(--card-scale) */
+/* CARD */
 .card{
   background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
   padding:calc(12px * var(--card-scale));
@@ -72,7 +72,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   transition:transform 0.18s ease;
 }
 
-/* thumb uses aspect-ratio so it scales with width; min-height fallback */
+/* thumb */
 .thumb{
   border-radius:10px;
   display:flex;
@@ -91,7 +91,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 .card .title{font-size:var(--title-size);margin:0;color:#eaf2ff;font-weight:700;line-height:1.15}
 .card .meta{font-size:var(--meta-size);color:var(--muted);display:block;margin-top:-2px}
 
-/* global button style (header, options, request buttons) - NOT affected by card scale */
+/* global button style */
 .btn{
   flex:0 0 auto;
   padding:8px 10px;
@@ -110,151 +110,47 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   min-height:32px;
 }
 
-/* buttons inside cards override with card-scale */
+/* buttons inside cards: equal width */
 .card .btn{
-  flex:1 1 auto;
+  flex:1 1 0;
   padding: var(--btn-padding-vert) var(--btn-padding-horiz);
   font-size: var(--btn-font);
   min-height: calc(32px * var(--card-scale));
+  min-width: 0;
 }
 
 /* variants */
 .btn.primary{background:linear-gradient(90deg,var(--accent),#4bb6ff);color:#06111a;box-shadow:0 8px 30px rgba(124,92,247,0.12);border:0}
 .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.03)}
 .btn.small{padding:6px 8px;font-size:12px;border-radius:8px}
-.extra-buttons{display:flex;gap:6px;flex-wrap:wrap}
+.extra-buttons{display:flex;gap:6px;flex-wrap:wrap;flex:1 1 100%}
+.card .buttons { display:flex; gap:8px; align-items:center; flex-wrap:wrap; width:100%; }
 
-/* Options dropdown - slider ALWAYS horizontal (deitado) */
-.options-container { 
-  position: relative; 
-  margin-left: auto; /* Força o container para o canto direito */
-}
-.options-menu {
-  display: none;
-  position: absolute;
-  top: 110%;
-  right: 0;
-  background: var(--glass);
-  backdrop-filter: blur(8px);
-  border-radius: 10px;
-  padding: 12px;
-  min-width: 160px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-  z-index: 20;
-}
+/* options */
+.options-container { position: relative; margin-left: auto; }
+.options-menu { display: none; position: absolute; top: 110%; right: 0; background: var(--glass); backdrop-filter: blur(8px); border-radius: 10px; padding: 12px; min-width: 160px; box-shadow: 0 6px 20px rgba(0,0,0,0.3); z-index: 20; }
+.options-menu.show { display: flex; align-items: center; gap: 12px; }
+.options-menu input[type=range]{ -webkit-appearance: none; appearance: none; width:140px; height:8px; background: linear-gradient(90deg,#2b3340,#111418); border-radius:6px; outline:none; }
+.options-menu input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#4bb6ff);box-shadow:0 6px 18px rgba(0,0,0,0.4); }
+.options-menu input[type=range]::-moz-range-thumb{ width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#4bb6ff);border:0; }
+.cols-count{ background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.04); padding:6px 10px; border-radius:8px; font-weight:800; color:#eaf2ff; min-width:38px; text-align:center; font-size:14px; }
 
-.options-menu.show {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-/* horizontal slider for all screens */
-.options-menu input[type=range]{
-  -webkit-appearance: none;
-  appearance: none;
-  width:140px;
-  height:8px;
-  background: linear-gradient(90deg,#2b3340,#111418);
-  border-radius:6px;
-  outline:none;
-}
-
-/* thumb style for range */
-.options-menu input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;
-  width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#4bb6ff);box-shadow:0 6px 18px rgba(0,0,0,0.4);
-}
-.options-menu input[type=range]::-moz-range-thumb{
-  width:20px;height:20px;border-radius:50%;background:linear-gradient(90deg,var(--accent),#4bb6ff);border:0;
-}
-
-/* small box that shows numeric columns */
-.cols-count{
-  background:rgba(255,255,255,0.02);
-  border:1px solid rgba(255,255,255,0.04);
-  padding:6px 10px;
-  border-radius:8px;
-  font-weight:800;
-  color:#eaf2ff;
-  min-width:38px;
-  text-align:center;
-  font-size:14px;
-}
-
-/* Request styles restored + improved UI for open/closed tabs */
+/* requests */
 .request-form { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.03)); border-radius: var(--radius); padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 24px; display: none; }
 .form-group { margin-bottom: 16px; }
 .form-control { width:100%; padding:10px 12px; background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:10px; color:#eaf2ff; }
 .requests-grid { display: grid; gap: var(--gap); grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-
-/* request card */
-.request-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
-  padding: 16px;
-  border-radius: var(--radius);
-  border: 1px solid rgba(255,255,255,0.03);
-  position: relative;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.35);
-}
+.request-card { background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02)); padding: 16px; border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.03); position: relative; box-shadow: 0 4px 18px rgba(0,0,0,0.35); }
 .request-title{font-size:16px;margin:8px 0;font-weight:700;color:#eaf2ff}
 .request-meta { color: var(--muted); font-size:13px; margin-bottom: 10px; display:flex; gap:12px; align-items:center; }
 .request-category { display:inline-block; padding:4px 10px; background: rgba(124,92,247,0.1); border-radius:6px; color:#c6b3ff; font-weight:700; font-size:13px;}
 .request-body{font-size:14px;color:#d0d8e3;line-height:1.4;margin-bottom:8px}
 .request-status { position:absolute; top:16px; right:16px; font-size:11px; padding:6px 8px; border-radius:6px; font-weight:700; }
-
-/* Styled Open/Closed request tabs */
 .request-tabs { display:flex; gap:8px; margin:12px 0; }
-.request-tab {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:10px;
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.06);
-  color:var(--muted);
-  font-weight:700;
-  cursor:pointer;
-  font-size:13px;
-}
-.request-tab.active {
-  background: linear-gradient(90deg, rgba(124,92,247,0.14), rgba(75,182,255,0.08));
-  color:#eaf2ff;
-  border:0;
-  box-shadow:0 8px 20px rgba(0,0,0,0.35);
-}
-
-/* Request View Tabs (All/My) */
-.request-view-tab {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  padding:10px 16px;
-  border-radius:12px;
-  background:transparent;
-  border:1px solid rgba(255,255,255,0.08);
-  color:var(--muted);
-  font-weight:700;
-  cursor:pointer;
-  font-size:14px;
-  transition: all 0.2s ease;
-}
-.request-view-tab.active {
-  background: linear-gradient(90deg, rgba(124,92,247,0.18), rgba(75,182,255,0.12));
-  color:#eaf2ff;
-  border:0;
-  box-shadow:0 10px 25px rgba(0,0,0,0.4);
-  transform: translateY(-1px);
-}
-.request-view-tab:hover:not(.active) {
-  background: rgba(255,255,255,0.04);
-  color:#cfe3ff;
-}
-
-/* badges for request status */
+.request-tab { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:8px 12px; border-radius:10px; background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); font-weight:700; cursor:pointer; font-size:13px; }
+.request-tab.active { background: linear-gradient(90deg, rgba(124,92,247,0.14), rgba(75,182,255,0.08)); color:#eaf2ff; border:0; box-shadow:0 8px 20px rgba(0,0,0,0.35); }
+.request-view-tab { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:10px 16px; border-radius:12px; background:transparent; border:1px solid rgba(255,255,255,0.08); color:var(--muted); font-weight:700; cursor:pointer; font-size:14px; transition: all 0.2s ease; }
+.request-view-tab.active { background: linear-gradient(90deg, rgba(124,92,247,0.18), rgba(75,182,255,0.12)); color:#eaf2ff; border:0; box-shadow:0 10px 25px rgba(0,0,0,0.4); transform: translateY(-1px); }
 .status-open { background: rgba(46, 204, 113, 0.12); color: #2ecc71; border:1px solid rgba(46,204,113,0.08) }
 .status-closed { background: rgba(231, 76, 60, 0.12); color: #e74c3c; border:1px solid rgba(231,76,60,0.08) }
 .request-link { color: #7c5cf7; text-decoration:none; font-weight:700 }
@@ -532,7 +428,7 @@ function doParseAndRender(txt){
   renderGrid(items);
 }
 
-/* parse functions (preserved) */
+/* parse functions (fixed: detect labels and prioritize GameBanana/GameJolt for candidateUrl) */
 function parseModsTxt(txt){
   const lines = txt.split(/\r?\n/);
   let currentCategory = null;
@@ -556,20 +452,47 @@ function parseBlock(blockLines, currentCategory){
   const lines = blockLines.filter(l => l && l.trim() !== '');
   if(lines.length === 0) return null;
   const title = lines[0].trim();
+
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  const urls = [];
-  for(const ln of lines){
+  // Build array of {label, url}
+  const links = [];
+  // First pass: detect lines that are URLs and consider previous non-url line as label
+  for (let i = 1; i < lines.length; i++) {
+    const ln = lines[i].trim();
     const m = ln.match(urlRegex);
-    if(m) for(const u of m) urls.push(u.replace(/[),.]+$/,''));
+    if (m) {
+      // try to use previous line as label if it exists and does not contain a URL
+      let candidateLabel = null;
+      if (i - 1 >= 1) {
+        const prev = lines[i - 1].trim();
+        if (!urlRegex.test(prev) && prev.toLowerCase() !== title.toLowerCase()) {
+          candidateLabel = prev;
+        }
+      }
+      for (const u of m) {
+        links.push({ label: candidateLabel ? candidateLabel.trim() : null, url: u.replace(/[),.]+$/,'') });
+        candidateLabel = null; // only use once
+      }
+    }
+  }
+  // fallback: collect any urls anywhere if no links found
+  if (links.length === 0) {
+    for (let i = 1; i < lines.length; i++) {
+      const ln = lines[i].trim();
+      const m = ln.match(urlRegex);
+      if (m) for (const u of m) links.push({ label: null, url: u.replace(/[),.]+$/,'') });
+    }
   }
 
-  // Prioritize GameBanana candidate if any, otherwise GameJolt, otherwise first url
+  // build plain urls array (backwards compat)
+  const urls = links.map(l => l.url);
+
+  // choose candidateUrl with priority: GameBanana -> GameJolt -> first url
   let candidateUrl = null;
-  const gb = urls.find(u => /gamebanana\.com/i.test(u));
-  if (gb) candidateUrl = gb;
-  else {
+  if (urls.length > 0) {
+    const gb = urls.find(u => /gamebanana\.com/i.test(u));
     const gj = urls.find(u => /gamejolt\.com/i.test(u));
-    candidateUrl = gj || urls[0] || null;
+    candidateUrl = gb || gj || urls[0] || null;
   }
 
   let category = currentCategory || 'Mods';
@@ -578,11 +501,12 @@ function parseBlock(blockLines, currentCategory){
     if(joined.includes('skin')) category='Skins';
     else if(joined.includes('tool')||joined.includes('install')) category='Tools';
   }
-  return { title, category, urls, candidateUrl, img: null, rawLines: lines };
+
+  return { title, category, links, urls, candidateUrl, img: null, rawLines: lines };
 }
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-/* makeCard (preserved) */
+/* makeCard (kept, uses links with labels and sets data-candidate-url) */
 function makeCard(item){
   const el = document.createElement('div');
   el.className='card';
@@ -591,7 +515,7 @@ function makeCard(item){
 
   const thumb = document.createElement('div');
   thumb.className='thumb';
-  if (item.candidateUrl) thumb.dataset.candidateUrl = item.candidateUrl;
+  if (item.candidateUrl) thumb.setAttribute('data-candidate-url', item.candidateUrl);
 
   const spinner = document.createElement('div');
   spinner.className = 'spinner';
@@ -602,6 +526,7 @@ function makeCard(item){
 
   const buttons = document.createElement('div');
   buttons.className='buttons';
+
   if(item.urls.length>0){
     const aDl=document.createElement('a');
     aDl.className='btn primary';
@@ -619,19 +544,17 @@ function makeCard(item){
     aOrig.textContent='Original';
     buttons.appendChild(aOrig);
 
-    if(item.urls.length>2){
-      const wrap=document.createElement('div');
-      wrap.className='extra-buttons';
-      for(let i=1;i<item.urls.length-1;i++){
+    if(item.links && item.links.length > 2){
+      for(let i=1;i<item.links.length-1;i++){
+        const linkObj = item.links[i];
         const ext=document.createElement('a');
-        ext.className='btn small ghost';
-        ext.href=item.urls[i];
-        ext.target='_blank';
-        ext.rel='noopener';
-        ext.textContent=`Link ${i+1}`;
-        wrap.appendChild(ext);
+        ext.className='btn ghost';
+        ext.href = linkObj.url;
+        ext.target = '_blank';
+        ext.rel = 'noopener';
+        ext.textContent = linkObj.label ? linkObj.label : `Link ${i+1}`;
+        buttons.appendChild(ext);
       }
-      buttons.appendChild(wrap);
     }
   } else {
     const no=document.createElement('div');
@@ -672,7 +595,7 @@ function setupThumbnailObserver() {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const thumb = entry.target;
-          const candidateUrl = thumb.dataset.candidateUrl;
+          const candidateUrl = thumb.getAttribute('data-candidate-url');
           if (candidateUrl) {
             observer.unobserve(thumb);
             loadThumbnail(thumb, candidateUrl);
@@ -688,7 +611,7 @@ function setupThumbnailObserver() {
   });
 }
 
-/* loadThumbnail (preserved) */
+/* loadThumbnail (unchanged behavior but robust) */
 async function loadThumbnail(thumbElement, candidateUrl) {
   try {
     const imgUrl = await fetchImageUrl(candidateUrl);
@@ -698,8 +621,29 @@ async function loadThumbnail(thumbElement, candidateUrl) {
       img.src = imgUrl;
       img.alt = '';
       thumbElement.appendChild(img);
+    } else {
+      // fallback placeholder
+      thumbElement.innerHTML = '';
+      const placeholder=document.createElement('div');
+      placeholder.style.width='100%';
+      placeholder.style.height='100%';
+      placeholder.style.display='flex';
+      placeholder.style.alignItems='center';
+      placeholder.style.justifyContent='center';
+      placeholder.style.fontWeight='800';
+      placeholder.style.fontSize='28px';
+      placeholder.style.color='#eaf2ff';
+      const card = thumbElement.closest('.card');
+      if (card && card.dataset.title) {
+        const title = card.dataset.title;
+        const cleanTitle = title.replace(/^[\[\(]+/,'').trim();
+        placeholder.textContent = (cleanTitle.slice(0,2) || 'M').toUpperCase();
+      } else {
+        placeholder.textContent = 'M';
+      }
+      thumbElement.appendChild(placeholder);
     }
-    delete thumbElement.dataset.candidateUrl;
+    thumbElement.removeAttribute('data-candidate-url');
   } catch (error) {
     console.warn('Failed to load thumbnail for', candidateUrl, error);
     thumbElement.innerHTML = '';
@@ -721,37 +665,48 @@ async function loadThumbnail(thumbElement, candidateUrl) {
       placeholder.textContent = 'M';
     }
     thumbElement.appendChild(placeholder);
-    delete thumbElement.dataset.candidateUrl;
+    thumbElement.removeAttribute('data-candidate-url');
   }
 }
 
+/* fetchImageUrl: try to extract og:image or first big image */
 async function fetchImageUrl(url) {
   try {
+    // use CORS proxy (same as before)
     const resp = await fetch(CORS_PROXY + encodeURIComponent(url));
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const html = await resp.text();
     const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    // prefer og:image (common)
     const og = doc.querySelector('meta[property="og:image"], meta[name="og:image"]');
     if (og && og.content) {
       let img = og.content;
       if (img.startsWith('/')) img = new URL(img, url).href;
       return img;
     }
-    const imgs = Array.from(doc.querySelectorAll('img')).map(i => i.src).filter(Boolean);
-    const pick = imgs.find(u => /^https?:\/\//i.test(u));
-    return pick || null;
+
+    // fallback: look for first large-ish image on page
+    const imgs = Array.from(doc.querySelectorAll('img'))
+      .map(i => i.getAttribute('src') || i.getAttribute('data-src') || i.getAttribute('data-original'))
+      .filter(Boolean)
+      .map(src => src.startsWith('http') ? src : (src.startsWith('/') ? (new URL(src, url).href) : null))
+      .filter(Boolean);
+
+    if (imgs.length > 0) return imgs[0];
+
+    return null;
   } catch (err) {
     console.warn('Thumb fetch failed for', url, err);
     return null;
   }
 }
 
-/* Requests (updated for new filtering system) */
+/* Requests (kept) */
 async function loadRequests() {
   try {
     let apiUrl = ISSUES_API;
     
-    // Add state parameter based on current filter
     if (currentRequestStatus === 'closed') {
       apiUrl += '?state=closed';
     } else {
@@ -762,13 +717,11 @@ async function loadRequests() {
     if (!response.ok) throw new Error('Failed to load requests');
     const issues = await response.json();
     
-    // Filter issues to only include requests
     let filteredIssues = issues.filter(issue => 
       !issue.pull_request && 
       issue.title.toLowerCase().includes('request:')
     );
     
-    // Apply user filter if in "My Requests" mode
     if (currentRequestView === 'my' && githubUser) {
       filteredIssues = filteredIssues.filter(issue => 
         issue.user.login === githubUser.login
@@ -800,7 +753,6 @@ function renderRequests(issues) {
     return;
   }
   
-  // Show up to 12 most recent requests
   const recentRequests = issues.slice(0, 12);
   recentRequests.forEach(issue => {
     const requestCard = document.createElement('div');
@@ -833,7 +785,7 @@ function renderRequests(issues) {
   });
 }
 
-/* submitRequest (updated to use GitHub API) */
+/* submitRequest (kept) */
 async function submitRequest() {
   if (!githubUser || !githubToken) {
     alert('Please login with GitHub first to submit requests');
@@ -854,7 +806,6 @@ async function submitRequest() {
   const originalText = submitBtn.textContent;
   
   try {
-    // Disable button and show loading state
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting...';
     submitBtn.style.opacity = '0.6';
@@ -866,7 +817,6 @@ async function submitRequest() {
     }
     issueBody += `_Submitted via ASTC Mobile Mods website by @${githubUser.login}_`;
     
-    // Create issue via GitHub API
     const response = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
       method: 'POST',
       headers: {
@@ -888,20 +838,14 @@ async function submitRequest() {
     
     const newIssue = await response.json();
     
-    // Clear form
     document.getElementById('requestForm').reset();
-    
-    // Show success message
     alert('Request submitted successfully! It will appear in the requests list shortly.');
-    
-    // Reload requests to show the new one
     loadRequests();
     
   } catch (error) {
     console.error('Error submitting request:', error);
     alert('Failed to submit request: ' + error.message);
   } finally {
-    // Re-enable button
     submitBtn.disabled = false;
     submitBtn.textContent = originalText;
     submitBtn.style.opacity = '1';
@@ -947,11 +891,10 @@ function filterAndShow(){
 
 function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-/* ---------- applyColumns: sets --cols and --card-scale (only cards scale) ---------- */
+/* ---------- applyColumns ---------- */
 function applyColumns(cols) {
   cols = Math.max(1, Math.min(8, Number(cols) || 3));
   document.documentElement.style.setProperty('--cols', cols);
-  // compute card-scale: fewer cols => scale closer to 1; more cols => smaller scale but clamp
   let scale = 1 - (cols - 1) * 0.07;
   if (scale < 0.58) scale = 0.58;
   if (scale > 1) scale = 1;
@@ -993,13 +936,12 @@ function applySortAndReorder() {
       return ta.localeCompare(tb);
     });
   } else if (mode === 'recent') {
-    // reverse of original parsed order
     sorted.sort((a,b) => {
       const ta = a.dataset.title || '';
       const tb = b.dataset.title || '';
       const ia = originalIndex.hasOwnProperty(ta) ? originalIndex[ta] : -Infinity;
       const ib = originalIndex.hasOwnProperty(tb) ? originalIndex[tb] : -Infinity;
-      return ib - ia; // reverse
+      return ib - ia;
     });
   }
 
@@ -1017,15 +959,13 @@ document.getElementById('submitRequest').addEventListener('click', submitRequest
 /* ========== GitHub Login Functionality ========== */
 let githubToken = localStorage.getItem('github_token');
 let githubUser = null;
-let currentRequestView = 'all'; // 'all' or 'my'
-let currentRequestStatus = 'open'; // 'open' or 'closed'
+let currentRequestView = 'all';
+let currentRequestStatus = 'open';
 
-// Check if user is already logged in
 if (githubToken) {
   checkGitHubAuth();
 }
 
-// GitHub Login Button
 document.getElementById('githubLoginBtn').addEventListener('click', async () => {
   const username = document.getElementById('githubUsernameInput').value.trim();
   const token = document.getElementById('githubTokenInput').value.trim();
@@ -1038,33 +978,25 @@ document.getElementById('githubLoginBtn').addEventListener('click', async () => 
   await authenticateWithGitHub(username, token);
 });
 
-// GitHub Logout Button
 document.getElementById('githubLogoutBtn').addEventListener('click', () => {
   githubToken = null;
   githubUser = null;
   localStorage.removeItem('github_token');
   localStorage.removeItem('github_user');
   updateLoginUI();
-  
-  // Hide My Requests tab and switch to All Requests
   document.getElementById('myRequestsViewTab').style.display = 'none';
   switchRequestView('all');
 });
 
-// Request View Tabs (All/My)
 document.getElementById('allRequestsViewTab').addEventListener('click', () => {
   switchRequestView('all');
 });
-
 document.getElementById('myRequestsViewTab').addEventListener('click', () => {
   switchRequestView('my');
 });
-
-// Request Status Tabs (Open/Closed) - Updated to work with both views
 document.getElementById('openRequestsTab').addEventListener('click', () => {
   switchRequestStatus('open');
 });
-
 document.getElementById('closedRequestsTab').addEventListener('click', () => {
   switchRequestStatus('closed');
 });
@@ -1074,7 +1006,6 @@ async function authenticateWithGitHub(username, token) {
   hideLoginError();
   
   try {
-    // Test the token by fetching user info
     const response = await fetch('https://api.github.com/user', {
       headers: {
         'Authorization': `token ${token}`,
@@ -1088,23 +1019,17 @@ async function authenticateWithGitHub(username, token) {
     
     const userData = await response.json();
     
-    // Verify the username matches
     if (userData.login.toLowerCase() !== username.toLowerCase()) {
       throw new Error('Username does not match the token owner');
     }
     
-    // Store authentication data
     githubToken = token;
     githubUser = userData;
     localStorage.setItem('github_token', token);
     localStorage.setItem('github_user', JSON.stringify(userData));
     
     updateLoginUI();
-    
-    // Show My Requests tab
     document.getElementById('myRequestsViewTab').style.display = 'inline-flex';
-    
-    // Reload requests to show updated data
     loadRequests();
     
   } catch (error) {
@@ -1120,8 +1045,6 @@ async function checkGitHubAuth() {
     const storedUser = localStorage.getItem('github_user');
     if (storedUser && githubToken) {
       githubUser = JSON.parse(storedUser);
-      
-      // Verify token is still valid
       const response = await fetch('https://api.github.com/user', {
         headers: {
           'Authorization': `token ${githubToken}`,
@@ -1133,7 +1056,6 @@ async function checkGitHubAuth() {
         updateLoginUI();
         document.getElementById('myRequestsViewTab').style.display = 'inline-flex';
       } else {
-        // Token is invalid, clear stored data
         githubToken = null;
         githubUser = null;
         localStorage.removeItem('github_token');
@@ -1162,7 +1084,6 @@ function updateLoginUI() {
     loginSuccess.style.display = 'block';
     githubUsername.textContent = githubUser.login;
     
-    // Show user avatar if available
     if (githubUser.avatar_url) {
       userAvatar.src = githubUser.avatar_url;
       userAvatar.style.display = 'block';
@@ -1179,8 +1100,6 @@ function updateLoginUI() {
     loginSuccess.style.display = 'none';
     submitBtn.disabled = true;
     submitBtn.style.opacity = '0.5';
-    
-    // Clear form
     document.getElementById('githubUsernameInput').value = '';
     document.getElementById('githubTokenInput').value = '';
   }
@@ -1206,7 +1125,6 @@ function showLoginError(message) {
   errorDiv.textContent = message;
   errorDiv.style.display = 'block';
 }
-
 function hideLoginError() {
   const errorDiv = document.getElementById('loginError');
   errorDiv.style.display = 'none';
@@ -1214,12 +1132,9 @@ function hideLoginError() {
 
 function switchRequestView(view) {
   currentRequestView = view;
-  
-  // Update tab states
   document.querySelectorAll('.request-view-tab').forEach(tab => {
     tab.classList.remove('active');
   });
-  
   if (view === 'all') {
     document.getElementById('allRequestsViewTab').classList.add('active');
     document.getElementById('requestsDescription').textContent = 'Recent requests from the community.';
@@ -1227,30 +1142,22 @@ function switchRequestView(view) {
     document.getElementById('myRequestsViewTab').classList.add('active');
     document.getElementById('requestsDescription').textContent = 'Your submitted requests.';
   }
-  
-  // Reload requests with new filter
   loadRequests();
 }
 
 function switchRequestStatus(status) {
   currentRequestStatus = status;
-  
-  // Update tab states
   document.querySelectorAll('.request-tab').forEach(tab => {
     tab.classList.remove('active');
   });
-  
   if (status === 'open') {
     document.getElementById('openRequestsTab').classList.add('active');
   } else {
     document.getElementById('closedRequestsTab').classList.add('active');
   }
-  
-  // Reload requests with new filter
   loadRequests();
 }
 
-// Initialize login UI on page load
 document.addEventListener('DOMContentLoaded', () => {
   updateLoginUI();
 });
