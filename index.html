@@ -110,19 +110,23 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   min-height:32px;
 }
 
-/* buttons inside cards override with card-scale */
+/* buttons inside cards override with card-scale AND make all equal width */
 .card .btn{
-  flex:1 1 auto;
+  flex:1 1 0; /* make buttons inside cards share width equally and wrap */
   padding: var(--btn-padding-vert) var(--btn-padding-horiz);
   font-size: var(--btn-font);
   min-height: calc(32px * var(--card-scale));
+  min-width: 0; /* allow flex children to shrink */
 }
 
 /* variants */
 .btn.primary{background:linear-gradient(90deg,var(--accent),#4bb6ff);color:#06111a;box-shadow:0 8px 30px rgba(124,92,247,0.12);border:0}
 .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.03)}
 .btn.small{padding:6px 8px;font-size:12px;border-radius:8px}
-.extra-buttons{display:flex;gap:6px;flex-wrap:wrap}
+.extra-buttons{display:flex;gap:6px;flex-wrap:wrap;flex:1 1 100%}
+
+/* Buttons container inside card */
+.card .buttons { display:flex; gap:8px; align-items:center; flex-wrap:wrap; width:100%; }
 
 /* Options dropdown - slider ALWAYS horizontal (deitado) */
 .options-container { 
@@ -532,7 +536,7 @@ function doParseAndRender(txt){
   renderGrid(items);
 }
 
-/* parse functions (preserved) */
+/* parse functions (updated to capture optional labels above URLs) */
 function parseModsTxt(txt){
   const lines = txt.split(/\r?\n/);
   let currentCategory = null;
@@ -556,21 +560,44 @@ function parseBlock(blockLines, currentCategory){
   const lines = blockLines.filter(l => l && l.trim() !== '');
   if(lines.length === 0) return null;
   const title = lines[0].trim();
+
+  // Build links array with optional label detection:
+  // For each line that contains a URL, check previous non-empty line (except title) for a label (a line without http).
   const urlRegex = /(https?:\/\/[^\s]+)/g;
-  const urls = [];
-  for(const ln of lines){
-    const m = ln.match(urlRegex);
-    if(m) for(const u of m) urls.push(u.replace(/[),.]+$/,''));
+  const links = [];
+  for (let i = 1; i < lines.length; i++) {
+    const ln = lines[i].trim();
+    const matches = ln.match(urlRegex);
+    if (matches) {
+      // candidate label is previous line if it exists and doesn't contain a URL and isn't the title
+      let label = null;
+      if (i - 1 >= 1) {
+        const prev = lines[i - 1].trim();
+        if (!urlRegex.test(prev)) {
+          // ensure prev isn't the title line
+          label = prev;
+        }
+      }
+      for (const u of matches) {
+        links.push({ label: label ? label.trim() : null, url: u.replace(/[),.]+$/,'') });
+        // if label was used for this URL, don't reuse it for subsequent urls on same line or later ones
+        label = null;
+      }
+    }
   }
 
-  // Prioritize GameBanana candidate if any, otherwise GameJolt, otherwise first url
-  let candidateUrl = null;
-  const gb = urls.find(u => /gamebanana\.com/i.test(u));
-  if (gb) candidateUrl = gb;
-  else {
-    const gj = urls.find(u => /gamejolt\.com/i.test(u));
-    candidateUrl = gj || urls[0] || null;
+  // If no links found via above method, fallback to scanning all urls in block
+  if (links.length === 0) {
+    const allUrls = [];
+    for (const ln of lines) {
+      const m = ln.match(urlRegex);
+      if (m) for (const u of m) allUrls.push(u.replace(/[),.]+$/,''));
+    }
+    for (const u of allUrls) links.push({ label: null, url: u });
   }
+
+  // create urls array for backward compatibility with existing logic
+  const urls = links.map(l => l.url);
 
   let category = currentCategory || 'Mods';
   if(!currentCategory){
@@ -578,11 +605,12 @@ function parseBlock(blockLines, currentCategory){
     if(joined.includes('skin')) category='Skins';
     else if(joined.includes('tool')||joined.includes('install')) category='Tools';
   }
-  return { title, category, urls, candidateUrl, img: null, rawLines: lines };
+  const candidateUrl = urls[0] || null;
+  return { title, category, links, urls, candidateUrl, img: null, rawLines: lines };
 }
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-/* makeCard (preserved) */
+/* makeCard (updated to use links with labels and ensure equal-size buttons) */
 function makeCard(item){
   const el = document.createElement('div');
   el.className='card';
@@ -600,9 +628,12 @@ function makeCard(item){
   const title = document.createElement('div');
   title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
 
+  // Buttons container - all .btn inside card will share widths equally thanks to CSS
   const buttons = document.createElement('div');
   buttons.className='buttons';
+
   if(item.urls.length>0){
+    // Download (first)
     const aDl=document.createElement('a');
     aDl.className='btn primary';
     aDl.href=item.urls[0];
@@ -611,6 +642,7 @@ function makeCard(item){
     aDl.textContent='Download';
     buttons.appendChild(aDl);
 
+    // Original (last)
     const aOrig=document.createElement('a');
     aOrig.className='btn ghost';
     aOrig.href=item.urls[item.urls.length-1];
@@ -619,19 +651,21 @@ function makeCard(item){
     aOrig.textContent='Original';
     buttons.appendChild(aOrig);
 
-    if(item.urls.length>2){
-      const wrap=document.createElement('div');
-      wrap.className='extra-buttons';
-      for(let i=1;i<item.urls.length-1;i++){
-        const ext=document.createElement('a');
-        ext.className='btn small ghost';
-        ext.href=item.urls[i];
-        ext.target='_blank';
-        ext.rel='noopener';
-        ext.textContent=`Link ${i+1}`;
-        wrap.appendChild(ext);
+    // middle links (if any) - use labels when available, otherwise default "Link N"
+    if(item.links && item.links.length > 2){
+      // compute base index for middle links (1..n-2) and numbering to match user's expectation
+      for(let i=1;i<item.links.length-1;i++){
+        const linkObj = item.links[i];
+        const ext = document.createElement('a');
+        // make same size: use same 'btn' class (no 'small')
+        ext.className='btn ghost';
+        ext.href = linkObj.url;
+        ext.target = '_blank';
+        ext.rel = 'noopener';
+        // show label if present, else "Link {index+1}" (index relative to all links)
+        ext.textContent = linkObj.label ? linkObj.label : `Link ${i+1}`;
+        buttons.appendChild(ext);
       }
-      buttons.appendChild(wrap);
     }
   } else {
     const no=document.createElement('div');
