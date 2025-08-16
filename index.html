@@ -163,6 +163,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 
 /* ------------------------------
    Modal warning styles (ADDED)
+   - adjusted for internal scrolling on small screens
    ------------------------------ */
 #siteWarningModalOverlay{
   position:fixed;
@@ -173,6 +174,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   align-items:center;
   justify-content:center;
   padding:20px;
+  -webkit-overflow-scrolling: touch;
 }
 #siteWarningModal{
   background:linear-gradient(180deg, #0f1720 0%, #07101a 100%);
@@ -183,6 +185,10 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   box-shadow:0 24px 60px rgba(2,6,12,0.8);
   border:1px solid rgba(255,255,255,0.04);
   overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  /* allow modal itself to be tall but constrained to viewport */
+  max-height: 90vh;
 }
 #siteWarningModal header{
   padding:18px 20px;
@@ -191,9 +197,174 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   align-items:center;
   justify-content:space-between;
   gap:12px;
+  flex: 0 0 auto;
 }
 #siteWarningModal header h3{margin:0;font-size:18px}
-#siteWarningModal .modal-body{padding:18px 20px;display:flex;gap:18px;flex-direction:column}
+/* make body scrollable inside modal when content overflows */
+#siteWarningModal .modal-body{
+  padding:18px 20px;
+  display:flex;
+  gap:18px;
+  flex-direction:column;
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto;
+  /* compute safe internal max height */
+  max-height: calc(90vh - 120px);
+}
+#siteWarningModal .warning-text{font-size:14px;color:#ffd6d6;background:rgba(231,76,60,0.06);padding:10px;border-radius:8px;border:1px solid rgba(231,76,60,0.08)}
+#siteWarningModal .hint{font-size:13px;color:var(--muted)}
+#siteWarningModal video{max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#000}
+#siteWarningModal .modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid rgba(255,255,255,0.02)}
+#siteWarningModal .modal-actions .btn{min-width:120px}
+#siteWarningModal .learn-more{font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+
+/* small screens: stack video below text */
+@media (min-width:720px){
+  #siteWarningModal .modal-body{flex-direction:row;align-items:flex-start}
+  #siteWarningModal .modal-col{flex:1}
+  #siteWarningModal .modal-video{flex:1;max-width:420px}
+}
+@media (max-width:719px){
+  #siteWarningModal{max-width:480px}
+}
+</style>
+</head>
+<body>
+  <div class="app">
+
+    <!-- WARNING MODAL (ADDED) -->
+    <div id="siteWarningModalOverlay" style="display:none;" aria-hidden="true">
+      <div id="siteWarningModal" role="dialog" aria-modal="true" aria-labelledby="siteWarningTitle">
+        <header>
+          <h3 id="siteWarningTitle">Important Notice — Safety</h3>
+          <button id="siteWarningClose" class="btn ghost" type="button" aria-label="Close notice">Close</button>
+        </header>
+        <div class="modal-body">
+          <div class="modal-col">
+            <div class="warning-text">
+              Please <strong>do not download anything from outside the website <span style="color:#7c5cf7;">ranoz.gg</span></strong> — files from external sources may contain unwanted or malicious content. Always prefer links hosted on <strong>ranoz.gg</strong> listed on this site.
+            </div>
+            <p class="hint" style="margin-top:10px;">
+              If you're having trouble downloading or installing, watch the tutorial video on the right — it is located in the same folder as this page.
+            </p>
+          </div>
+
+          <div class="modal-col modal-video" style="display:flex;flex-direction:column;gap:8px;align-items:stretch">
+            <!-- Make sure 'tutorial.mp4' is in same folder as index.html -->
+            <video id="siteTutorialVideo" controls preload="metadata" poster="" tabindex="0">
+              <source src="tutorial.mp4" type="video/mp4">
+              Your browser does not support HTML5 video — open the file tutorial.mp4 in the same folder.
+            </video>
+            <div style="display:flex;justify-content:flex-end;align-items:center;">
+              <button id="siteWarningGotIt" class="btn primary" type="button">Got it</button>
+              <button id="siteWarningDontShow" class="btn ghost" type="button" style="margin-left:8px;">Don’t show again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END WARNING MODAL -->
+
+    <header>
+      <div class="brand">
+        <div class="square">FNF</div>
+        <div class="titleWrap">
+          <h1>Mobile ASTC Mods [OPT]</h1>
+          <div class="lead">Optimized Mods for Mobile</div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div style="display:flex;align-items:center">
+          <div class="search" title="Search by name">
+            🔎 <input id="search" placeholder="Search by name..." />
+          </div>
+          <div class="sort-wrap">
+            <label for="sortSelect" style="font-size:13px;color:var(--muted)">Sort:</label>
+            <select id="sortSelect" class="sort-select" title="Sort mods">
+              <option value="default">Default</option>
+              <option value="alpha">Alphabetical</option>
+              <option value="recent">Most Recent Added</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="options-container">
+          <button id="optionsBtn" class="btn ghost" type="button">⚙ Options</button>
+          <div id="optionsMenu" class="options-menu" aria-hidden="true">
+            <input type="range" id="zoomSlider" min="1" max="8" step="1" />
+            <div class="cols-count" id="colsCount">3</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <div class="tab-group" id="tabGroup">
+        <button class="tab active" data-cat="all" type="button">All</button>
+        <button class="tab" data-cat="Tools" type="button">Tools</button>
+        <button class="tab" data-cat="Skins" type="button">Skins</button>
+        <button class="tab" data-cat="Mods" type="button">Mods</button>
+      </div>
+      <button class="tab requests-tab" data-cat="requests" id="requestsTab" type="button">Requests</button>
+    </nav>
+
+    <main>
+      <section id="grid" class="grid" aria-live="polite"></section>
+      
+      <!-- Request Section -->
+      <section id="requestSection" style="display: none;">
+        <form class="request-form" id="requestForm">
+          <h2>Request a Mod/Skin/Tool</h2>
+          <p style="margin-bottom: 16px; color: var(--muted);">Submit your request for a new mod, skin or tool to be added to the collection (requires GitHub login).</p>
+          
+          <!-- GitHub Login Section -->
+          <div id="githubLoginSection" style="margin-bottom: 20px; padding: 16px; background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);">
+            <div id="loginForm" style="display: block;">
+              <h3 style="margin: 0 0 12px 0; color: #eaf2ff; font-size: 16px;">GitHub Authentication</h3>
+              <p style="margin: 0 0 16px 0; color: var(--muted); font-size: 14px;">Login with your GitHub Personal Access Token to submit and manage requests</p>
+              
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label for="githubUsername" style="display: block; margin-bottom: 6px; color: #eaf2ff; font-weight: 600; font-size: 13px;">GitHub Username*</label>
+                <input type="text" id="githubUsernameInput" class="form-control" placeholder="your-github-username" required>
+              </div>
+              
+              <div class="form-group" style="margin-bottom: 16px;">
+                <label for="githubToken" style="display: block; margin-bottom: 6px; color: #eaf2ff; font-weight: 600; font-size: 13px;">Personal Access Token*</label>
+                <input type="password" id="githubTokenInput" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" required>
+                <small style="display: block; margin-top: 4px; color: var(--muted); font-size: 12px;">
+                  <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--accent); text-decoration: none;">Create a token</a> with 'repo' and 'user' scopes
+                </small>
+              </div>
+              
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button id="githubLoginBtn" class="btn primary" type="button">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                  Login
+                </button>
+                <div id="loginSpinner" style="display: none;">
+                  <div class="spinner" style="width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                </div>
+              </div>
+              
+              <div id="loginError" style="display: none; margin-top: 12px; padding: 10px; background: rgba(231, 76, 60, 0.1); border: 1px solid rgba(231, 76, 60, 0.2); border-radius: 6px; color: #e74c3c; font-size: 13px;"></div>
+            </div>
+            
+            <div id="loginSuccess" style="display: none;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                  <img id="userAvatar" src="" alt="Avatar" style="width: 32px; height: 32px; border-radius: 50%; display: none;">
+                  <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--accent); display: flex; align-items: center; justify-content: center;" id="defaultAvatar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <p style="margin: 0; color: #2ecc71; font-weight: 700; font-size: 14px;">Logged in as <span id="githubUsername"></span></p>
+        }
 #siteWarningModal .warning-text{font-size:14px;color:#ffd6d6;background:rgba(231,76,60,0.06);padding:10px;border-radius:8px;border:1px solid rgba(231,76,60,0.08)}
 #siteWarningModal .hint{font-size:13px;color:var(--muted)}
 #siteWarningModal video{max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#000}
