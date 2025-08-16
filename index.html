@@ -160,10 +160,94 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 .footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
+
+/* ------------------------------
+   Modal warning styles (ADDED)
+   ------------------------------ */
+#siteWarningModalOverlay{
+  position:fixed;
+  inset:0;
+  background:rgba(2,6,12,0.7);
+  z-index:9999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+#siteWarningModal{
+  background:linear-gradient(180deg, #0f1720 0%, #07101a 100%);
+  border-radius:12px;
+  max-width:900px;
+  width:100%;
+  color:#eaf2ff;
+  box-shadow:0 24px 60px rgba(2,6,12,0.8);
+  border:1px solid rgba(255,255,255,0.04);
+  overflow:hidden;
+}
+#siteWarningModal header{
+  padding:18px 20px;
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+#siteWarningModal header h3{margin:0;font-size:18px}
+#siteWarningModal .modal-body{padding:18px 20px;display:flex;gap:18px;flex-direction:column}
+#siteWarningModal .warning-text{font-size:14px;color:#ffd6d6;background:rgba(231,76,60,0.06);padding:10px;border-radius:8px;border:1px solid rgba(231,76,60,0.08)}
+#siteWarningModal .hint{font-size:13px;color:var(--muted)}
+#siteWarningModal video{max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#000}
+#siteWarningModal .modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid rgba(255,255,255,0.02)}
+#siteWarningModal .modal-actions .btn{min-width:120px}
+#siteWarningModal .learn-more{font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
+
+/* small screens: stack video below text */
+@media (min-width:720px){
+  #siteWarningModal .modal-body{flex-direction:row;align-items:flex-start}
+  #siteWarningModal .modal-col{flex:1}
+  #siteWarningModal .modal-video{flex:1;max-width:420px}
+}
+@media (max-width:719px){
+  #siteWarningModal{max-width:480px}
+}
 </style>
 </head>
 <body>
   <div class="app">
+
+    <!-- WARNING MODAL (ADDED) -->
+    <div id="siteWarningModalOverlay" style="display:none;" aria-hidden="true">
+      <div id="siteWarningModal" role="dialog" aria-modal="true" aria-labelledby="siteWarningTitle">
+        <header>
+          <h3 id="siteWarningTitle">Important Notice!!</h3>
+          <button id="siteWarningClose" class="btn ghost" type="button" aria-label="Close notice">Close</button>
+        </header>
+        <div class="modal-body">
+          <div class="modal-col">
+            <div class="warning-text">
+              Please <strong>do not download anything from outside the website <span style="color:#7c5cf7;">ranoz.gg</span></strong> — files from external sources may contain unwanted or malicious content. Always prefer links hosted on <strong>ranoz.gg</strong> listed on this site.
+            </div>
+            <p class="hint" style="margin-top:10px;">
+              If you're having trouble downloading or installing, watch this tutorial video.
+            </p>
+          </div>
+
+          <div class="modal-col modal-video" style="display:flex;flex-direction:column;gap:8px;align-items:stretch">
+            <!-- Make sure 'tutorial.mp4' is in same folder as index.html -->
+            <video id="siteTutorialVideo" controls preload="metadata" poster="" tabindex="0">
+              <source src="tutorial.mp4" type="video/mp4">
+              Your browser does not support HTML5 video — open the file tutorial.mp4 in the same folder.
+            </video>
+            <div style="display:flex;justify-content:flex-end;align-items:center;">
+              <button id="siteWarningGotIt" class="btn primary" type="button">Got it</button>
+              <button id="siteWarningDontShow" class="btn ghost" type="button" style="margin-left:8px;">Don’t show again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END WARNING MODAL -->
+
     <header>
       <div class="brand">
         <div class="square">FNF</div>
@@ -271,896 +355,4 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
           </div>
           <div class="form-group">
             <label for="requestTitle">Title*</label>
-            <input type="text" id="requestTitle" class="form-control" placeholder="Name of the mod, skin, etc." required>
-          </div>
-          <div class="form-group">
-            <label for="requestCategory">Category*</label>
-            <select id="requestCategory" class="form-control" required>
-              <option value="">Select a category</option>
-              <option value="Mods">Mods</option>
-              <option value="Skins">Skins</option>
-              <option value="Tools">Tools</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="requestLink">Link*</label>
-            <input type="url" id="requestLink" class="form-control" placeholder="https://..." required>
-            <small style="display: block; margin-top: 4px; color: var(--muted);">Where can we find this mod?</small>
-          </div>
-          <div class="form-group">
-            <label for="requestDescription">Description</label>
-            <textarea id="requestDescription" class="form-control" rows="4" placeholder="Provide any additional details..."></textarea>
-          </div>
-          <div class="form-actions">
-            <button id="submitRequest" class="btn primary" type="button">Submit Request</button>
-            <a href="https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/issues" target="_blank" class="btn ghost">View All Requests</a>
-          </div>
-        </form>
-        
-        <div class="request-divider"></div>
-        
-        <h2>Requests</h2>
-        
-        <!-- Request View Tabs (All/My) -->
-        <div class="request-view-tabs" style="display: flex; gap: 8px; margin: 12px 0;">
-          <button class="request-view-tab active" id="allRequestsViewTab" type="button">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>
-            All Requests
-          </button>
-          <button class="request-view-tab" id="myRequestsViewTab" style="display: none;" type="button">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px;">
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-            </svg>
-            My Requests
-          </button>
-        </div>
-        
-        <!-- Status Filter Tabs (Open/Closed) -->
-        <div class="request-tabs">
-          <button class="request-tab active" id="openRequestsTab" type="button">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
-              <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-            Open
-          </button>
-          <button class="request-tab" id="closedRequestsTab" type="button">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 4px;">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-            </svg>
-            Closed
-          </button>
-        </div>
-        
-        <p id="requestsDescription" style="margin-bottom: 16px; color: var(--muted);">Recent requests from the community.</p>
-        <div class="requests-grid" id="requestsGrid"></div>
-      </section>
-    </main>
-
-    <div class="footer">@LucyYuih</div>
-  </div>
-
-<script>
-/* ========== constants & preserved logic ========== */
-const GITHUB_BLOB = 'https://github.com/LucyYuih/FNF-ASTC-Mobile-Mods/blob/main/mods.txt';
-const REPO = 'LucyYuih/FNF-ASTC-Mobile-Mods';
-const ISSUES_API = `https://api.github.com/repos/${REPO}/issues`;
-const CORS_PROXY = 'https://corsproxy.io/?';
-
-let thumbnailObserver = null;
-window._originalOrderTitles = null;
-
-/* DOM ready */
-document.addEventListener('DOMContentLoaded', ()=> {
-  const raw = blobToRaw(GITHUB_BLOB);
-  loadFromUrl(raw).then(() => {});
-  loadRequests();
-
-  // wire controls (preserve existing function names)
-  const sortSelect = document.getElementById('sortSelect');
-  if (sortSelect) sortSelect.addEventListener('change', applySortAndReorder);
-
-  const zoomSlider = document.getElementById('zoomSlider');
-  const colsCount = document.getElementById('colsCount');
-  zoomSlider.addEventListener('input', e => {
-    applyColumns(e.target.value);
-    colsCount.textContent = e.target.value;
-  });
-
-  const optionsBtn = document.getElementById('optionsBtn');
-  const optionsMenu = document.getElementById('optionsMenu');
-  optionsBtn.addEventListener('click', ()=> {
-    const isVisible = optionsMenu.classList.contains('show');
-    if (isVisible) {
-      optionsMenu.classList.remove('show');
-      optionsMenu.setAttribute('aria-hidden', 'true');
-    } else {
-      optionsMenu.classList.add('show');
-      optionsMenu.setAttribute('aria-hidden', 'false');
-    }
-  });
-  document.addEventListener('click', (e) => {
-    if (!optionsMenu.contains(e.target) && !optionsBtn.contains(e.target)) {
-      optionsMenu.classList.remove('show');
-      optionsMenu.setAttribute('aria-hidden', 'true');
-    }
-  });
-
-  // init saved columns & numeric display
-  const savedCols = parseInt(localStorage.getItem('gridColumns') || getComputedStyle(document.documentElement).getPropertyValue('--cols') || 3, 10);
-  const slider = document.getElementById('zoomSlider');
-  slider.value = Math.min(8, Math.max(1, savedCols));
-  document.getElementById('colsCount').textContent = slider.value;
-  applyColumns(slider.value);
-});
-
-/* helper: convert blob -> raw */
-function blobToRaw(blobUrl){
-  try{
-    const u = new URL(blobUrl);
-    if(u.hostname.includes('github.com') && u.pathname.includes('/blob/')){
-      const parts = u.pathname.split('/');
-      const user = parts[1], repo = parts[2], branch = parts[4];
-      const path = parts.slice(5).join('/');
-      return `https://raw.githubusercontent.com/${user}/${repo}/${branch}/${path}`;
-    }
-  }catch(e){}
-  return blobUrl;
-}
-
-/* load mods.txt (preserved) */
-async function loadFromUrl(url){
-  try{
-    const res = await fetch(url);
-    if(!res.ok) throw new Error('HTTP ' + res.status);
-    const txt = await res.text();
-    doParseAndRender(txt);
-  }catch(err){
-    console.warn('Fetch failed.', err);
-  }
-}
-
-function doParseAndRender(txt){
-  const items = parseModsTxt(txt);
-  renderGrid(items);
-}
-
-/* parse functions (fixed: detect labels and prioritize GameBanana/GameJolt for candidateUrl) */
-function parseModsTxt(txt){
-  const lines = txt.split(/\r?\n/);
-  let currentCategory = null;
-  const items = []; let block = [];
-  function flushBlock(){ if(block.length===0) return; const item=parseBlock(block,currentCategory); if(item) items.push(item); block=[]; }
-  for(let i=0;i<lines.length;i++){
-    const raw = lines[i];
-    const line = raw.replace(/\u00A0/g,' ').trim();
-    if(!line) continue;
-    if(line.startsWith('#')) continue;
-    const lower = line.toLowerCase();
-    if(lower === 'tools' || lower === 'skins' || lower === 'mods'){ flushBlock(); currentCategory = capitalize(lower); continue; }
-    if(/^[-]{3,}$/.test(line)) continue;
-    if(line === '-') { flushBlock(); continue; }
-    block.push(line);
-  }
-  flushBlock();
-  return items;
-}
-function parseBlock(blockLines, currentCategory){
-  const lines = blockLines.filter(l => l && l.trim() !== '');
-  if(lines.length === 0) return null;
-  const title = lines[0].trim();
-
-  const urlRegex = /(https?:\/\/[^\s]+)/g;
-  // Build array of {label, url}
-  const links = [];
-  // First pass: detect lines that are URLs and consider previous non-url line as label
-  for (let i = 1; i < lines.length; i++) {
-    const ln = lines[i].trim();
-    const m = ln.match(urlRegex);
-    if (m) {
-      // try to use previous line as label if it exists and does not contain a URL
-      let candidateLabel = null;
-      if (i - 1 >= 1) {
-        const prev = lines[i - 1].trim();
-        if (!urlRegex.test(prev) && prev.toLowerCase() !== title.toLowerCase()) {
-          candidateLabel = prev;
-        }
-      }
-      for (const u of m) {
-        links.push({ label: candidateLabel ? candidateLabel.trim() : null, url: u.replace(/[),.]+$/,'') });
-        candidateLabel = null; // only use once
-      }
-    }
-  }
-  // fallback: collect any urls anywhere if no links found
-  if (links.length === 0) {
-    for (let i = 1; i < lines.length; i++) {
-      const ln = lines[i].trim();
-      const m = ln.match(urlRegex);
-      if (m) for (const u of m) links.push({ label: null, url: u.replace(/[),.]+$/,'') });
-    }
-  }
-
-  // build plain urls array (backwards compat)
-  const urls = links.map(l => l.url);
-
-  // choose candidateUrl with priority: GameBanana -> GameJolt -> first url
-  let candidateUrl = null;
-  if (urls.length > 0) {
-    const gb = urls.find(u => /gamebanana\.com/i.test(u));
-    const gj = urls.find(u => /gamejolt\.com/i.test(u));
-    candidateUrl = gb || gj || urls[0] || null;
-  }
-
-  let category = currentCategory || 'Mods';
-  if(!currentCategory){
-    const joined = lines.join(' ').toLowerCase();
-    if(joined.includes('skin')) category='Skins';
-    else if(joined.includes('tool')||joined.includes('install')) category='Tools';
-  }
-
-  return { title, category, links, urls, candidateUrl, img: null, rawLines: lines };
-}
-function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
-
-/* makeCard (kept, uses links with labels and sets data-candidate-url) */
-function makeCard(item){
-  const el = document.createElement('div');
-  el.className='card';
-  el.dataset.title=item.title.toLowerCase();
-  el.dataset.category=item.category;
-
-  const thumb = document.createElement('div');
-  thumb.className='thumb';
-  if (item.candidateUrl) thumb.setAttribute('data-candidate-url', item.candidateUrl);
-
-  const spinner = document.createElement('div');
-  spinner.className = 'spinner';
-  thumb.appendChild(spinner);
-
-  const title = document.createElement('div');
-  title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
-
-  const buttons = document.createElement('div');
-  buttons.className='buttons';
-
-  if(item.urls.length>0){
-    const aDl=document.createElement('a');
-    aDl.className='btn primary';
-    aDl.href=item.urls[0];
-    aDl.target='_blank';
-    aDl.rel='noopener';
-    aDl.textContent='Download';
-    buttons.appendChild(aDl);
-
-    const aOrig=document.createElement('a');
-    aOrig.className='btn ghost';
-    aOrig.href=item.urls[item.urls.length-1];
-    aOrig.target='_blank';
-    aOrig.rel='noopener';
-    aOrig.textContent='Original';
-    buttons.appendChild(aOrig);
-
-    if(item.links && item.links.length > 2){
-      for(let i=1;i<item.links.length-1;i++){
-        const linkObj = item.links[i];
-        const ext=document.createElement('a');
-        ext.className='btn ghost';
-        ext.href = linkObj.url;
-        ext.target = '_blank';
-        ext.rel = 'noopener';
-        ext.textContent = linkObj.label ? linkObj.label : `Link ${i+1}`;
-        buttons.appendChild(ext);
-      }
-    }
-  } else {
-    const no=document.createElement('div');
-    no.className='btn ghost';
-    no.textContent='No link';
-    buttons.appendChild(no);
-  }
-
-  el.appendChild(thumb);
-  el.appendChild(title);
-  el.appendChild(buttons);
-
-  return el;
-}
-
-/* renderGrid and store original order */
-function renderGrid(items){
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';
-  window.currentItems=items;
-  const frag=document.createDocumentFragment();
-
-  for(const it of items)
-    frag.appendChild(makeCard(it));
-
-  grid.appendChild(frag);
-  filterAndShow();
-
-  window._originalOrderTitles = Array.from(grid.children).map(c => c.dataset.title || '');
-
-  setupThumbnailObserver();
-}
-
-/* thumbs observer */
-function setupThumbnailObserver() {
-  if (!thumbnailObserver) {
-    thumbnailObserver = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const thumb = entry.target;
-          const candidateUrl = thumb.getAttribute('data-candidate-url');
-          if (candidateUrl) {
-            observer.unobserve(thumb);
-            loadThumbnail(thumb, candidateUrl);
-          }
-        }
-      });
-    }, {
-      rootMargin: '0px 0px 200px 0px'
-    });
-  }
-  document.querySelectorAll('.thumb[data-candidate-url]').forEach(thumb => {
-    thumbnailObserver.observe(thumb);
-  });
-}
-
-/* loadThumbnail (unchanged behavior but robust) */
-async function loadThumbnail(thumbElement, candidateUrl) {
-  try {
-    const imgUrl = await fetchImageUrl(candidateUrl);
-    if (imgUrl) {
-      thumbElement.innerHTML = '';
-      const img = document.createElement('img');
-      img.src = imgUrl;
-      img.alt = '';
-      thumbElement.appendChild(img);
-    } else {
-      // fallback placeholder
-      thumbElement.innerHTML = '';
-      const placeholder=document.createElement('div');
-      placeholder.style.width='100%';
-      placeholder.style.height='100%';
-      placeholder.style.display='flex';
-      placeholder.style.alignItems='center';
-      placeholder.style.justifyContent='center';
-      placeholder.style.fontWeight='800';
-      placeholder.style.fontSize='28px';
-      placeholder.style.color='#eaf2ff';
-      const card = thumbElement.closest('.card');
-      if (card && card.dataset.title) {
-        const title = card.dataset.title;
-        const cleanTitle = title.replace(/^[\[\(]+/,'').trim();
-        placeholder.textContent = (cleanTitle.slice(0,2) || 'M').toUpperCase();
-      } else {
-        placeholder.textContent = 'M';
-      }
-      thumbElement.appendChild(placeholder);
-    }
-    thumbElement.removeAttribute('data-candidate-url');
-  } catch (error) {
-    console.warn('Failed to load thumbnail for', candidateUrl, error);
-    thumbElement.innerHTML = '';
-    const placeholder=document.createElement('div');
-    placeholder.style.width='100%';
-    placeholder.style.height='100%';
-    placeholder.style.display='flex';
-    placeholder.style.alignItems='center';
-    placeholder.style.justifyContent='center';
-    placeholder.style.fontWeight='800';
-    placeholder.style.fontSize='28px';
-    placeholder.style.color='#eaf2ff';
-    const card = thumbElement.closest('.card');
-    if (card && card.dataset.title) {
-      const title = card.dataset.title;
-      const cleanTitle = title.replace(/^[\[\(]+/,'').trim();
-      placeholder.textContent = (cleanTitle.slice(0,2) || 'M').toUpperCase();
-    } else {
-      placeholder.textContent = 'M';
-    }
-    thumbElement.appendChild(placeholder);
-    thumbElement.removeAttribute('data-candidate-url');
-  }
-}
-
-/* fetchImageUrl: try to extract og:image or first big image */
-async function fetchImageUrl(url) {
-  try {
-    // use CORS proxy (same as before)
-    const resp = await fetch(CORS_PROXY + encodeURIComponent(url));
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const html = await resp.text();
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-
-    // prefer og:image (common)
-    const og = doc.querySelector('meta[property="og:image"], meta[name="og:image"]');
-    if (og && og.content) {
-      let img = og.content;
-      if (img.startsWith('/')) img = new URL(img, url).href;
-      return img;
-    }
-
-    // fallback: look for first large-ish image on page
-    const imgs = Array.from(doc.querySelectorAll('img'))
-      .map(i => i.getAttribute('src') || i.getAttribute('data-src') || i.getAttribute('data-original'))
-      .filter(Boolean)
-      .map(src => src.startsWith('http') ? src : (src.startsWith('/') ? (new URL(src, url).href) : null))
-      .filter(Boolean);
-
-    if (imgs.length > 0) return imgs[0];
-
-    return null;
-  } catch (err) {
-    console.warn('Thumb fetch failed for', url, err);
-    return null;
-  }
-}
-
-/* Requests (kept) */
-async function loadRequests() {
-  try {
-    let apiUrl = ISSUES_API;
-    
-    if (currentRequestStatus === 'closed') {
-      apiUrl += '?state=closed';
-    } else {
-      apiUrl += '?state=open';
-    }
-    
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error('Failed to load requests');
-    const issues = await response.json();
-    
-    let filteredIssues = issues.filter(issue => 
-      !issue.pull_request && 
-      issue.title.toLowerCase().includes('request:')
-    );
-    
-    if (currentRequestView === 'my' && githubUser) {
-      filteredIssues = filteredIssues.filter(issue => 
-        issue.user.login === githubUser.login
-      );
-    }
-    
-    renderRequests(filteredIssues);
-  } catch (error) {
-    console.error('Error loading requests:', error);
-    document.getElementById('requestsGrid').innerHTML = `<p style="color:var(--muted);">Failed to load requests. Please try again later.</p>`;
-  }
-}
-function renderRequests(issues) {
-  const container = document.getElementById('requestsGrid');
-  container.innerHTML = '';
-  
-  if (issues.length === 0) {
-    let message = 'No requests found.';
-    if (currentRequestView === 'my') {
-      message = currentRequestStatus === 'open' 
-        ? 'You have no open requests. Submit your first request above!'
-        : 'You have no closed requests.';
-    } else {
-      message = currentRequestStatus === 'open'
-        ? 'No open requests found. Be the first to submit one!'
-        : 'No closed requests found.';
-    }
-    container.innerHTML = `<p style="color:var(--muted);text-align:center;padding:20px;">${message}</p>`;
-    return;
-  }
-  
-  const recentRequests = issues.slice(0, 12);
-  recentRequests.forEach(issue => {
-    const requestCard = document.createElement('div');
-    requestCard.className = 'request-card';
-    
-    let category = 'Other';
-    if (issue.labels && issue.labels.length > 0) {
-      const categoryLabel = issue.labels.find(label => ['Mods', 'Skins', 'Tools'].includes(label.name));
-      if (categoryLabel) category = categoryLabel.name;
-    }
-    
-    const status = issue.state === 'open' ? 'open' : 'closed';
-    const isMyRequest = githubUser && issue.user.login === githubUser.login;
-    
-    requestCard.innerHTML = `
-      <div class="request-meta">
-        <span class="request-category">${category}</span>
-        <span>${formatDate(issue.created_at)}</span>
-        ${isMyRequest ? '<span style="color: var(--accent); font-weight: 700; font-size: 11px;">YOUR REQUEST</span>' : ''}
-      </div>
-      <div class="request-status ${status === 'open' ? 'status-open' : 'status-closed'}">${status.toUpperCase()}</div>
-      <h3 class="request-title">${escapeHtml(issue.title.replace('Request:', '').trim())}</h3>
-      <div class="request-body">${truncateText(issue.body || 'No description provided', 240)}</div>
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
-        <span style="color: var(--muted); font-size: 12px;">by ${issue.user.login}</span>
-        <a href="${issue.html_url}" target="_blank" class="request-link">View on GitHub →</a>
-      </div>
-    `;
-    container.appendChild(requestCard);
-  });
-}
-
-/* submitRequest (kept) */
-async function submitRequest() {
-  if (!githubUser || !githubToken) {
-    alert('Please login with GitHub first to submit requests');
-    return;
-  }
-  
-  const title = document.getElementById('requestTitle').value.trim();
-  const category = document.getElementById('requestCategory').value;
-  const link = document.getElementById('requestLink').value.trim();
-  const description = document.getElementById('requestDescription').value.trim();
-  
-  if (!title || !category || !link) {
-    alert('Please fill in all required fields');
-    return;
-  }
-  
-  const submitBtn = document.getElementById('submitRequest');
-  const originalText = submitBtn.textContent;
-  
-  try {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submitting...';
-    submitBtn.style.opacity = '0.6';
-    
-    const issueTitle = `Request: ${title}`;
-    let issueBody = `**Category:** ${category}\n\n**Link:** ${link}\n\n`;
-    if (description) {
-      issueBody += `**Description:**\n${description}\n\n`;
-    }
-    issueBody += `_Submitted via ASTC Mobile Mods website by @${githubUser.login}_`;
-    
-    const response = await fetch(`https://api.github.com/repos/${REPO}/issues`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `token ${githubToken}`,
-        'Accept': 'application/vnd.github.v3+json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        title: issueTitle,
-        body: issueBody,
-        labels: ['Request', category]
-      })
-    });
-    
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to submit request');
-    }
-    
-    const newIssue = await response.json();
-    
-    document.getElementById('requestForm').reset();
-    alert('Request submitted successfully! It will appear in the requests list shortly.');
-    loadRequests();
-    
-  } catch (error) {
-    console.error('Error submitting request:', error);
-    alert('Failed to submit request: ' + error.message);
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
-    submitBtn.style.opacity = '1';
-  }
-}
-
-/* Tabs handling (kept) */
-document.getElementById('tabs').addEventListener('click', (e)=>{
-  const b=e.target.closest('.tab');
-  if(!b) return;
-  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');
-  const category = b.dataset.cat;
-  if (category === 'requests') {
-    document.getElementById('grid').style.display = 'none';
-    document.getElementById('requestSection').style.display = 'block';
-    document.getElementById('requestForm').style.display = 'block';
-    loadRequests();
-  } else {
-    document.getElementById('grid').style.display = 'grid';
-    document.getElementById('requestSection').style.display = 'none';
-    filterAndShow();
-  }
-});
-
-/* filter/search (kept) */
-document.getElementById('search').addEventListener('input', filterAndShow);
-function filterAndShow(){
-  if (document.getElementById('requestSection').style.display === 'block') return;
-  const q=document.getElementById('search').value.trim().toLowerCase();
-  const active=document.querySelector('.tab.active')?.dataset?.cat||'all';
-  const grid=document.getElementById('grid');
-  const cards=Array.from(grid.children);
-  for(const c of cards){
-    const title=(c.dataset.title||'').toLowerCase();
-    const cat=(c.dataset.category||'').toLowerCase();
-    const matchQ = !q || title.includes(q);
-    const matchCat = active==='all' || cat === (active||'').toLowerCase();
-    c.style.display = (matchQ && matchCat) ? '' : 'none';
-  }
-  setupThumbnailObserver();
-}
-
-function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-/* ---------- applyColumns ---------- */
-function applyColumns(cols) {
-  cols = Math.max(1, Math.min(8, Number(cols) || 3));
-  document.documentElement.style.setProperty('--cols', cols);
-  let scale = 1 - (cols - 1) * 0.07;
-  if (scale < 0.58) scale = 0.58;
-  if (scale > 1) scale = 1;
-  document.documentElement.style.setProperty('--card-scale', scale.toString());
-  localStorage.setItem('gridColumns', String(cols));
-}
-
-/* sorting (kept) */
-function applySortAndReorder() {
-  const sortSelect = document.getElementById('sortSelect');
-  const mode = sortSelect ? sortSelect.value : 'default';
-  const grid = document.getElementById('grid');
-  const cards = Array.from(grid.children);
-  if (cards.length === 0) return;
-
-  const original = window._originalOrderTitles || cards.map(c => c.dataset.title || '');
-  const originalIndex = {};
-  original.forEach((t,i) => originalIndex[t] = i);
-
-  let sorted = cards.slice();
-
-  if (mode === 'default') {
-    sorted.sort((a,b) => {
-      const ta = a.dataset.title || '';
-      const tb = b.dataset.title || '';
-      const ia = originalIndex.hasOwnProperty(ta) ? originalIndex[ta] : Infinity;
-      const ib = originalIndex.hasOwnProperty(tb) ? originalIndex[tb] : Infinity;
-      return ia - ib;
-    });
-  } else if (mode === 'alpha') {
-    sorted.sort((a,b)=> {
-      const ta = (a.dataset.title||'').toLowerCase();
-      const tb = (b.dataset.title||'').toLowerCase();
-      if (ta === tb) {
-        const ia = originalIndex[ta] || 0;
-        const ib = originalIndex[tb] || 0;
-        return ia - ib;
-      }
-      return ta.localeCompare(tb);
-    });
-  } else if (mode === 'recent') {
-    sorted.sort((a,b) => {
-      const ta = a.dataset.title || '';
-      const tb = b.dataset.title || '';
-      const ia = originalIndex.hasOwnProperty(ta) ? originalIndex[ta] : -Infinity;
-      const ib = originalIndex.hasOwnProperty(tb) ? originalIndex[tb] : -Infinity;
-      return ib - ia;
-    });
-  }
-
-  for (const c of sorted) grid.appendChild(c);
-  setupThumbnailObserver();
-}
-
-/* utilities */
-function truncateText(text, maxLength) { if (!text) return ''; if (text.length <= maxLength) return escapeHtml(text); return escapeHtml(text.substring(0, maxLength)) + '...'; }
-function formatDate(dateString) { const date = new Date(dateString); return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }); }
-
-/* wire submit request button */
-document.getElementById('submitRequest').addEventListener('click', submitRequest);
-
-/* ========== GitHub Login Functionality ========== */
-let githubToken = localStorage.getItem('github_token');
-let githubUser = null;
-let currentRequestView = 'all';
-let currentRequestStatus = 'open';
-
-if (githubToken) {
-  checkGitHubAuth();
-}
-
-document.getElementById('githubLoginBtn').addEventListener('click', async () => {
-  const username = document.getElementById('githubUsernameInput').value.trim();
-  const token = document.getElementById('githubTokenInput').value.trim();
-  
-  if (!username || !token) {
-    showLoginError('Please enter both username and token');
-    return;
-  }
-  
-  await authenticateWithGitHub(username, token);
-});
-
-document.getElementById('githubLogoutBtn').addEventListener('click', () => {
-  githubToken = null;
-  githubUser = null;
-  localStorage.removeItem('github_token');
-  localStorage.removeItem('github_user');
-  updateLoginUI();
-  document.getElementById('myRequestsViewTab').style.display = 'none';
-  switchRequestView('all');
-});
-
-document.getElementById('allRequestsViewTab').addEventListener('click', () => {
-  switchRequestView('all');
-});
-document.getElementById('myRequestsViewTab').addEventListener('click', () => {
-  switchRequestView('my');
-});
-document.getElementById('openRequestsTab').addEventListener('click', () => {
-  switchRequestStatus('open');
-});
-document.getElementById('closedRequestsTab').addEventListener('click', () => {
-  switchRequestStatus('closed');
-});
-
-async function authenticateWithGitHub(username, token) {
-  showLoginSpinner(true);
-  hideLoginError();
-  
-  try {
-    const response = await fetch('https://api.github.com/user', {
-      headers: {
-        'Authorization': `token ${token}`,
-        'Accept': 'application/vnd.github.v3+json'
-      }
-    });
-    
-    if (!response.ok) {
-      throw new Error('Invalid token or authentication failed');
-    }
-    
-    const userData = await response.json();
-    
-    if (userData.login.toLowerCase() !== username.toLowerCase()) {
-      throw new Error('Username does not match the token owner');
-    }
-    
-    githubToken = token;
-    githubUser = userData;
-    localStorage.setItem('github_token', token);
-    localStorage.setItem('github_user', JSON.stringify(userData));
-    
-    updateLoginUI();
-    document.getElementById('myRequestsViewTab').style.display = 'inline-flex';
-    loadRequests();
-    
-  } catch (error) {
-    console.error('GitHub authentication error:', error);
-    showLoginError(error.message || 'Authentication failed. Please check your credentials.');
-  } finally {
-    showLoginSpinner(false);
-  }
-}
-
-async function checkGitHubAuth() {
-  try {
-    const storedUser = localStorage.getItem('github_user');
-    if (storedUser && githubToken) {
-      githubUser = JSON.parse(storedUser);
-      const response = await fetch('https://api.github.com/user', {
-        headers: {
-          'Authorization': `token ${githubToken}`,
-          'Accept': 'application/vnd.github.v3+json'
-        }
-      });
-      
-      if (response.ok) {
-        updateLoginUI();
-        document.getElementById('myRequestsViewTab').style.display = 'inline-flex';
-      } else {
-        githubToken = null;
-        githubUser = null;
-        localStorage.removeItem('github_token');
-        localStorage.removeItem('github_user');
-      }
-    }
-  } catch (error) {
-    console.error('Error checking GitHub auth:', error);
-    githubToken = null;
-    githubUser = null;
-    localStorage.removeItem('github_token');
-    localStorage.removeItem('github_user');
-  }
-}
-
-function updateLoginUI() {
-  const loginForm = document.getElementById('loginForm');
-  const loginSuccess = document.getElementById('loginSuccess');
-  const githubUsername = document.getElementById('githubUsername');
-  const submitBtn = document.getElementById('submitRequest');
-  const userAvatar = document.getElementById('userAvatar');
-  const defaultAvatar = document.getElementById('defaultAvatar');
-
-  if (githubUser && githubToken) {
-    loginForm.style.display = 'none';
-    loginSuccess.style.display = 'block';
-    githubUsername.textContent = githubUser.login;
-    
-    if (githubUser.avatar_url) {
-      userAvatar.src = githubUser.avatar_url;
-      userAvatar.style.display = 'block';
-      defaultAvatar.style.display = 'none';
-    } else {
-      userAvatar.style.display = 'none';
-      defaultAvatar.style.display = 'flex';
-    }
-    
-    submitBtn.disabled = false;
-    submitBtn.style.opacity = '1';
-  } else {
-    loginForm.style.display = 'block';
-    loginSuccess.style.display = 'none';
-    submitBtn.disabled = true;
-    submitBtn.style.opacity = '0.5';
-    document.getElementById('githubUsernameInput').value = '';
-    document.getElementById('githubTokenInput').value = '';
-  }
-}
-
-function showLoginSpinner(show) {
-  const spinner = document.getElementById('loginSpinner');
-  const loginBtn = document.getElementById('githubLoginBtn');
-  
-  if (show) {
-    spinner.style.display = 'block';
-    loginBtn.disabled = true;
-    loginBtn.style.opacity = '0.6';
-  } else {
-    spinner.style.display = 'none';
-    loginBtn.disabled = false;
-    loginBtn.style.opacity = '1';
-  }
-}
-
-function showLoginError(message) {
-  const errorDiv = document.getElementById('loginError');
-  errorDiv.textContent = message;
-  errorDiv.style.display = 'block';
-}
-function hideLoginError() {
-  const errorDiv = document.getElementById('loginError');
-  errorDiv.style.display = 'none';
-}
-
-function switchRequestView(view) {
-  currentRequestView = view;
-  document.querySelectorAll('.request-view-tab').forEach(tab => {
-    tab.classList.remove('active');
-  });
-  if (view === 'all') {
-    document.getElementById('allRequestsViewTab').classList.add('active');
-    document.getElementById('requestsDescription').textContent = 'Recent requests from the community.';
-  } else {
-    document.getElementById('myRequestsViewTab').classList.add('active');
-    document.getElementById('requestsDescription').textContent = 'Your submitted requests.';
-  }
-  loadRequests();
-}
-
-function switchRequestStatus(status) {
-  currentRequestStatus = status;
-  document.querySelectorAll('.request-tab').forEach(tab => {
-    tab.classList.remove('active');
-  });
-  if (status === 'open') {
-    document.getElementById('openRequestsTab').classList.add('active');
-  } else {
-    document.getElementById('closedRequestsTab').classList.add('active');
-  }
-  loadRequests();
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  updateLoginUI();
-});
-</script>
-</body>
-</html>
+            <input type="text" id="requestTitle" class="form-control" placeholder="Name of the mod, skin, etc." required
