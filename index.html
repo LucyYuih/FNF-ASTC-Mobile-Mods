@@ -162,7 +162,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
 .footer{color:var(--muted);font-size:12px;margin-top:14px;text-align:center}
 
 /* ------------------------------
-   Modal warning styles (fixed for mobile)
+   Modal warning styles (desktop/Edge tuned)
    ------------------------------ */
 #siteWarningModalOverlay{
   position:fixed;
@@ -174,6 +174,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   justify-content:center;
   padding:20px;
   -webkit-overflow-scrolling: touch;
+  overflow:auto;
 }
 #siteWarningModal{
   background:linear-gradient(180deg, #0f1720 0%, #07101a 100%);
@@ -186,7 +187,7 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   overflow:hidden;
   display:flex;
   flex-direction:column;
-  max-height: 90vh;
+  max-height: calc(100vh - 80px);
 }
 #siteWarningModal header{
   padding:18px 20px;
@@ -206,11 +207,11 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   overflow:auto;
   -webkit-overflow-scrolling: touch;
   flex: 1 1 auto;
-  max-height: calc(90vh - 120px);
+  max-height: calc(100vh - 160px);
 }
 #siteWarningModal .warning-text{font-size:14px;color:#ffd6d6;background:rgba(231,76,60,0.06);padding:10px;border-radius:8px;border:1px solid rgba(231,76,60,0.08)}
 #siteWarningModal .hint{font-size:13px;color:var(--muted)}
-#siteWarningModal video{max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#000}
+#siteWarningModal video{max-width:100%;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:#000;max-height:60vh;height:auto}
 #siteWarningModal .modal-actions{display:flex;gap:10px;justify-content:flex-end;padding:14px 20px;border-top:1px solid rgba(255,255,255,0.02)}
 #siteWarningModal .modal-actions .btn{min-width:120px}
 #siteWarningModal .learn-more{font-size:13px;color:var(--muted);text-decoration:underline;cursor:pointer}
@@ -222,7 +223,8 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
   #siteWarningModal .modal-video{flex:1;max-width:420px}
 }
 @media (max-width:719px){
-  #siteWarningModal{max-width:480px}
+  #siteWarningModal{max-width:480px; max-height: 100vh;}
+  #siteWarningModal .modal-body{max-height: calc(100vh - 120px);}
 }
 </style>
 </head>
@@ -239,10 +241,10 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
         <div class="modal-body">
           <div class="modal-col">
             <div class="warning-text">
-              Please <strong>do not download anything from outside the website <span style="color:#7c5cf7;">ranoz.gg</span></strong> — files from external sources may contain unwanted or malicious content.
+              Please <strong>do not download anything from outside the website <span style="color:#7c5cf7;">ranoz.gg</span></strong> — files from external sources may contain unwanted or malicious content. Always prefer links hosted on <strong>ranoz.gg</strong> listed on this site.
             </div>
             <p class="hint" style="margin-top:10px;">
-              If you're having trouble downloading or installing, watch the tutorial video.
+              If you're having trouble downloading or installing, watch the tutorial video on the right — it is located in the same folder as this page.
             </p>
           </div>
 
@@ -311,7 +313,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
       
       <!-- Request Section -->
       <section id="requestSection" style="display: none;">
-        <!-- Make sure the form is correctly closed so the rest of the DOM doesn't get swallowed into the form -->
         <form class="request-form" id="requestForm" novalidate>
           <h2>Request a Mod/Skin/Tool</h2>
           <p style="margin-bottom: 16px; color: var(--muted);">Submit your request for a new mod, skin or tool to be added to the collection (requires GitHub login).</p>
@@ -398,7 +399,6 @@ header{display:flex;gap:16px;align-items:center;justify-content:space-between;ma
           </div>
         </form>
 
-        <!-- form closed above; everything below is outside the form to prevent native validation scrolls -->
         <div class="request-divider" style="height:18px;"></div>
         
         <h2>Requests</h2>
@@ -588,7 +588,7 @@ function doParseAndRender(txt){
   renderGrid(items);
 }
 
-/* parse functions (fixed: detect labels and prioritize GameBanana/GameJolt for candidateUrl) */
+/* parse functions (ADDED: Image link detection & image-url fallback) */
 function parseModsTxt(txt){
   const lines = txt.split(/\r?\n/);
   let currentCategory = null;
@@ -647,6 +647,23 @@ function parseBlock(blockLines, currentCategory){
   // build plain urls array (backwards compat)
   const urls = links.map(l => l.url);
 
+  // *** New: detect Image link (explicit label "Image") or direct image urls and prefer them for thumb ***
+  let imageUrl = null;
+  try {
+    // find labeled "Image"
+    const labeledImage = links.find(l => l.label && String(l.label).trim().toLowerCase() === 'image' && l.url);
+    if (labeledImage && labeledImage.url) imageUrl = labeledImage.url;
+    // if not found, look for any link that ends with an image extension
+    if (!imageUrl) {
+      const imgCandidate = links.find(l => l.url && /\.(jpe?g|png|webp|gif|bmp|svg)(\?.*)?$/i.test(l.url));
+      if (imgCandidate) imageUrl = imgCandidate.url;
+    }
+    // normalize protocol-relative urls
+    if (imageUrl && imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
+  } catch(e){
+    imageUrl = null;
+  }
+
   // choose candidateUrl with priority: GameBanana -> GameJolt -> first url
   let candidateUrl = null;
   if (urls.length > 0) {
@@ -662,11 +679,11 @@ function parseBlock(blockLines, currentCategory){
     else if(joined.includes('tool')||joined.includes('install')) category='Tools';
   }
 
-  return { title, category, links, urls, candidateUrl, img: null, rawLines: lines };
+  return { title, category, links, urls, candidateUrl, img: imageUrl || null, rawLines: lines };
 }
 function capitalize(s){ return s.charAt(0).toUpperCase() + s.slice(1); }
 
-/* makeCard (kept, uses links with labels and sets data-candidate-url) */
+/* makeCard (kept, but if item.img exists, use it directly as thumb) */
 function makeCard(item){
   const el = document.createElement('div');
   el.className='card';
@@ -675,11 +692,21 @@ function makeCard(item){
 
   const thumb = document.createElement('div');
   thumb.className='thumb';
-  if (item.candidateUrl) thumb.setAttribute('data-candidate-url', item.candidateUrl);
 
-  const spinner = document.createElement('div');
-  spinner.className = 'spinner';
-  thumb.appendChild(spinner);
+  // if item.img (detected Image link or direct image), use it immediately
+  if (item.img) {
+    const safeUrl = normalizeImageUrl(item.img);
+    const img = document.createElement('img');
+    img.src = safeUrl;
+    img.alt = '';
+    thumb.appendChild(img);
+  } else {
+    // otherwise, fallback to lazy fetch using candidateUrl
+    if (item.candidateUrl) thumb.setAttribute('data-candidate-url', item.candidateUrl);
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+    thumb.appendChild(spinner);
+  }
 
   const title = document.createElement('div');
   title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
@@ -728,6 +755,14 @@ function makeCard(item){
   el.appendChild(buttons);
 
   return el;
+}
+
+/* normalize image urls slightly (protocol-relative) */
+function normalizeImageUrl(u){
+  if(!u) return u;
+  u = String(u).trim();
+  if(u.startsWith('//')) return 'https:' + u;
+  return u;
 }
 
 /* renderGrid and store original order */
@@ -855,7 +890,12 @@ async function fetchImageUrl(url) {
     const imgs = Array.from(doc.querySelectorAll('img'))
       .map(i => i.getAttribute('src') || i.getAttribute('data-src') || i.getAttribute('data-original'))
       .filter(Boolean)
-      .map(src => src.startsWith('http') ? src : (src.startsWith('/') ? (new URL(src, url).href) : null))
+      .map(src => {
+        if (src.startsWith('http')) return src;
+        if (src.startsWith('//')) return 'https:' + src;
+        if (src.startsWith('/')) return new URL(src, url).href;
+        return null;
+      })
       .filter(Boolean);
 
     if (imgs.length > 0) return imgs[0];
@@ -1275,8 +1315,6 @@ function switchRequestStatus(status) {
 
 /* ------------------------------
    Modal behavior (UPDATED)
-   - uses localStorage for "Don't show again"
-   - ensures internal scrolling on mobile and re-activates thumbnail observer after close
    ------------------------------ */
 (function(){
   const overlay = document.getElementById('siteWarningModalOverlay');
@@ -1294,8 +1332,6 @@ function switchRequestStatus(status) {
     } catch(e){}
     overlay.style.display = 'flex';
     overlay.setAttribute('aria-hidden','false');
-    // lock body scroll while modal open (helps mobile)
-    try { document.body.style.overflow = 'hidden'; } catch(e){}
     const video = document.getElementById('siteTutorialVideo');
     if(video) video.setAttribute('tabindex','0');
   }
@@ -1304,8 +1340,6 @@ function switchRequestStatus(status) {
     if(!overlay) return;
     overlay.style.display = 'none';
     overlay.setAttribute('aria-hidden','true');
-    try { document.body.style.overflow = ''; } catch(e){}
-    // re-run thumbnail observer to ensure thumbs load after modal closed
     try { setupThumbnailObserver(); } catch(e){}
   }
 
