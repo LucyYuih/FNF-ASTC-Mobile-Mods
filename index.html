@@ -708,8 +708,27 @@ function makeCard(item){
     thumb.appendChild(spinner);
   }
 
+  // Build sites list from item.urls (unique hostnames without www.)
+  let hosts = [];
+  try {
+    hosts = Array.from(new Set((item.urls || []).map(u => {
+      try {
+        const h = new URL(u).hostname.replace(/^www\./i, '');
+        return h;
+      } catch (e) {
+        // fallback: take first segment after protocol
+        return String(u).replace(/^https?:\/\//i, '').split('/')[0];
+      }
+    }).filter(Boolean)));
+  } catch (e) {
+    hosts = [];
+  }
+  const hostsText = hosts.length ? (' • ' + hosts.join(', ')) : '';
+
   const title = document.createElement('div');
-  title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.category)} • ${item.urls.length} link(s)</div>`;
+  // append the sitesText after the link count as requested
+  const metaText = `${escapeHtml(item.category)} • ${item.urls.length} link(s)${escapeHtml(hostsText)}`;
+  title.innerHTML = `<div class="title">${escapeHtml(item.title)}</div><div class="meta">${metaText}</div>`;
 
   const buttons = document.createElement('div');
   buttons.className='buttons';
@@ -1146,6 +1165,10 @@ function applySortAndReorder() {
 function truncateText(text, maxLength) { if (!text) return ''; if (text.length <= maxLength) return escapeHtml(text); return escapeHtml(text.substring(0, maxLength)) + '...'; }
 function formatDate(dateString) { const date = new Date(dateString); return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }); }
 
+</script>
+
+<!-- ========== GitHub Login + Requests JS (kept) ========== -->
+<script>
 /* ========== GitHub Login Functionality ========== */
 if (githubToken) {
   checkGitHubAuth();
