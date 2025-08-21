@@ -462,7 +462,17 @@ document.addEventListener('DOMContentLoaded', ()=> {
 
   // wire controls (preserve existing function names)
   const sortSelect = document.getElementById('sortSelect');
-  if (sortSelect) sortSelect.addEventListener('change', applySortAndReorder);
+  if (sortSelect) sortSelect.addEventListener('change', (e) => {
+    applySortAndReorder();
+    // update URL with new sort for grid views
+    const activeCat = document.querySelector('.tab.active')?.dataset?.cat || 'all';
+    if ((activeCat || '').toLowerCase() !== 'requests') {
+      updateUrlForState(activeCat, (sortSelect.value || 'default'));
+    } else {
+      // keep /requests URL for requests tab
+      updateUrlForState('requests', null);
+    }
+  });
 
   const zoomSlider = document.getElementById('zoomSlider');
   const colsCount = document.getElementById('colsCount');
@@ -515,10 +525,15 @@ document.addEventListener('DOMContentLoaded', ()=> {
         document.getElementById('requestSection').style.display = 'block';
         document.getElementById('requestForm').style.display = 'block';
         loadRequests();
+        // update URL to /requests
+        updateUrlForState('requests', null);
       } else {
         document.getElementById('grid').style.display = 'grid';
         document.getElementById('requestSection').style.display = 'none';
         filterAndShow();
+        // update URL with category + current sort
+        const currentSort = document.getElementById('sortSelect')?.value || 'default';
+        updateUrlForState(category, currentSort);
       }
     });
   }
@@ -554,7 +569,18 @@ document.addEventListener('DOMContentLoaded', ()=> {
     updateLoginUI();
     document.getElementById('myRequestsViewTab').style.display = 'none';
     switchRequestView('all');
+    // keep URL as /requests when leaving requests area, or default to /all/default for grid
+    const activeCat = document.querySelector('.tab.active')?.dataset?.cat || 'all';
+    if ((activeCat || '').toLowerCase() !== 'requests') {
+      updateUrlForState(activeCat, (document.getElementById('sortSelect')?.value || 'default'));
+    } else {
+      updateUrlForState('requests', null);
+    }
   });
+
+  // Apply state based on URL (tabs + sort) after initial render
+  // small timeout to ensure grid rendered if mods loaded async
+  setTimeout(applyStateFromUrl, 250);
 });
 
 /* helper: convert blob -> raw */
@@ -1164,6 +1190,135 @@ function applySortAndReorder() {
 /* utilities */
 function truncateText(text, maxLength) { if (!text) return ''; if (text.length <= maxLength) return escapeHtml(text); return escapeHtml(text.substring(0, maxLength)) + '...'; }
 function formatDate(dateString) { const date = new Date(dateString); return date.toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }); }
+
+/* =========================
+   URL state handling
+   - minimal, non-invasive additions
+   - keep repo/site base path intact (works on GitHub Pages)
+   ========================= */
+
+function updateUrlForState(category, sort) {
+  try {
+    const knownCats = ['all','tools','skins','mods','requests'];
+    const knownSorts = ['default','alpha','recent'];
+
+    // normalize inputs
+    const cat = category ? String(category).toLowerCase() : 'all';
+    const s = sort ? String(sort).toLowerCase() : null;
+
+    // compute base path by stripping existing known trailing segments
+    const pathSegments = location.pathname.split('/').filter(Boolean);
+    // remove trailing segments that are known categories or sorts
+    let baseSegments = pathSegments.slice();
+    while (baseSegments.length > 0) {
+      const last = String(baseSegments[baseSegments.length - 1]).toLowerCase();
+      if (knownCats.includes(last) || knownSorts.includes(last)) {
+        baseSegments.pop();
+      } else {
+        break;
+      }
+    }
+    // ensure leading slash and trailing slash for joining
+    const base = '/' + (baseSegments.join('/') || '') + (baseSegments.length ? '/' : '/');
+
+    // build new trailing part
+    let tail = '';
+    if (cat === 'requests') {
+      tail = 'requests';
+    } else {
+      const catSegment = cat || 'all';
+      const sortSegment = s || 'default';
+      tail = encodeURI(`${catSegment}/${sortSegment}`);
+    }
+
+    const newPath = (base + tail).replace(/\/\/+/g, '/');
+    // use replaceState to avoid adding history entries for every small change
+    history.replaceState(null, '', newPath);
+  } catch (e) {
+    // fail silently
+    console.warn('updateUrlForState failed', e);
+  }
+}
+
+function getUrlState() {
+  try {
+    const knownCats = ['all','tools','skins','mods','requests'];
+    const knownSorts = ['default','alpha','recent'];
+
+    const segs = location.pathname.split('/').filter(Boolean).map(s => String(s).toLowerCase());
+    // collect trailing known segments
+    const collected = [];
+    for (let i = segs.length - 1; i >= 0; i--) {
+      const s = segs[i];
+      if (knownCats.includes(s) || knownSorts.includes(s)) {
+        collected.unshift(s);
+      } else {
+        break;
+      }
+    }
+
+    if (collected.length === 0) {
+      return { category: 'all', sort: 'default' };
+    }
+    if (collected[0] === 'requests') {
+      return { category: 'requests', sort: null };
+    }
+    // otherwise, expect [category, sort?]
+    const category = collected[0] || 'all';
+    const sort = collected[1] || 'default';
+    return { category, sort };
+  } catch (e) {
+    return { category: 'all', sort: 'default' };
+  }
+}
+
+function applyStateFromUrl() {
+  const state = getUrlState();
+  // set sort select if present
+  try {
+    const sortSelect = document.getElementById('sortSelect');
+    if (state.sort && sortSelect) {
+      const desired = state.sort.toLowerCase();
+      // ensure valid
+      if (['default','alpha','recent'].includes(desired)) {
+        if (sortSelect.value !== desired) {
+          sortSelect.value = desired;
+          applySortAndReorder();
+        }
+      }
+    }
+  } catch (e){}
+
+  // set active tab
+  try {
+    const cat = (state.category || 'all').toLowerCase();
+    const tabs = Array.from(document.querySelectorAll('.tab'));
+    let matched = null;
+    for (const t of tabs) {
+      const dc = (t.dataset?.cat || '').toString().toLowerCase();
+      if (dc === cat) { matched = t; break; }
+    }
+    if (matched) {
+      // simulate click behavior without altering history (we already reflect URL)
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      matched.classList.add('active');
+      if (cat === 'requests') {
+        document.getElementById('grid').style.display = 'none';
+        document.getElementById('requestSection').style.display = 'block';
+        document.getElementById('requestForm').style.display = 'block';
+        loadRequests();
+      } else {
+        document.getElementById('grid').style.display = 'grid';
+        document.getElementById('requestSection').style.display = 'none';
+        filterAndShow();
+      }
+    }
+  } catch (e) {
+    console.warn('applyStateFromUrl tab set failed', e);
+  }
+}
+
+/* ========================= */
 
 </script>
 
