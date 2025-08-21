@@ -370,8 +370,8 @@ Original
 https://gamebanana.com/mods/609364
 
 -
-Arcade Showdown (Vs. Kapi) Mobile support 1.3.0
-https://ranoz.gg/file/eoCIhRLQ
+Arcade Showdown (Vs. Kapi) Mobile support 1.3
+https://ranoz.gg/file/v95QMUTu
 
 Original
 https://gamebanana.com/mods/609516
@@ -475,8 +475,8 @@ Original
 https://gamebanana.com/mods/609918
 
 -
-VS Arumu 2.0
-https://ranoz.gg/file/JeMuS5Et
+VS Arumu 2.5.0
+https://ranoz.gg/file/1qcRURyn
 
 Original
 https://gamebanana.com/mods/611266
@@ -911,3 +911,90 @@ https://gamebanana.com/mods/599057
 
 Image
 https://images.gamebanana.com/img/ss/mods/6843bc49aeb04.jpg
+
+-
+VS BIRDIE (V Slice Port)
+https://ranoz.gg/file/T7xdsM5a
+
+Original
+https://gamebanana.com/mods/613651
+
+-
+Crash Funksanity V1
+https://ranoz.gg/file/MiEiEGMW
+
+Original
+https://gamebanana.com/mods/613958
+
+-
+Files [One Hit Wonders V-Slice Port]
+https://ranoz.gg/file/yf2SNM3R
+
+Original
+https://gamebanana.com/mods/511420
+
+-
+Vs HarveyzStuff [PITSTOP 2]
+https://ranoz.gg/file/Rx9w2bmU
+
+Original
+https://gamebanana.com/mods/594717
+
+-
+Vs. Impostor V5 - JADSpostor Week (V-Slice Port) hotfix
+https://ranoz.gg/file/5Ddx3j0D
+
+Original
+https://gamebanana.com/mods/613802
+
+-
+Kace 1Shot 2.0
+https://ranoz.gg/file/RAPxKQaW
+
+Original
+https://gamebanana.com/mods/587268
+
+-
+OK K.O.! Let’s Get Funky! (V-Slice Port) 2.1
+https://ranoz.gg/file/BqKR9nEB
+
+Original
+https://gamebanana.com/mods/613415
+
+-
+Osu! Mania notes + hit sound [Mobile Only] 1.0.1
+https://ranoz.gg/file/NODsSBTT
+
+No Hitbox
+https://ranoz.gg/file/WbRhR2jh
+
+Original
+https://gamebanana.com/mods/614700
+
+-
+poopstuck
+https://ranoz.gg/file/fvdVch8l
+
+Original
+https://gamebanana.com/mods/613875
+
+-
+Roadmap (Oneshot made in 12 hours) 1.1
+https://ranoz.gg/file/qWPVH8za
+
+Original
+https://gamebanana.com/mods/532311
+
+-
+VS Camellia GHOS,GHOS VIP, GHOUL (PC/Mobile)
+https://ranoz.gg/file/QFWjNPDr
+
+Original
+https://gamebanana.com/mods/613835
+
+-
+Vs. Sunday (V-Slice Port) 0.9
+https://ranoz.gg/file/UqVC2zQG
+
+Original
+https://gamebanana.com/mods/615041
